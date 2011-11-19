@@ -12,11 +12,10 @@ require("naughty")
 require("debian.menu")
 
 -- {{{ Variable definitions
+-- This is used later as the default terminal and editor to run.
 -- Themes define colours, icons, and wallpapers
--- beautiful.init(awful.util.getdir("config") .. "/themes/default/theme.lua")
 beautiful.init(awful.util.getdir("config") .. "/themes/current/theme.lua")
 
--- This is used later as the default terminal and editor to run.
 terminal = "xfce4-terminal"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
