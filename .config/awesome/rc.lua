@@ -7,6 +7,7 @@ require("awful.rules")
 require("beautiful")
 -- Notification library
 require("naughty")
+require("revelation")
 
 -- Load Debian menu entries
 require("debian.menu")
@@ -218,6 +219,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
     awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
+    awful.key({ modkey }, "b", function () mywibox[mouse.screen].visible = not mywibox[mouse.screen].visible end),
     awful.key({ modkey,           }, "Tab",
         function ()
             awful.client.focus.history.previous()
@@ -242,6 +244,7 @@ globalkeys = awful.util.table.join(
 
     -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
+    awful.key({ modkey },            "e",     revelation),
 
     awful.key({ modkey }, "x",
               function ()
@@ -416,6 +419,7 @@ run_once("mpd")
 run_once("mpd-hits","-d")
 awful.util.spawn_with_shell("set-touchpad")
 run_once("parcellite" ,nil, nil)
+run_once("mail-notification" ,nil, nil)
 -- run_once("/usr/bin/python", "-O /usr/share/wicd/gtk/wicd-client.py" ,nil, nil)
 run_once("conky", "-c /home/kamil/.conky/std.conf" ,nil,nil)
 run_once("conky", "-c /home/kamil/.conky/rings.conf" ,nil,nil)
