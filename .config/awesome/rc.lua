@@ -17,7 +17,7 @@ require("debian.menu")
 -- Themes define colours, icons, and wallpapers
 beautiful.init(awful.util.getdir("config") .. "/themes/current/theme.lua")
 
-terminal = "xfce4-terminal"
+terminal = "xfce4-terminal -e zsh"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -33,9 +33,9 @@ layouts =
 {
     awful.layout.suit.floating,
     awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
-    awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
+    -- awful.layout.suit.tile.left,
+    -- awful.layout.suit.tile.bottom,
+    -- awful.layout.suit.tile.top,
     awful.layout.suit.fair,
     awful.layout.suit.fair.horizontal,
     -- awful.layout.suit.spiral,
@@ -354,7 +354,7 @@ awful.rules.rules = {
     { rule = { class = "pinentry" },
       properties = { floating = true } },
     { rule = { class = "Pidgin" },
-      properties = { floating = true } },
+      properties = { tag = tags[1][3]} },
     { rule = { class = "gimp" },
       properties = { floating = true } },
     -- Set Firefox to always map on tags number 2 of screen 1.
@@ -422,6 +422,8 @@ run_once("parcellite" ,nil, nil)
 run_once("mail-notification" ,nil, nil)
 -- run_once("/usr/bin/python", "-O /usr/share/wicd/gtk/wicd-client.py" ,nil, nil)
 run_once("conky", "-c /home/kamil/.conky/std.conf" ,nil,nil)
-run_once("conky", "-c /home/kamil/.conky/rings.conf" ,nil,nil)
+-- run_once("conky", "-c /home/kamil/.conky/rings.conf" ,nil,nil)
+
+awful.util.spawn_with_shell("sleep 40 && awsetbg -f -r Wallpapers")
 
 -- }}}
