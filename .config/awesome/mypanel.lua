@@ -65,12 +65,6 @@ for s = 1, screen.count() do
     mytasklist[s] = awful.widget.tasklist(function(c)
                                               return awful.widget.tasklist.label.currenttags(c, s)
                                           end, mytasklist.buttons)
-    -- -- Create launchers
-    -- myluanchers = {'firefox4' = '/usr/share/iceweasel/icons/mozicon50.xpm',
-    --                'pidgin'   = /usr/share/icons/hicolor/48x48/apps/pidgin.png'}
-    -- for k, v in pairs(mylaunchers) do
-    
-    -- end
 
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s })
@@ -86,6 +80,7 @@ for s = 1, screen.count() do
         mytextclock,
         s == 1 and mpdwidget or nil,
         s == 1 and mysystray or nil,
+        batwidget,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
