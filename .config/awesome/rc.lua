@@ -91,5 +91,5 @@ require("launch_terminal")
 -- }}}
 
 -- {{{ Calendar popup
-require("calendar_popup")
+-- require("calendar_popup")
 -- }}}
