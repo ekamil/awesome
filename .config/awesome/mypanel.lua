@@ -80,7 +80,6 @@ for s = 1, screen.count() do
         mytextclock,
         s == 1 and mpdwidget or nil,
         s == 1 and mysystray or nil,
-        batwidget,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
