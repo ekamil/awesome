@@ -58,29 +58,6 @@ volwidget:buttons(awful.util.table.join(
 -- }}}
 
 
--- {{{ Battery state
-
--- Initialize widget
-batwidget = widget({ type = "textbox" })
-baticon = widget({ type = "imagebox" })
-acicon = widget({ type = "imagebox" })
-
--- Register widget
-vicious.register(batwidget, vicious.widgets.bat,
-function (widget, args)
-if args[1] == "+ " then
-    acicon = image(icons.charging)
-end
-if args[2] == 0 then
-    return ""
-else
-    baticon.image = image(icons.batt_bat1)
-    return args[2] .. '%'
-end
-end, 61, "BAT1"
-)
--- }}}
-
 -- {{{ Battery widget with steps
 
 require "battery_widget"
