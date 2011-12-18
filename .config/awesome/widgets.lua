@@ -71,7 +71,7 @@ end
 if args[2] == 0 then
     return ""
 else
-    baticon.image = image(icons.bat)
+    baticon.image = image(icons.batt_bat1)
     return args[2] .. '%'
 end
 end, 61, "BAT1"
