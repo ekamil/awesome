@@ -1,4 +1,6 @@
+require "calendar2"
 require "icons"
+
 -- {{{ MPD widget
 mpdicon = widget({ type = "imagebox" })
 mpdicon.image = image(icons.mpd)
@@ -35,6 +37,7 @@ date_format = "%a, %d %b %Y, %H:%M"
 datewidget = widget({ type = "textbox" })
 -- Register widget
 vicious.register(datewidget, vicious.widgets.date, date_format, 13)
+calendar2.addCalendarToWidget(datewidget)
 -- }}}
 
 -- {{{ Volume level
@@ -92,6 +95,10 @@ uptimeicon.image = image(icons.uptime)
 uptimewidget = widget({ type = "textbox" })
 vicious.register(uptimewidget, vicious.widgets.uptime,
 function (widget, args)
-    return string.format("%2dd %02d:%02d", args[1], args[2], args[3])
+    if args[1] == 0 then
+        return string.format("%02d:%02d", args[2], args[3])
+    else 
+        return string.format("%2dd %02d:%02d", args[1], args[2], args[3])
+    end
 end, 23)
 -- }}}

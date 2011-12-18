@@ -77,8 +77,8 @@ for s = 1, screen.count() do
             layout = awful.widget.layout.horizontal.leftright
         },
         mylayoutbox[s],
-        uptimewidget, uptimeicon,
         datewidget, dateicon, 
+        uptimewidget, uptimeicon,
         mpdwidget, mpdicon,
         batwidget, acicon, baticon,
         volwidget, volicon,
