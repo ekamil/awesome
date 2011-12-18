@@ -2,7 +2,7 @@ require("vicious")
 require("widgets")
 -- {{{ Wibox
 -- Create a textclock widget
-mytextclock = awful.widget.textclock({ align = "right" })
+mytextclock = awful.widget.textclock({ align = "right" }, "%a, %d %b %Y, %H:%M")
 
 -- Create a systray
 mysystray = widget({ type = "systray" })
@@ -77,9 +77,12 @@ for s = 1, screen.count() do
             layout = awful.widget.layout.horizontal.leftright
         },
         mylayoutbox[s],
-        mytextclock,
-        s == 1 and mpdwidget or nil,
-        s == 1 and mysystray or nil,
+        uptimewidget, uptimeicon,
+        datewidget, dateicon, 
+        mpdwidget, mpdicon,
+        batwidget, acicon, baticon,
+        volwidget, volicon,
+        separator, mysystray, separator,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }

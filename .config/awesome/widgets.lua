@@ -1,5 +1,14 @@
+require "icons"
 -- {{{ MPD widget
+mpdicon = widget({ type = "imagebox" })
+mpdicon.image = image(icons.mpd)
 mpdwidget = widget({ type = "textbox" })
+-- Register buttons
+mpdwidget:buttons(awful.util.table.join(
+   awful.button({ }, 1, function () awful.util.spawn("mpc toggle") end),
+   awful.button({ }, 2, function () check_for_terminal("pms") end)
+   ))
+--
 vicious.register(mpdwidget, vicious.widgets.mpd,
     function (widget, args)
         if args["{state}"] == "Stop" then 
@@ -12,7 +21,7 @@ vicious.register(mpdwidget, vicious.widgets.mpd,
 
 -- {{{ Reusable separator
 separator = widget({ type = "imagebox" })
-separator.image = image(beautiful.widget_sep)
+separator.image = image(icons.sep)
 
 spacer = widget({ type = "textbox" })
 spacer.width = 3
@@ -20,37 +29,29 @@ spacer.width = 3
 
 -- {{{ Date and time
 dateicon = widget({ type = "imagebox" })
-dateicon.image = image(beautiful.widget_date)
+dateicon.image = image(icons.date)
+date_format = "%a, %d %b %Y, %H:%M"
 -- Initialize widget
 datewidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(datewidget, vicious.widgets.date, date_format, 61)
+vicious.register(datewidget, vicious.widgets.date, date_format, 13)
 -- }}}
 
 -- {{{ Volume level
 volicon = widget({ type = "imagebox" })
-volicon.image = image(beautiful.widget_vol)
+volicon.image = image(icons.vol)
 -- Initialize widgets
-volbar = awful.widget.progressbar()
 volwidget = widget({ type = "textbox" })
--- Progressbar properties
-volbar:set_vertical(true):set_ticks(true)
-volbar:set_height(16):set_width(8):set_ticks_size(2)
-volbar:set_background_color(beautiful.fg_off_widget)
-volbar:set_gradient_colors({ beautiful.fg_widget,
-   beautiful.fg_center_widget, beautiful.fg_end_widget
-}) -- Enable caching
+-- Enable caching
 vicious.cache(vicious.widgets.volume)
 -- Register widgets
-vicious.register(volbar, vicious.widgets.volume, "$1", 2, "PCM")
-vicious.register(volwidget, vicious.widgets.volume, " $1%", 2, "PCM")
+vicious.register(volwidget, vicious.widgets.volume, " $1%", 15, "PCM")
 -- Register buttons
-volbar.widget:buttons(awful.util.table.join(
-   awful.button({ }, 1, function () exec("kmix") end),
-   awful.button({ }, 4, function () exec("amixer -q set PCM 2dB+", false) vicious.force({volbar, volwidget}) end),
-   awful.button({ }, 5, function () exec("amixer -q set PCM 2dB-", false) vicious.force({volbar, volwidget}) end)
-)) -- Register assigned buttons
-volwidget:buttons(volbar.widget:buttons())
+volwidget:buttons(awful.util.table.join(
+   awful.button({ }, 1, function () awful.util.spawn("amixer set Master toggle") end),
+   awful.button({ }, 4, function () awful.util.spawn("amixer -q set PCM 2dB+") end),
+   awful.button({ }, 5, function () awful.util.spawn("amixer -q set PCM 2dB-") end)
+   ))
 -- }}}
 
 
@@ -59,17 +60,38 @@ volwidget:buttons(volbar.widget:buttons())
 -- Initialize widget
 batwidget = widget({ type = "textbox" })
 baticon = widget({ type = "imagebox" })
+acicon = widget({ type = "imagebox" })
 
 -- Register widget
 vicious.register(batwidget, vicious.widgets.bat,
 function (widget, args)
-if args[2] == 0 then return ""
-else
-baticon.image = image(beautiful.widget_bat)
-return "<span color='white'>".. args[2] .. "%</span>"
+if args[1] == "+ " then
+    acicon = image(icons.charging)
 end
-end, 61, "BAT0"
+if args[2] == 0 then
+    return ""
+else
+    baticon.image = image(icons.bat)
+    return args[2] .. '%'
+end
+end, 61, "BAT1"
 )
 -- }}}
 
+-- {{{ Battery widget with steps
 
+require "battery_widget"
+
+--}}}
+
+
+-- {{{ Uptime 
+uptimeicon = widget({type = "imagebox"})
+uptimeicon.image = image(icons.uptime)
+
+uptimewidget = widget({ type = "textbox" })
+vicious.register(uptimewidget, vicious.widgets.uptime,
+function (widget, args)
+    return string.format("%2dd %02d:%02d", args[1], args[2], args[3])
+end, 23)
+-- }}}
