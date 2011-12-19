@@ -12,7 +12,7 @@ require("shifty")
 -- shifty: predefined tags
 shifty.config.tags = {
 ["1"] = { init = true, position = 1, layout = awful.layout.suit.tile },
-["2"] = { position = 2, layout = awful.layout.suit.max },
+["2"] = { init = true, position = 2, layout = awful.layout.suit.max },
 ["3"] = { position = 3, layout = awful.layout.suit.floating },
 ["4"] = { position = 4, layout = awful.layout.suit.tile.bottom },
 ["5"] = { position = 5, layout = awful.layout.suit.tile.bottom },
@@ -34,12 +34,13 @@ shifty.config.apps = {
 { match = { "gimp%-image%-window" }, geometry = {175,15,930,770}, border_width = 0 },
 { match = { "^gimp%-toolbox$" }, geometry = {0,15,175,770}, slave = true, border_width = 0 },
 { match = { "^gimp%-dock$" }, geometry = {1105,15,175,770}, slave = true, border_width = 0 },
---video
+-- x-video
 { match = { "MPlayer" }, geometry = {0,15,nil,nil}, float = true },
 
 -- client manipulation
 { match = { "" },
 honorsizehints = false,
+nopopup = true,
 buttons = awful.util.table.join (
 awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
 awful.button({ modkey }, 1, awful.mouse.client.move),
@@ -50,7 +51,8 @@ awful.button({ modkey , "Shift"}, 1, awful.mouse.client.resize))
 
 -- shifty: defaults
 shifty.config.defaults = {
-layout = awful.layout.suit.max,
+    layout = awful.layout.suit.max,
+    nopopup = true,
 }
 shifty.config.layouts = layouts
 shifty.init()

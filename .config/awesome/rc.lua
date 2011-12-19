@@ -65,6 +65,10 @@ root.buttons(awful.util.table.join(
 ))
 -- }}}
 
+-- {{{ functions to help launch run commands in a terminal using ":" keyword 
+require("launch_terminal")
+-- }}}
+
 -- {{{ Key bindings
 require("keys")
 -- }}}
@@ -79,12 +83,4 @@ require("signals")
 
 -- {{{ Autostart
 require("autostart")
--- }}}
-
--- {{{ functions to help launch run commands in a terminal using ":" keyword 
-require("launch_terminal")
--- }}}
-
--- {{{ Calendar popup
--- require("calendar_popup")
 -- }}}
