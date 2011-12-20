@@ -6,9 +6,9 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
     awful.key({modkey, "Shift"}, "Left", shifty.shift_prev),
     awful.key({modkey, "Shift"}, "Right", shifty.shift_next),
-    awful.key({modkey}, "t", function() shifty.add({ rel_index = 1 }) end),
-    awful.key({modkey, "Control"}, "r", shifty.rename),
-    awful.key({modkey, "Control"}, "w", shifty.del),
+    awful.key({modkey, "Shift"}, "t", function() shifty.add({ rel_index = 1 }) end),
+    awful.key({modkey, "Shift"}, "r", shifty.rename),
+    awful.key({modkey, "Shift"}, "w", shifty.del),
 
     awful.key({ modkey,           }, "j",
         function ()
