@@ -11,14 +11,14 @@ require("shifty")
 
 -- shifty: predefined tags
 shifty.config.tags = {
-["1"] = { init = true, position = 1, layout = awful.layout.suit.tile },
+["1"] = { init = true, position = 1, layout = awful.layout.suit.max },
 ["2"] = { init = true, position = 2, layout = awful.layout.suit.max },
 ["3"] = { position = 3, layout = awful.layout.suit.floating },
-["4"] = { position = 4, layout = awful.layout.suit.tile.bottom },
-["5"] = { position = 5, layout = awful.layout.suit.tile.bottom },
-["6"] = { position = 6, layout = awful.layout.suit.floating, spawn = "gimp" },
-["7"] = { position = 7, layout = awful.layout.suit.floating },
-["8"] = { position = 8, layout = awful.layout.suit.tile.bottom },
+["4"] = { position = 4, layout = awful.layout.suit.tile},
+["5"] = { position = 5, layout = awful.layout.suit.tile},
+["6"] = { position = 6, layout = awful.layout.suit.tile},
+["7"] = { position = 7, layout = awful.layout.suit.tile},
+["8"] = { position = 8, layout = awful.layout.suit.tile},
 }
 
 
@@ -36,6 +36,9 @@ shifty.config.apps = {
 { match = { "^gimp%-dock$" }, geometry = {1105,15,175,770}, slave = true, border_width = 0 },
 -- x-video
 { match = { "MPlayer" }, geometry = {0,15,nil,nil}, float = true },
+-- eclipse
+{ match = { "Eclipse" }, tag = "4" },
+
 
 -- client manipulation
 { match = { "" },
