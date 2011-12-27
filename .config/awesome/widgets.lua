@@ -79,3 +79,48 @@ function (widget, args)
     end
 end, 23)
 -- }}}
+
+-- {{{ CPU temperature
+thermalwidget = widget({ type = "textbox" })
+thermalicon = widget({ type = "imagebox" })
+thermalicon.image = image(icons.temp)
+vicious.register(thermalwidget, vicious.widgets.thermal, "$1°C", 5, {"thermal_zone0", "sys"})
+-- }}}
+
+-- {{{ Memory usage
+-- Initialize widget
+memwidget = widget({ type = "textbox" })
+memicon = widget({ type = "imagebox" })
+memicon.image = image(icons.mem)
+vicious.register(memwidget, vicious.widgets.mem, "$2MB/$3MB ", 5)
+-- }}}
+
+-- {{{ Net usage
+netwidget = widget({ type = "textbox" })
+neticon = widget({ type = "imagebox" })
+neticon.image = image(icons.netio)
+vicious.register(netwidget, vicious.widgets.net,
+function (widget, args)
+   local down, up
+   if args["{eth0 down_kb}"] ~= "0.0" or args["{eth0 up_kb}"] ~= "0.0" then
+      down, up = args["{eth0 down_kb}"], args["{eth0 up_kb}"]
+   elseif args["{wlan0 down_kb}"] ~= "0.0" or args["{wlan0 up_kb}"] ~= "0.0" then
+      down, up = args["{wlan0 down_kb}"], args["{wlan0 up_kb}"]
+   else
+     neticon.visible = false
+     return
+   end
+   neticon.visible = true
+   return string.format("%skb/%skb", up, down)
+end, 5)
+-- }}}
+
+-- {{{ Disk I/O
+ioicon = widget({ type = "imagebox" })
+ioicon.image = image(icons.disk)
+ioicon.visible = true
+iowidget = widget({ type = "textbox" })
+vicious.register(iowidget, vicious.widgets.dio, "SSD ${sda read_mb}/${sda write_mb}MB", 3)
+-- Register buttons
+iowidget:buttons( awful.button({ }, 1, function () awful.util.spawn(terminal .. " -e iotop") end) )
+-- }}}
