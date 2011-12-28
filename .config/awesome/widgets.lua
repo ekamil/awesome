@@ -1,6 +1,20 @@
 require "calendar2"
 require "icons"
 
+-- {{{ From wiki
+-- Execute command and return its output. You probably won't only execute commands with one
+-- line of output
+function execute_command(command)
+   local fh = io.popen(command)
+   local str = ""
+   for i in fh:lines() do
+      str = str .. i
+   end
+   io.close(fh)
+   return str
+end
+-- }}}
+
 -- {{{ MPD widget
 mpdicon = widget({ type = "imagebox" })
 mpdicon.image = image(icons.mpd)
@@ -82,10 +96,16 @@ end, 23)
 
 -- {{{ CPU temperature
 thermalwidget = widget({ type = "textbox" })
-thermalwidget.width = 60
 thermalicon = widget({ type = "imagebox" })
 thermalicon.image = image(icons.temp)
-vicious.register(thermalwidget, vicious.widgets.thermal, "ACPI: $1°C", 5, {"thermal_zone0", "core"})
+vicious.register(thermalwidget,
+                vicious.widgets.thermal,
+                function (widget, args)
+                if args[1] > 0 then return string.format("ACPI: %s°C", args[1])
+                else return ""
+                end
+                end,
+                5, {"thermal_zone0", "core"})
 -- }}}
 
 -- {{{ Memory usage
@@ -113,7 +133,7 @@ vicious.register(cpuwidget, vicious.widgets.cpu, "$1%", 5)
 
 -- {{{ Net usage
 netwidget = widget({ type = "textbox" })
--- netwidget.width = 120
+netwidget.width = 130
 neticon = widget({ type = "imagebox" })
 neticon.image = image(icons.netio)
 vicious.register(netwidget, vicious.widgets.net,
@@ -134,12 +154,17 @@ end, 3)
 -- {{{ wifi
 wifiicon =  widget({ type = "imagebox" })
 wifiicon.image = image(icons.wifi)
-wifiwidget = widget({ type = "textbox" })
-wifiwidget.text = "SSID: (strenght%)"
-vicious.register(wifiwidget, nil,
-    function (widget,args)
-        widget.text = "SSID: (strenght%)"
-    end, 3)
+wifiwidget = widget({ type = "textbox", name = "wifiwidget" })
+function wicd_info ()
+    local essid = execute_command("/usr/bin/wicd-cli -yp Essid")
+    local qual = execute_command("/usr/bin/wicd-cli -yp Quality")
+    local info = string.format("SSID: %s (%s %%)", essid, qual)
+    wifiwidget.text = info
+end
+wicd_info()
+mytimer = timer({ timeout = 37 })
+mytimer:add_signal("timeout", wicd_info)
+mytimer:start()
 -- }}}
 
 -- {{{ Disk I/O
