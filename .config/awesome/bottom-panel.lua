@@ -13,11 +13,19 @@ for s = 1, screen.count() do
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
         {},
-        volwidget, volicon,
-        thermalwidget, thermalicon,
-        memwidget, memicon,
-        netwidget, neticon,
-        iowidget, ioicon,
-        layout = awful.widget.layout.horizontal.rightleft
+        thermalicon ,thermalwidget , hddtempwidget, 
+        separator,
+        cpuicon     ,cpuwidget     ,
+        separator,
+        memicon     ,memwidget     ,
+        separator,
+        neticon     ,netwidget     ,
+        separator,
+        wifiicon    ,wifiwidget    ,
+        separator,
+        ioicon      ,iowidget      ,
+        separator,
+        fsicon, fswidget,
+        layout = awful.widget.layout.horizontal.leftright
     }
 end

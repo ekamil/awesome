@@ -82,21 +82,38 @@ end, 23)
 
 -- {{{ CPU temperature
 thermalwidget = widget({ type = "textbox" })
+thermalwidget.width = 60
 thermalicon = widget({ type = "imagebox" })
 thermalicon.image = image(icons.temp)
-vicious.register(thermalwidget, vicious.widgets.thermal, "$1°C", 5, {"thermal_zone0", "sys"})
+vicious.register(thermalwidget, vicious.widgets.thermal, "ACPI: $1°C", 5, {"thermal_zone0", "core"})
 -- }}}
 
 -- {{{ Memory usage
 -- Initialize widget
 memwidget = widget({ type = "textbox" })
+memwidget.width = 130
 memicon = widget({ type = "imagebox" })
 memicon.image = image(icons.mem)
-vicious.register(memwidget, vicious.widgets.mem, "$2MB/$3MB ", 5)
+vicious.register(memwidget, vicious.widgets.mem, "$2MB/$3MB ($1%)", 5)
+-- }}}
+
+-- {{{ Hddtemp
+hddtempwidget = widget({ type = "textbox" })
+hddtempwidget.width = 60
+vicious.register(hddtempwidget, vicious.widgets.hddtemp, "SDA: ${/dev/sda}°C", 5)
+-- }}}
+
+-- {{{ CPU usage
+cpuwidget = widget({ type = "textbox" })
+cpuwidget.width = 25
+cpuicon = widget({ type = "imagebox" })
+cpuicon.image = image(icons.cpu)
+vicious.register(cpuwidget, vicious.widgets.cpu, "$1%", 5)
 -- }}}
 
 -- {{{ Net usage
 netwidget = widget({ type = "textbox" })
+-- netwidget.width = 120
 neticon = widget({ type = "imagebox" })
 neticon.image = image(icons.netio)
 vicious.register(netwidget, vicious.widgets.net,
@@ -107,20 +124,36 @@ function (widget, args)
    elseif args["{wlan0 down_kb}"] ~= "0.0" or args["{wlan0 up_kb}"] ~= "0.0" then
       down, up = args["{wlan0 down_kb}"], args["{wlan0 up_kb}"]
    else
-     neticon.visible = false
-     return
+      down, up = "0.0", "0.0"
    end
    neticon.visible = true
-   return string.format("%skb/%skb", up, down)
-end, 5)
+   return string.format("%5s kb / %5s kb", down, up)
+end, 3)
+-- }}}
+
+-- {{{ wifi
+wifiicon =  widget({ type = "imagebox" })
+wifiicon.image = image(icons.wifi)
+wifiwidget = widget({ type = "textbox" })
+wifiwidget.text = "SSID: (strenght%)"
+vicious.register(wifiwidget, nil,
+    function (widget,args)
+        widget.text = "SSID: (strenght%)"
+    end, 3)
 -- }}}
 
 -- {{{ Disk I/O
 ioicon = widget({ type = "imagebox" })
-ioicon.image = image(icons.disk)
-ioicon.visible = true
+ioicon.image = image(icons.fs)
 iowidget = widget({ type = "textbox" })
-vicious.register(iowidget, vicious.widgets.dio, "SSD ${sda read_mb}/${sda write_mb}MB", 3)
--- Register buttons
-iowidget:buttons( awful.button({ }, 1, function () awful.util.spawn(terminal .. " -e iotop") end) )
+vicious.register(iowidget, vicious.widgets.dio, "SDA ${sda read_kb}/${sda write_kb} KB", 3)
+-- }}}
+
+-- {{{ FS
+fsicon = widget({ type = "imagebox" })
+fsicon.image = image(icons.fs)
+fswidget = widget({ type = "textbox" })
+vicious.register(fswidget, vicious.widgets.fs, 
+                "/ ${/ used_gb}GB / ${/ size_gb}GB (${/ avail_p} %free) | /home ${/home used_gb}GB / ${/home size_gb}GB (${/home avail_p} %free)"
+                        , 305)
 -- }}}
