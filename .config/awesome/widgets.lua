@@ -32,7 +32,7 @@ vicious.register(mpdwidget, vicious.widgets.mpd,
         else 
             return args["{Artist}"]..' - '.. args["{Title}"]
         end
-    end, 5)
+    end, mytimes.mpdwidget)
 -- }}}
 
 -- {{{ Reusable separator
@@ -50,7 +50,7 @@ date_format = "%a, %d %b %Y, %H:%M"
 -- Initialize widget
 datewidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(datewidget, vicious.widgets.date, date_format, 13)
+vicious.register(datewidget, vicious.widgets.date, date_format, mytimes.date)
 calendar2.addCalendarToWidget(datewidget)
 -- }}}
 
@@ -62,7 +62,7 @@ volwidget = widget({ type = "textbox" })
 -- Enable caching
 vicious.cache(vicious.widgets.volume)
 -- Register widgets
-vicious.register(volwidget, vicious.widgets.volume, " $1%", 15, "PCM")
+vicious.register(volwidget, vicious.widgets.volume, " $1%", mytimes.vol, "PCM")
 -- Register buttons
 volwidget:buttons(awful.util.table.join(
    awful.button({ }, 1, function () awful.util.spawn("amixer set Master toggle") end),
@@ -91,7 +91,7 @@ function (widget, args)
     else 
         return string.format("%2dd %02d:%02d", args[1], args[2], args[3])
     end
-end, 23)
+end, mytimes.uptime)
 -- }}}
 
 -- {{{ CPU temperature
@@ -105,7 +105,7 @@ vicious.register(thermalwidget,
                 else return ""
                 end
                 end,
-                5, {"thermal_zone0", "core"})
+                mytimes.thermal, {"thermal_zone0", "core"})
 -- }}}
 
 -- {{{ Memory usage
@@ -114,13 +114,13 @@ memwidget = widget({ type = "textbox" })
 memwidget.width = 130
 memicon = widget({ type = "imagebox" })
 memicon.image = image(icons.mem)
-vicious.register(memwidget, vicious.widgets.mem, "$2MB/$3MB ($1%)", 5)
+vicious.register(memwidget, vicious.widgets.mem, "$2MB/$3MB ($1%)", mytimes.mem)
 -- }}}
 
 -- {{{ Hddtemp
 hddtempwidget = widget({ type = "textbox" })
 hddtempwidget.width = 60
-vicious.register(hddtempwidget, vicious.widgets.hddtemp, "SDA: ${/dev/sda}°C", 5)
+vicious.register(hddtempwidget, vicious.widgets.hddtemp, "SDA: ${/dev/sda}°C", mytimes.hddt)
 -- }}}
 
 -- {{{ CPU usage
@@ -128,7 +128,7 @@ cpuwidget = widget({ type = "textbox" })
 cpuwidget.width = 25
 cpuicon = widget({ type = "imagebox" })
 cpuicon.image = image(icons.cpu)
-vicious.register(cpuwidget, vicious.widgets.cpu, "$1%", 5)
+vicious.register(cpuwidget, vicious.widgets.cpu, "$1%", mytimes.cpu)
 -- }}}
 
 -- {{{ Net usage
@@ -148,7 +148,7 @@ function (widget, args)
    end
    neticon.visible = true
    return string.format("Dl: %5s kb Up: %5s kb", down, up)
-end, 3)
+end, mytimes.net)
 -- }}}
 
 -- {{{ wifi
@@ -171,7 +171,7 @@ mytimer:start()
 ioicon = widget({ type = "imagebox" })
 ioicon.image = image(icons.fs)
 iowidget = widget({ type = "textbox" })
-vicious.register(iowidget, vicious.widgets.dio, "SDA ${sda read_kb}/${sda write_kb} KB", 3)
+vicious.register(iowidget, vicious.widgets.dio, "SDA ${sda read_kb}/${sda write_kb} KB", mytimes.io)
 -- }}}
 
 -- {{{ FS
@@ -180,7 +180,7 @@ fsicon.image = image(icons.fs)
 fswidget = widget({ type = "textbox" })
 vicious.register(fswidget, vicious.widgets.fs, 
                 "/ ${/ used_gb}GB / ${/ size_gb}GB (${/ avail_p} %free) | /home ${/home used_gb}GB / ${/home size_gb}GB (${/home avail_p} %free)"
-                        , 305)
+                        , mytimes.fs)
 -- }}}
 
 
@@ -198,5 +198,5 @@ vicious.register(mailicon, vicious.widgets.mdir,
                         end
                         return nil
                 end,
-                10, mailfolders)
+                mytimes.mail, mailfolders)
 -- }}}

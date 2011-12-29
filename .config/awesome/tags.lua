@@ -1,14 +1,5 @@
 require("shifty")
 
--- Define a tag table which hold all screen tags.
---
--- tags = {}
--- for s = 1, screen.count() do
---     -- Each screen has its own tag table.
---     tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
--- end
-
-
 -- shifty: predefined tags
 shifty.config.tags = {
 ["1"] = { init = true, position = 1, layout = awful.layout.suit.max },
@@ -19,6 +10,7 @@ shifty.config.tags = {
 ["6"] = { position = 6, layout = awful.layout.suit.tile},
 ["7"] = { position = 7, layout = awful.layout.suit.tile},
 ["8"] = { position = 8, layout = awful.layout.suit.tile},
+["vlc"] = { layout = awful.layout.suit.max},
 }
 
 
@@ -40,6 +32,8 @@ shifty.config.apps = {
 { match = { "Chromium" }, tag = "5"},
 -- eclipse
 { match = { "Eclipse" }, tag = "4" },
+-- vlc
+{ match = { "Vlc" }, tag = "vlc" },
 
 
 -- client manipulation

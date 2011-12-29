@@ -37,10 +37,10 @@ vicious.register(baticon, vicious.widgets.bat, function (widget, args)
         baticon.image = image(icons.batt_ac)
     end
 end,
-33, battery)
+mytimes.baticon, battery)
 
 batwidget = widget({ type = "textbox" })
-vicious.register(batwidget, vicious.widgets.bat, "$2%", 31, battery)
+vicious.register(batwidget, vicious.widgets.bat, "$2%", mytimes.batwidget, battery)
 batwidget:add_signal('mouse::enter', function()
     local fd = nil
     fd = io.popen("acpi -btai")

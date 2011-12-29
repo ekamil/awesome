@@ -22,6 +22,10 @@ editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
 -- }}}
 
+-- {{{ Tags
+require("refr_times")
+-- }}}
+
 -- {{{ layouts
 -- Table of layouts to cover with awful.layout.inc, order matters.
 layouts =

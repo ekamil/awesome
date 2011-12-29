@@ -42,23 +42,35 @@ function read_maildirs(md)
         mails = {}
         -- Recursively find new messages
         local f = io.popen("find '"..mdir.."' -type f -wholename '*/new/*'")
+        local counter = 0
         for line in f:lines() do 
-            table.insert(mails,format_mail(newmail_format,line)) 
+            if counter < 5 then 
+                table.insert(mails,format_mail(newmail_format,line)) 
+            else
+                table.insert(mails, "\n")
+            end
+            counter = counter + 1
         end
         f:close()
+        counter = 0
 
         -- Recursively find "old" messages lacking the Seen flag
         local f = io.popen("find '"..mdir.."' -type f -regex '.*/cur/.*2,[^S]*$'")
         for line in f:lines() do 
-            table.insert(mails,format_mail(oldmail_format,line))
+            if counter < 5 then 
+                table.insert(mails,format_mail(oldmail_format,line))
+            else
+                table.insert(mails, "\n")
+            end
+            counter = counter + 1
         end
         f:close()
 
         if #mails>0 then info = info .. string.format(dir_format,mdir) .. ':\n' end
         for m=1, #mails do
             info = info .. mails[m]
-            if m > 10 then 
-                info = info .. "And many more"
+            if m >= 5 then 
+                info = info .. "And " .. #mails - 5 .. " more\n"
                 break 
             end
         end
