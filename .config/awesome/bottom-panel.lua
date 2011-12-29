@@ -1,17 +1,17 @@
 require("vicious")
 require("widgets")
--- {{{ Wibox
+-- {{{ bottompanel
 -- Create a textclock widget
 
-mywibox = {}
+mybottompanel = {}
 
--- Create a wibox for each screen and add it
+-- Create a bottompanel for each screen and add it
 --
 for s = 1, screen.count() do
-    -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "bottom", screen = s })
-    -- Add widgets to the wibox - order matters
-    mywibox[s].widgets = {
+    -- Create the bottompanel
+    mybottompanel[s] = awful.wibox({ position = "bottom", screen = s })
+    -- Add widgets to the bottompanel - order matters
+    mybottompanel[s].widgets = {
         {},
         thermalicon ,thermalwidget , hddtempwidget, 
         separator,
@@ -19,13 +19,14 @@ for s = 1, screen.count() do
         separator,
         memicon     ,memwidget     ,
         separator,
-        neticon     ,netwidget     ,
-        separator,
         wifiicon    ,wifiwidget    ,
+        separator,
+        netwidget     ,
         separator,
         ioicon      ,iowidget      ,
         separator,
         fsicon, fswidget,
+        separator, mailicon,
         layout = awful.widget.layout.horizontal.leftright
     }
 end

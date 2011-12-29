@@ -21,10 +21,7 @@ run_once("mpd-hits","-d")
 awful.util.spawn_with_shell("set-touchpad")
 run_once("parcellite" ,nil, nil)
 run_once("mail-notification" ,nil, nil)
--- run_once("/usr/bin/python", "-O /usr/share/wicd/gtk/wicd-client.py" ,nil, nil)
 run_once("conky", "-c /home/kamil/.conky/std.conf" ,nil,nil)
-run_once("conky", "-c /home/kamil/.conky/wibar.conf" ,nil,nil)
--- run_once("conky", "-c /home/kamil/.conky/rings.conf" ,nil,nil)
 
 awful.util.spawn_with_shell("sleep 40 && awsetbg -f -r Wallpapers")
 

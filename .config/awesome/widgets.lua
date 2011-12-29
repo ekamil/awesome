@@ -133,7 +133,7 @@ vicious.register(cpuwidget, vicious.widgets.cpu, "$1%", 5)
 
 -- {{{ Net usage
 netwidget = widget({ type = "textbox" })
-netwidget.width = 130
+netwidget.width = 150
 neticon = widget({ type = "imagebox" })
 neticon.image = image(icons.netio)
 vicious.register(netwidget, vicious.widgets.net,
@@ -147,7 +147,7 @@ function (widget, args)
       down, up = "0.0", "0.0"
    end
    neticon.visible = true
-   return string.format("%5s kb / %5s kb", down, up)
+   return string.format("Dl: %5s kb Up: %5s kb", down, up)
 end, 3)
 -- }}}
 
@@ -181,4 +181,22 @@ fswidget = widget({ type = "textbox" })
 vicious.register(fswidget, vicious.widgets.fs, 
                 "/ ${/ used_gb}GB / ${/ size_gb}GB (${/ avail_p} %free) | /home ${/home used_gb}GB / ${/home size_gb}GB (${/home avail_p} %free)"
                         , 305)
+-- }}}
+
+
+-- {{{ mailhover http://awesome.naquadah.org/wiki/Email_maildir_naughty_hoover
+require('mailhoover')
+mailicon = widget({ type = 'imagebox', name = 'mailicon'})
+mailfolders = mailhoover.get_maildirs_from_mailcheck()
+mailhoover.addToWidget(mailicon, mailfolders, "kamil")
+vicious.register(mailicon, vicious.widgets.mdir,
+                function (widget, args)
+                        if args[1] > 0 then
+                                mailicon.image = image(icons.mail)
+                        else
+                                mailicon.image = image(icons.nomail)
+                        end
+                        return nil
+                end,
+                10, mailfolders)
 -- }}}
