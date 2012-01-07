@@ -13,4 +13,4 @@ mytimes.io         =  11
 mytimes.fs         =  12
 mytimes.mail       =  13
 mytimes.uptime     =  600
-mytimes.date       =  700
+mytimes.date       =  55

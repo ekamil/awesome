@@ -35,7 +35,6 @@ end
 
 function read_maildirs(md)
     local info = ""
-    local count = 0
 
     for i=1, #md do
         mdir = md[i]

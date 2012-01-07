@@ -79,10 +79,10 @@ for s = 1, screen.count() do
         mylayoutbox[s],
         datewidget, dateicon, 
         uptimewidget, uptimeicon,
-        mpdwidget, mpdicon,
         batwidget, acicon, baticon,
         volwidget, volicon,
-        separator, mysystray, separator,
+        separator, mysystray,
+        separator, mailicon,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }

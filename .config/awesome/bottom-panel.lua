@@ -12,21 +12,20 @@ for s = 1, screen.count() do
     mybottompanel[s] = awful.wibox({ position = "bottom", screen = s })
     -- Add widgets to the bottompanel - order matters
     mybottompanel[s].widgets = {
-        {},
-        thermalicon ,thermalwidget , hddtempwidget, 
+        {
+            thermalicon ,thermalwidget , hddtempwidget, 
+            separator,
+            cpuicon     ,cpuwidget     ,
+            separator,
+            memicon     ,memwidget     ,
+            separator,
+            mpdicon, mpdwidget, 
+            layout = awful.widget.layout.horizontal.leftright
+        },
+        fswidget,fsicon, 
         separator,
-        cpuicon     ,cpuwidget     ,
+        wifiwidget, netwidget, wifiicon, 
         separator,
-        memicon     ,memwidget     ,
-        separator,
-        wifiicon    ,wifiwidget    ,
-        separator,
-        netwidget     ,
-        separator,
-        ioicon      ,iowidget      ,
-        separator,
-        fsicon, fswidget,
-        separator, mailicon,
-        layout = awful.widget.layout.horizontal.leftright
+        layout = awful.widget.layout.horizontal.rightleft
     }
 end

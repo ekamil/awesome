@@ -188,7 +188,7 @@ vicious.register(fswidget, vicious.widgets.fs,
 require('mailhoover')
 mailicon = widget({ type = 'imagebox', name = 'mailicon'})
 mailfolders = mailhoover.get_maildirs_from_mailcheck()
-mailhoover.addToWidget(mailicon, mailfolders, "kamil")
+mailhoover.addToWidget(mailicon, mailfolders, "Mail")
 vicious.register(mailicon, vicious.widgets.mdir,
                 function (widget, args)
                         if args[1] > 0 then

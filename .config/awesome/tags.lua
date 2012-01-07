@@ -10,7 +10,6 @@ shifty.config.tags = {
 ["6"] = { position = 6, layout = awful.layout.suit.tile},
 ["7"] = { position = 7, layout = awful.layout.suit.tile},
 ["8"] = { position = 8, layout = awful.layout.suit.tile},
-["vlc"] = { layout = awful.layout.suit.max},
 }
 
 
@@ -20,7 +19,7 @@ shifty.config.apps = {
 { match = { "Firefox" }, tag = "2", },
 -- Pidgin
 { match = { "Pidgin" }, tag = "3", float=true,  },
-{ match = { "buddy_list" }, tag = "3", float = false, nofocus = true, geometry = {0,15,350,750}},
+{ match = { "buddy_list" }, tag = "3", float = false, nofocus = true, geometry = {0,16,350,736}},
 -- gimp
 { match = { "Gimp" }, tag = "6", },
 { match = { "gimp%-image%-window" }, geometry = {175,15,930,770}, border_width = 0 },
@@ -32,8 +31,6 @@ shifty.config.apps = {
 { match = { "Chromium" }, tag = "5"},
 -- eclipse
 { match = { "Eclipse" }, tag = "4" },
--- vlc
-{ match = { "Vlc" }, tag = "vlc" },
 
 
 -- client manipulation
