@@ -133,7 +133,7 @@ vicious.register(cpuwidget, vicious.widgets.cpu, "$1%", mytimes.cpu)
 
 -- {{{ Net usage
 netwidget = widget({ type = "textbox" })
-netwidget.width = 150
+netwidget.width = 160
 neticon = widget({ type = "imagebox" })
 neticon.image = image(icons.netio)
 vicious.register(netwidget, vicious.widgets.net,
@@ -147,7 +147,7 @@ function (widget, args)
       down, up = "0.0", "0.0"
    end
    neticon.visible = true
-   return string.format("Dl: %5s kb Up: %5s kb", down, up)
+   return string.format("Up: %5s kb/s Dl: %5s kb/s", up, down)
 end, mytimes.net)
 -- }}}
 

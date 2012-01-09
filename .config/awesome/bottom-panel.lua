@@ -24,7 +24,7 @@ for s = 1, screen.count() do
         },
         fswidget,fsicon, 
         separator,
-        wifiwidget, netwidget, wifiicon, 
+        wifiwidget, wifiicon, netwidget, neticon,
         separator,
         layout = awful.widget.layout.horizontal.rightleft
     }
