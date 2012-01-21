@@ -4,6 +4,7 @@ local tostring = tostring
 local io = io
 local table = table
 local pairs = pairs
+local next = next
 local capi = {
     mouse = mouse,
     screen = screen
@@ -35,6 +36,7 @@ end
 
 function read_maildirs(md)
     local info = ""
+    if next(md) == nil then return info end
 
     for i=1, #md do
         mdir = md[i]
@@ -95,9 +97,11 @@ function get_maildirs_from_mailcheck ()
     local rcfpath = home .. ".mailcheckrc"
     local rcfile = io.open(rcfpath)
     maildirs = {}
-    for line in rcfile:lines() do
-        local newvalue = string.gsub(line, '$%(HOME%)', home, 1)
-        table.insert(maildirs, newvalue) 
+    if rcfile then
+        for line in rcfile:lines() do
+            local newvalue = string.gsub(line, '$%(HOME%)', home, 1)
+            table.insert(maildirs, newvalue) 
+        end
     end
     return maildirs
 end

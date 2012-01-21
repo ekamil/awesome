@@ -19,12 +19,14 @@ for s = 1, screen.count() do
             separator,
             memicon     ,memwidget     ,
             separator,
+            loadwidget,
+            separator,
             mpdicon, mpdwidget, 
             layout = awful.widget.layout.horizontal.leftright
         },
-        fswidget,fsicon, 
-        separator,
-        wifiwidget, wifiicon, netwidget, neticon,
+        fs_root_widget, fsicon, separator,
+        fs_home_widget, fsicon, separator,
+        wifiwidget, wifiicon,-- netwidget, neticon,
         separator,
         layout = awful.widget.layout.horizontal.rightleft
     }

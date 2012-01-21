@@ -9,6 +9,7 @@ mytimes.mem        =  8
 mytimes.hddt       =  9
 mytimes.cpu        =  9
 mytimes.net        =  10
+mytimes.wifi       =  60
 mytimes.io         =  11
 mytimes.fs         =  12
 mytimes.mail       =  13

@@ -94,20 +94,41 @@ function (widget, args)
 end, mytimes.uptime)
 -- }}}
 
--- {{{ CPU temperature
-thermalwidget = widget({ type = "textbox" })
-thermalicon = widget({ type = "imagebox" })
-thermalicon.image = image(icons.temp)
-vicious.register(thermalwidget,
-                vicious.widgets.thermal,
-                function (widget, args)
-                if args[1] > 0 then return string.format("ACPI: %s°C", args[1])
-                else return ""
-                end
-                end,
-                mytimes.thermal, {"thermal_zone0", "core"})
+-- {{{ Load
+loadwidget = widget({ type = "textbox" })
+vicious.register(loadwidget, vicious.widgets.uptime,
+    function (widget, args)
+        -- return string.format("Load: %.2f %.2f %.2f", args[4], args[5], args[6])
+        return string.format("Load 5m: %.2f", args[5])
+    end, mytimes.thermal)
 -- }}}
 
+-- {{{ CPU temperature
+thermalwidget = widget({ type = "textbox", name = "thermalwidget" })
+thermalicon = widget({ type = "imagebox" })
+thermalicon.image = image(icons.temp)
+function cpu_temp()
+    function get_temp(proc)
+        local thermal_path = "/sys/devices/platform/coretemp.0/temp%d_input"
+        local _path = string.format(thermal_path, proc)
+        fd = io.open(_path)
+        fr = fd:read()
+        fd:close()
+        return string.format("%d°C ", fr/1000)
+    end
+    local l = "CPU: " .. get_temp(3)
+    -- for k,proc in pairs({2,4}) do
+    --     l = l .. get_temp(proc)
+    -- end
+    thermalwidget.text = l
+end
+cpu_temp()
+mytimer = timer({ timeout = mytimes.thermal })
+mytimer:add_signal("timeout", cpu_temp)
+mytimer:start()
+-- }}}
+
+-- B
 -- {{{ Memory usage
 -- Initialize widget
 memwidget = widget({ type = "textbox" })
@@ -157,12 +178,21 @@ wifiicon.image = image(icons.wifi)
 wifiwidget = widget({ type = "textbox", name = "wifiwidget" })
 function wicd_info ()
     local essid = execute_command("/usr/bin/wicd-cli -yp Essid")
-    local qual = execute_command("/usr/bin/wicd-cli -yp Quality")
-    local info = string.format("SSID: %s (%s %%)", essid, qual)
+    local info = ""
+    if essid == "Invalid wireless network identifier." then
+        local ip = execute_command("/sbin/ifconfig eth | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'")
+        info = string.format("IP: %s", ip)
+        wifiicon.visible = false
+    else
+        local qual = execute_command("/usr/bin/wicd-cli -yp Quality")
+        local ip = execute_command("/usr/bin/wicd-cli -yd | grep IP")
+        info = string.format("%s SSID: %s %s%%", ip, essid, qual)
+        wifiicon.visible = true
+    end
     wifiwidget.text = info
 end
 wicd_info()
-mytimer = timer({ timeout = 37 })
+mytimer = timer({ timeout = mytimes.wifi })
 mytimer:add_signal("timeout", wicd_info)
 mytimer:start()
 -- }}}
@@ -177,10 +207,10 @@ vicious.register(iowidget, vicious.widgets.dio, "SDA ${sda read_kb}/${sda write_
 -- {{{ FS
 fsicon = widget({ type = "imagebox" })
 fsicon.image = image(icons.fs)
-fswidget = widget({ type = "textbox" })
-vicious.register(fswidget, vicious.widgets.fs, 
-                "/ ${/ used_gb}GB / ${/ size_gb}GB (${/ avail_p} %free) | /home ${/home used_gb}GB / ${/home size_gb}GB (${/home avail_p} %free)"
-                        , mytimes.fs)
+fs_root_widget = widget({ type = "textbox" })
+vicious.register(fs_root_widget, vicious.widgets.fs, "/ ${/ avail_p} %free" , mytimes.fs)
+fs_home_widget = widget({ type = "textbox" })
+vicious.register(fs_home_widget, vicious.widgets.fs, "/home ${/home avail_p} %free" , mytimes.fs)
 -- }}}
 
 

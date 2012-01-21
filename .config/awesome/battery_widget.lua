@@ -50,7 +50,7 @@ batwidget:add_signal('mouse::enter', function()
         naughty.notify({
             text         = d
             , timeout    = 0
-            , position   = "top_right"
+            , position   = "bottom_right"
         })
     }
 end)

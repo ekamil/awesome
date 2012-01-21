@@ -36,7 +36,7 @@ end
 
         local writeLine = 1
         while writeLine < (stDay + 1) do
-                lines = lines .. " "
+                lines = lines .. "  "
                 writeLine = writeLine + 1
         end
 
@@ -45,15 +45,12 @@ end
                 local t = os.time{year=year,month=month,day=d}
                 if writeLine == 8 then
                         writeLine = 1
-                        lines = lines .. "\n" .. os.date("<span color='#1a1918'> %V</span>",t)
+                        lines = lines .. "\n" .. string.format("%-3s ", os.date("%V",t))
                 end
                 if os.date("%Y-%m-%d") == os.date("%Y-%m-%d", t) then
                         x = string.format(current_day_format, d)
                 end
-                if (#(tostring(d)) == 1) then
-                        x = " " .. x
-                end
-                lines = lines .. " " .. x
+                lines = lines .. string.format("%2s ", x)
                 writeLine = writeLine + 1
         end
         local header = os.date("<span color='#be6e00'>─────────── Calendar ──────────\n</span><span color='#1f6080'>%B %Y</span>",os.time{year=year,month=month,day=1})
@@ -73,10 +70,11 @@ function addCalendarToWidget(mywidget, custom_current_day_format)
     mywidget:add_signal('mouse::enter', function ()
     local month, year = os.date('%m'), os.date('%Y')
     calendar = { month, year, naughty.notify({
-    text = string.format('<span font_desc="%s">%s</span>', "Terminus", displayMonth(month, year, 2)),
-    border_color = "#1a1918",
-    timeout = 0,
-    hover_timeout = 0.5,
+                    text           =  string.format('<span font_desc="%s">%s</span>', "Terminus", displayMonth(month, year, 2)),
+                    border_color   =  "#1a1918",
+                    timeout        =  0,
+                    hover_timeout  =  0.5,
+                    position       =  "bottom_right"
     }) }
     end )
     --awful.key({ modkey, "Control" }, "c", function ()

@@ -45,7 +45,7 @@ end
 --}}}
 
 
-theme.font          = "sans 8"
+theme.font          = "nimbus mono 8"
 
 theme.bg_normal     = "#291700"
 theme.bg_focus      = "#564229"

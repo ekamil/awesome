@@ -1,4 +1,3 @@
--- A
 -- Standard awesome library
 require("awful")
 require("awful.autofocus")
@@ -18,6 +17,7 @@ beautiful.init(awful.util.getdir("config") .. "/themes/current/theme.lua")
 -- {{{ Variable definitions
 terminal = "xfce4-terminal -e zsh"
 editor = os.getenv("EDITOR") or "editor"
+userhome = os.getenv("HOME")
 editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
 -- }}}
