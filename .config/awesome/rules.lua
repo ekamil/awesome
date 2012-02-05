@@ -17,4 +17,15 @@ window_rules = {
 { match = { "Eclipse" }, tag = "4" },
 
 { match = { "Dia" }, float=true,  }
+,
+
+-- client manipulation
+{ match = { "" },
+honorsizehints = false,
+nopopup = true,
+buttons = awful.util.table.join (
+awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
+awful.button({ modkey }, 1, awful.mouse.client.move),
+awful.button({ modkey , "Shift"}, 1, awful.mouse.client.resize))
+}
 }

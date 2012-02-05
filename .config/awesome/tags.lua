@@ -13,20 +13,8 @@ shifty.config.tags = {
 ["8"] = { position = 8, layout = awful.layout.suit.tile},
 }
 
-
 -- shifty: tags matching and client rules
-shifty.config.apps = {window_rules,
--- client manipulation
-{ match = { "" },
-honorsizehints = false,
-nopopup = true,
-buttons = awful.util.table.join (
-awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
-awful.button({ modkey }, 1, awful.mouse.client.move),
-awful.button({ modkey , "Shift"}, 1, awful.mouse.client.resize))
-},
-}
-
+shifty.config.apps = window_rules
 
 -- shifty: defaults
 shifty.config.defaults = {
