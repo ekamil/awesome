@@ -51,7 +51,7 @@ date_format = "%a, %d %b %Y, %H:%M"
 datewidget = widget({ type = "textbox" })
 -- Register widget
 vicious.register(datewidget, vicious.widgets.date, date_format, mytimes.date)
-calendar2.addCalendarToWidget(datewidget)
+-- calendar2.addCalendarToWidget(datewidget)
 -- }}}
 
 -- {{{ Volume level

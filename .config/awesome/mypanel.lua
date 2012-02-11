@@ -82,7 +82,7 @@ for s = 1, screen.count() do
         batwidget, acicon, baticon,
         volwidget, volicon,
         separator, mysystray,
-        separator, mailicon,
+        -- separator, mailicon,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
