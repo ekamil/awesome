@@ -6,11 +6,11 @@ shifty.config.tags = {
 ["1"] = { init = true, position = 1, layout = awful.layout.suit.max },
 ["2"] = { init = true, position = 2, layout = awful.layout.suit.max },
 ["3"] = { position = 3, layout = awful.layout.suit.floating },
-["4"] = { position = 4, layout = awful.layout.suit.tile},
-["5"] = { position = 5, layout = awful.layout.suit.tile},
-["6"] = { position = 6, layout = awful.layout.suit.tile},
-["7"] = { position = 7, layout = awful.layout.suit.tile},
-["8"] = { position = 8, layout = awful.layout.suit.tile},
+["4"] = { position = 4, layout = awful.layout.suit.max},
+["5"] = { position = 5, layout = awful.layout.suit.max},
+["6"] = { position = 6, layout = awful.layout.suit.max},
+["7"] = { position = 7, layout = awful.layout.suit.max},
+["8"] = { position = 8, layout = awful.layout.suit.max},
 }
 
 -- shifty: tags matching and client rules
