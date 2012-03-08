@@ -112,8 +112,13 @@ function cpu_temp()
         local thermal_path = "/sys/devices/platform/coretemp.0/temp%d_input"
         local _path = string.format(thermal_path, proc)
         fd = io.open(_path)
-        fr = fd:read()
-        fd:close()
+        if (fd==nil)
+            then
+                fr = "0"
+            else
+                fr = fd:read()
+                fd:close()
+            end
         return string.format("%d°C ", fr/1000)
     end
     local l = "CPU: " .. get_temp(3)
