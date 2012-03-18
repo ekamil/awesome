@@ -220,18 +220,18 @@ vicious.register(fs_home_widget, vicious.widgets.fs, "/home ${/home avail_p} %fr
 
 
 -- {{{ mailhover http://awesome.naquadah.org/wiki/Email_maildir_naughty_hoover
-require('mailhoover')
-mailicon = widget({ type = 'imagebox', name = 'mailicon'})
-mailfolders = mailhoover.get_maildirs_from_mailcheck()
-mailhoover.addToWidget(mailicon, mailfolders, "Mail")
-vicious.register(mailicon, vicious.widgets.mdir,
-                function (widget, args)
-                        if args[1] > 0 then
-                                mailicon.image = image(icons.mail)
-                        else
-                                mailicon.image = image(icons.nomail)
-                        end
-                        return nil
-                end,
-                mytimes.mail, mailfolders)
+-- require('mailhoover')
+-- mailicon = widget({ type = 'imagebox', name = 'mailicon'})
+-- mailfolders = mailhoover.get_maildirs_from_mailcheck()
+-- mailhoover.addToWidget(mailicon, mailfolders, "Mail")
+-- vicious.register(mailicon, vicious.widgets.mdir,
+--                 function (widget, args)
+--                         if args[1] > 0 then
+--                                 mailicon.image = image(icons.mail)
+--                         else
+--                                 mailicon.image = image(icons.nomail)
+--                         end
+--                         return nil
+--                 end,
+--                 mytimes.mail, mailfolders)
 -- }}}
