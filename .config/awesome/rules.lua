@@ -15,6 +15,8 @@ window_rules = {
 { match = { "Chromium" }, tag = "5"},
 -- eclipse
 { match = { "Eclipse" }, tag = "4" },
+-- deluge
+{ match = { "Deluge" }, tag = "6" },
 
 { match = { "Dia" }, float=true,  }
 ,
