@@ -37,6 +37,9 @@ globalkeys = awful.util.table.join(
 
     -- Standard program
     awful.key({ modkey, }, "Return", function () awful.util.spawn(terminal) end),
+    awful.key({ modkey, "Control"}, "Return", function () 
+                                        awful.util.spawn("xfce4-terminal -e screen")
+                                    end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     -- awful.key({ modkey, "Shift"   }, "q", awesome.quit),
     awful.key({ modkey, "Shift"   }, "l",   function () awful.tag.incmwfact( 0.05)  end),
