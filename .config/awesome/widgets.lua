@@ -157,24 +157,24 @@ cpuicon.image = image(icons.cpu)
 vicious.register(cpuwidget, vicious.widgets.cpu, "$1%", mytimes.cpu)
 -- }}}
 
--- {{{ Net usage
-netwidget = widget({ type = "textbox" })
-netwidget.width = 160
-neticon = widget({ type = "imagebox" })
-neticon.image = image(icons.netio)
-vicious.register(netwidget, vicious.widgets.net,
-function (widget, args)
-   local down, up
-   if args["{eth0 down_kb}"] ~= "0.0" or args["{eth0 up_kb}"] ~= "0.0" then
-      down, up = args["{eth0 down_kb}"], args["{eth0 up_kb}"]
-   elseif args["{wlan0 down_kb}"] ~= "0.0" or args["{wlan0 up_kb}"] ~= "0.0" then
-      down, up = args["{wlan0 down_kb}"], args["{wlan0 up_kb}"]
-   else
-      down, up = "0.0", "0.0"
-   end
-   neticon.visible = true
-   return string.format("Up: %5s kb/s Dl: %5s kb/s", up, down)
-end, mytimes.net)
+-- -- {{{ Net usage
+-- netwidget = widget({ type = "textbox" })
+-- netwidget.width = 160
+-- neticon = widget({ type = "imagebox" })
+-- neticon.image = image(icons.netio)
+-- vicious.register(netwidget, vicious.widgets.net,
+-- function (widget, args)
+--    local down, up
+--    if args["{eth1 down_kb}"] ~= "0.0" or args["{eth1 up_kb}"] ~= "0.0" then
+--       down, up = args["{eth1 down_kb}"], args["{eth1 up_kb}"]
+--    elseif args["{wlan1 down_kb}"] ~= "0.0" or args["{wlan1 up_kb}"] ~= "0.0" then
+--       down, up = args["{wlan1 down_kb}"], args["{wlan1 up_kb}"]
+--    else
+--       down, up = "0.0", "0.0"
+--    end
+--    neticon.visible = true
+--    return string.format("Up: %5s kb/s Dl: %5s kb/s", up, down)
+-- end, mytimes.net)
 -- }}}
 
 -- {{{ wifi
