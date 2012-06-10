@@ -82,7 +82,7 @@ globalkeys = awful.util.table.join(
     awful.key({ "Control" }, ";", function () awful.util.spawn("mpc prev") end),
     awful.key({ "Control" }, "/", function () awful.util.spawn("amixer set Master toggle") end),
     awful.key({   modkey  }, "l", function () awful.util.spawn("xflock4") end),
-    awful.key({ }, "#117", function () awful.util.spawn("xdotool click 2") end),
+    awful.key({ }, "#135", function () awful.util.spawn("xdotool click 2") end),
     -- Apps
     awful.key({ modkey }, "F12",          function () awful.prompt.run({ prompt = "Alarm clock (time volume): " },
                                                                 mypromptbox[mouse.screen].widget,
