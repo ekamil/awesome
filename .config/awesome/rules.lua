@@ -4,6 +4,8 @@ window_rules = {
 -- Pidgin
 { match = { "Pidgin" }, tag = "3", float=true,  },
 { match = { "buddy_list" }, tag = "3", float = false, nofocus = true, geometry = {0,16,350,736}},
+-- Skype
+{ match = { "Skype" }, tag = "4" },
 -- gimp
 { match = { "Gimp" }, tag = "6", },
 { match = { "gimp%-image%-window" }, geometry = {175,15,930,770}, border_width = 0 },
@@ -14,10 +16,9 @@ window_rules = {
 -- chromium
 { match = { "Chromium" }, tag = "5"},
 -- eclipse
-{ match = { "Eclipse" }, tag = "4" },
+{ match = { "Eclipse" }, tag = "7" },
 -- deluge
 { match = { "Deluge" }, tag = "6" }
-
 -- { match = { "Dia" }, float=true,  }
 ,
 
