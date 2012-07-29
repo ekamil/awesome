@@ -40,7 +40,7 @@ separator = widget({ type = "imagebox" })
 separator.image = image(icons.sep)
 
 spacer = widget({ type = "textbox" })
-spacer.width = 3
+spacer.width = 1
 -- }}}
 
 -- {{{ Date and time
@@ -55,6 +55,7 @@ vicious.register(datewidget, vicious.widgets.date, date_format, mytimes.date)
 -- }}}
 
 -- {{{ Volume level
+local mixer = "Master"
 volicon = widget({ type = "imagebox" })
 volicon.image = image(icons.vol)
 -- Initialize widgets
@@ -62,12 +63,12 @@ volwidget = widget({ type = "textbox" })
 -- Enable caching
 vicious.cache(vicious.widgets.volume)
 -- Register widgets
-vicious.register(volwidget, vicious.widgets.volume, " $1%", mytimes.vol, "PCM")
+vicious.register(volwidget, vicious.widgets.volume, " $1% $2", mytimes.vol, mixer)
 -- Register buttons
 volwidget:buttons(awful.util.table.join(
-   awful.button({ }, 1, function () awful.util.spawn("amixer set Master toggle") end),
-   awful.button({ }, 4, function () awful.util.spawn("amixer -q set PCM 2dB+") end),
-   awful.button({ }, 5, function () awful.util.spawn("amixer -q set PCM 2dB-") end)
+   awful.button({ }, 1, function () awful.util.spawn("amixer set " .. mixer .. " toggle") end),
+   awful.button({ }, 4, function () awful.util.spawn("amixer -q set " .. mixer .. " 2dB+") end),
+   awful.button({ }, 5, function () awful.util.spawn("amixer -q set " .. mixer .. " 2dB-") end)
    ))
 -- }}}
 
@@ -98,8 +99,8 @@ end, mytimes.uptime)
 loadwidget = widget({ type = "textbox" })
 vicious.register(loadwidget, vicious.widgets.uptime,
     function (widget, args)
-        -- return string.format("Load: %.2f %.2f %.2f", args[4], args[5], args[6])
-        return string.format("Load 5m: %.2f", args[5])
+        return string.format("%.2f %.2f %.2f", args[4], args[5], args[6])
+        -- return string.format("Load 5m: %.2f", args[5])
     end, mytimes.thermal)
 -- }}}
 
@@ -137,10 +138,11 @@ mytimer:start()
 -- {{{ Memory usage
 -- Initialize widget
 memwidget = widget({ type = "textbox" })
-memwidget.width = 130
+-- memwidget.width = 130
 memicon = widget({ type = "imagebox" })
 memicon.image = image(icons.mem)
-vicious.register(memwidget, vicious.widgets.mem, "$2MB/$3MB ($1%)", mytimes.mem)
+-- vicious.register(memwidget, vicious.widgets.mem, "$2MB/$3MB ($1%)", mytimes.mem)
+vicious.register(memwidget, vicious.widgets.mem, "$1%", mytimes.mem)
 -- }}}
 
 -- {{{ Hddtemp
@@ -157,26 +159,29 @@ cpuicon.image = image(icons.cpu)
 vicious.register(cpuwidget, vicious.widgets.cpu, "$1%", mytimes.cpu)
 -- }}}
 
--- -- {{{ Net usage
--- netwidget = widget({ type = "textbox" })
--- netwidget.width = 160
--- neticon = widget({ type = "imagebox" })
--- neticon.image = image(icons.netio)
--- vicious.register(netwidget, vicious.widgets.net,
--- function (widget, args)
---    local down, up
---    if args["{eth1 down_kb}"] ~= "0.0" or args["{eth1 up_kb}"] ~= "0.0" then
---       down, up = args["{eth1 down_kb}"], args["{eth1 up_kb}"]
---    elseif args["{wlan1 down_kb}"] ~= "0.0" or args["{wlan1 up_kb}"] ~= "0.0" then
---       down, up = args["{wlan1 down_kb}"], args["{wlan1 up_kb}"]
---    else
---       down, up = "0.0", "0.0"
---    end
---    neticon.visible = true
---    return string.format("Up: %5s kb/s Dl: %5s kb/s", up, down)
--- end, mytimes.net)
+--[[ 
+-- {{{ Net usage
+netwidget = widget({ type = "textbox" })
+netwidget.width = 160
+neticon = widget({ type = "imagebox" })
+neticon.image = image(icons.netio)
+vicious.register(netwidget, vicious.widgets.net,
+function (widget, args)
+   local down, up
+   if args["{eth1 down_kb}"] ~= "0.0" or args["{eth1 up_kb}"] ~= "0.0" then
+      down, up = args["{eth1 down_kb}"], args["{eth1 up_kb}"]
+   elseif args["{wlan1 down_kb}"] ~= "0.0" or args["{wlan1 up_kb}"] ~= "0.0" then
+      down, up = args["{wlan1 down_kb}"], args["{wlan1 up_kb}"]
+   else
+      down, up = "0.0", "0.0"
+   end
+   neticon.visible = true
+   return string.format("Up: %5s kb/s Dl: %5s kb/s", up, down)
+end, mytimes.net)
 -- }}}
+--]]
 
+--[[ 
 -- {{{ wifi
 wifiicon =  widget({ type = "imagebox" })
 wifiicon.image = image(icons.wifi)
@@ -201,6 +206,7 @@ mytimer = timer({ timeout = mytimes.wifi })
 mytimer:add_signal("timeout", wicd_info)
 mytimer:start()
 -- }}}
+--]]
 
 -- {{{ Disk I/O
 ioicon = widget({ type = "imagebox" })
@@ -216,22 +222,4 @@ fs_root_widget = widget({ type = "textbox" })
 vicious.register(fs_root_widget, vicious.widgets.fs, "/ ${/ avail_p} %free" , mytimes.fs)
 fs_home_widget = widget({ type = "textbox" })
 vicious.register(fs_home_widget, vicious.widgets.fs, "/home ${/home avail_p} %free" , mytimes.fs)
--- }}}
-
-
--- {{{ mailhover http://awesome.naquadah.org/wiki/Email_maildir_naughty_hoover
--- require('mailhoover')
--- mailicon = widget({ type = 'imagebox', name = 'mailicon'})
--- mailfolders = mailhoover.get_maildirs_from_mailcheck()
--- mailhoover.addToWidget(mailicon, mailfolders, "Mail")
--- vicious.register(mailicon, vicious.widgets.mdir,
---                 function (widget, args)
---                         if args[1] > 0 then
---                                 mailicon.image = image(icons.mail)
---                         else
---                                 mailicon.image = image(icons.nomail)
---                         end
---                         return nil
---                 end,
---                 mytimes.mail, mailfolders)
 -- }}}

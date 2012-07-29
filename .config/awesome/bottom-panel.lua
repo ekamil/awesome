@@ -1,7 +1,6 @@
 require("vicious")
 require("widgets")
 -- {{{ bottompanel
--- Create a textclock widget
 
 mybottompanel = {}
 
@@ -21,13 +20,14 @@ for s = 1, screen.count() do
             separator,
             loadwidget,
             separator,
-            mpdicon, mpdwidget, 
+            mpdicon,
             layout = awful.widget.layout.horizontal.leftright
         },
-        fs_root_widget, fsicon, separator,
-        fs_home_widget, fsicon, separator,
-        wifiwidget, wifiicon,-- netwidget, neticon,
-        separator,
+        mpdwidget, 
+        -- fs_root_widget, fsicon, separator,
+        -- fs_home_widget, fsicon, separator,
+        -- wifiwidget, wifiicon,-- netwidget, neticon,
+        -- separator,
         layout = awful.widget.layout.horizontal.rightleft
     }
 end

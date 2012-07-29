@@ -18,10 +18,10 @@ run_once("xscreensaver","-no-splash")
 run_once("dropbox","start -i",nil)
 run_once("mpd")
 run_once("mpd-hits","-d")
-awful.util.spawn_with_shell("set-touchpad")
+run_once("set-touchpad")
 run_once("parcellite" ,nil, nil)
 run_once("mail-notification" ,nil, nil)
-run_once("conky", "-c /home/kamil/.conky/std.conf" ,nil,nil)
+-- run_once("conky", "-c /home/kamil/.conky/std.conf" ,nil,nil)
 
 awful.util.spawn_with_shell("sleep 40 && awsetbg -f -r Wallpapers")
 

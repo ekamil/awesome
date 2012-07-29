@@ -41,17 +41,3 @@ mytimes.baticon, battery)
 
 batwidget = widget({ type = "textbox" })
 vicious.register(batwidget, vicious.widgets.bat, "$2%", mytimes.batwidget, battery)
--- batwidget:add_signal('mouse::enter', function()
---     local fd = nil
---     fd = io.popen("acpi -btai")
---     local d = fd:read("*all"):gsub("\n+$", "")
---     fd:close()
---     batinfo = {
---         naughty.notify({
---             text         = d
---             , timeout    = 0
---             , position   = "bottom_right"
---         })
---     }
--- end)
--- batwidget:add_signal('mouse::leave', function () naughty.destroy(batinfo[1]) end)
