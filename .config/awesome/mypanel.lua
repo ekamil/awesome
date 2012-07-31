@@ -1,13 +1,8 @@
 require("vicious")
-require("widgets")
--- {{{ Wibox
--- Create a textclock widget
-mytextclock = awful.widget.textclock({ align = "right" }, "%a, %d %b %Y, %H:%M")
-
 -- Create a systray
-mysystray = widget({ type = "systray" })
 
 mywibox = {}
+mybottompanel = {}
 mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
@@ -45,6 +40,7 @@ mytasklist.buttons = awful.util.table.join(
                                               if client.focus then client.focus:raise() end
                                           end))
 
+mysystray = widget({ type = "systray" })
 -- Create a wibox for each screen and add it
 --
 for s = 1, screen.count() do
@@ -55,9 +51,7 @@ for s = 1, screen.count() do
     mylayoutbox[s] = awful.widget.layoutbox(s)
     mylayoutbox[s]:buttons(awful.util.table.join(
                            awful.button({ }, 1, function () awful.layout.inc(layouts, 1) end),
-                           awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
-                           awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
-                           awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
+                           awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end)))
     -- Create a taglist widget
     mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, mytaglist.buttons)
 
@@ -77,12 +71,9 @@ for s = 1, screen.count() do
             layout = awful.widget.layout.horizontal.leftright
         },
         mylayoutbox[s],
-        datewidget, dateicon, 
-        uptimewidget, uptimeicon,
-        batwidget, acicon, baticon,
-        separator, volwidget, volicon,
-        separator, mysystray,
+        s == 1 and mysystray or nil,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
-    }
+        }
+    mywibox[s].screen = s
 end

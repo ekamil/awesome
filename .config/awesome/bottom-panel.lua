@@ -12,22 +12,23 @@ for s = 1, screen.count() do
     -- Add widgets to the bottompanel - order matters
     mybottompanel[s].widgets = {
         {
-            thermalicon ,thermalwidget , hddtempwidget, 
+            thermalicon,thermalwidget, hddtempwidget, 
             separator,
-            cpuicon     ,cpuwidget     ,
+            cpuicon, cpuwidget,
             separator,
-            memicon     ,memwidget     ,
+            memicon, memwidget,
             separator,
             loadwidget,
             separator,
             mpdicon,
             layout = awful.widget.layout.horizontal.leftright
         },
-        mpdwidget, 
-        -- fs_root_widget, fsicon, separator,
-        -- fs_home_widget, fsicon, separator,
-        -- wifiwidget, wifiicon,-- netwidget, neticon,
-        -- separator,
+        datewidget, dateicon, separator,
+        volwidget, volicon, separator,
+        loadwidget, separator,
+        uptimewidget, uptimeicon, separator,
+        batwidget, baticon, separator,
+        mpdwidget,
         layout = awful.widget.layout.horizontal.rightleft
     }
 end
