@@ -2,7 +2,7 @@ mytimes = {}
 
 mytimes.baticon    =  3
 mytimes.batwidget  =  4
-mytimes.mpdwidget  =  5
+mytimes.mpdwidget  =  1
 mytimes.vol        =  1
 mytimes.thermal    =  7
 mytimes.mem        =  8

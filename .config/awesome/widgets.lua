@@ -99,8 +99,8 @@ end, mytimes.uptime)
 loadwidget = widget({ type = "textbox" })
 vicious.register(loadwidget, vicious.widgets.uptime,
     function (widget, args)
-        return string.format("%.2f %.2f %.2f", args[4], args[5], args[6])
-        -- return string.format("Load 5m: %.2f", args[5])
+        -- return string.format("%.2f %.2f %.2f", args[4], args[5], args[6])
+        return string.format(" @ %.2f", args[5])
     end, mytimes.thermal)
 -- }}}
 
@@ -120,13 +120,12 @@ function cpu_temp()
                 fr = fd:read()
                 fd:close()
             end
-        return string.format("%d°C ", fr/1000)
+        return string.format("%d° ", fr/1000)
     end
-    local l = "CPU: " .. get_temp(3)
     -- for k,proc in pairs({2,4}) do
     --     l = l .. get_temp(proc)
     -- end
-    thermalwidget.text = l
+    thermalwidget.text = get_temp(3)
 end
 cpu_temp()
 mytimer = timer({ timeout = mytimes.thermal })

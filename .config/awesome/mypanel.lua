@@ -1,8 +1,9 @@
 require("vicious")
+require("widgets")
 -- Create a systray
 
-mywibox = {}
-mybottompanel = {}
+top_panel = {}
+bottom_panel = {}
 mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
@@ -60,10 +61,12 @@ for s = 1, screen.count() do
                                               return awful.widget.tasklist.label.currenttags(c, s)
                                           end, mytasklist.buttons)
 
+    --
     -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "top", screen = s })
+    --
+    top_panel[s] = awful.wibox({ position = "top", screen = s })
     -- Add widgets to the wibox - order matters
-    mywibox[s].widgets = {
+    top_panel[s].widgets = {
         {
             mylauncher,
             mytaglist[s],
@@ -71,9 +74,33 @@ for s = 1, screen.count() do
             layout = awful.widget.layout.horizontal.leftright
         },
         mylayoutbox[s],
+        datewidget, dateicon, separator,
+        thermalwidget, cpuicon, loadwidget, separator,
+        volwidget, volicon, separator,
+        batwidget, baticon, separator,
         s == 1 and mysystray or nil,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
         }
-    mywibox[s].screen = s
+    top_panel[s].screen = s
+    --
+    -- Create the bottompanel
+    --[[
+    bottom_panel[s] = awful.wibox({ position = "bottom", screen = s })
+    -- Add widgets to the bottompanel - order matters
+    bottom_panel[s].widgets = {
+        {
+            thermalicon,thermalwidget, hddtempwidget, separator,
+            mpdicon,
+            layout = awful.widget.layout.horizontal.leftright
+        },
+        loadwidget, separator,
+        cpuwidget, cpuicon, separator,
+        memwidget, memicon, separator,
+        uptimewidget, uptimeicon, separator,
+        mpdwidget,
+        layout = awful.widget.layout.horizontal.rightleft
+    }
+    bottom_panel[s].screen = s
+    --]]
 end

@@ -55,7 +55,6 @@ require("mymenu")
 
 -- {{{ panel
 require("mypanel")
-require("bottom-panel")
 -- }}}
 
 -- {{{ Mouse bindings

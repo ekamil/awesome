@@ -18,7 +18,7 @@ window_rules = {
 -- eclipse
 { match = { "Eclipse" }, tag = "7" },
 -- IntelliJ IDEA
-{ match = { "IntelliJ IDEA 11.1.2" }, tag = "8" },
+{ match = { "IntelliJ IDEA" }, tag = "8" },
 -- deluge
 { match = { "Deluge" }, tag = "6" }
 -- { match = { "Dia" }, float=true,  }
