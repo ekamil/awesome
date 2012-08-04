@@ -31,8 +31,7 @@ globalkeys = awful.util.table.join(
                                         if client.focus then client.focus:raise() end
                                     end),
     awful.key({ modkey }, "b", function () 
-                                    mywibox[mouse.screen].visible = not mywibox[mouse.screen].visible 
-                                    mybottompanel[mouse.screen].visible = not mybottompanel[mouse.screen].visible 
+                                    top_panel[mouse.screen].visible = not top_panel[mouse.screen].visible 
                                 end),
 
     -- Standard program

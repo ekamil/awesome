@@ -1,4 +1,3 @@
-require "calendar2"
 require "icons"
 
 -- {{{ From wiki
@@ -55,21 +54,9 @@ vicious.register(datewidget, vicious.widgets.date, date_format, mytimes.date)
 -- }}}
 
 -- {{{ Volume level
-local mixer = "Master"
-volicon = widget({ type = "imagebox" })
-volicon.image = image(icons.vol)
--- Initialize widgets
-volwidget = widget({ type = "textbox" })
--- Enable caching
-vicious.cache(vicious.widgets.volume)
--- Register widgets
-vicious.register(volwidget, vicious.widgets.volume, " $1% $2", mytimes.vol, mixer)
--- Register buttons
-volwidget:buttons(awful.util.table.join(
-   awful.button({ }, 1, function () awful.util.spawn("amixer set " .. mixer .. " toggle") end),
-   awful.button({ }, 4, function () awful.util.spawn("amixer -q set " .. mixer .. " 2dB+") end),
-   awful.button({ }, 5, function () awful.util.spawn("amixer -q set " .. mixer .. " 2dB-") end)
-   ))
+
+require "volume_widget"
+
 -- }}}
 
 
@@ -100,7 +87,8 @@ loadwidget = widget({ type = "textbox" })
 vicious.register(loadwidget, vicious.widgets.uptime,
     function (widget, args)
         -- return string.format("%.2f %.2f %.2f", args[4], args[5], args[6])
-        return string.format(" @ %.2f", args[5])
+        return string.format("%.2f %.2f", args[4], args[5])
+        -- return string.format("  %.2f", args[5])
     end, mytimes.thermal)
 -- }}}
 

@@ -75,7 +75,7 @@ for s = 1, screen.count() do
         },
         mylayoutbox[s],
         datewidget, dateicon, separator,
-        thermalwidget, cpuicon, loadwidget, separator,
+        loadwidget, thermalwidget, cpuicon, separator,
         volwidget, volicon, separator,
         batwidget, baticon, separator,
         s == 1 and mysystray or nil,
