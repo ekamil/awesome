@@ -36,7 +36,7 @@ globalkeys = awful.util.table.join(
 
     -- Standard program
     awful.key({ modkey, }, "Return", function () awful.util.spawn(terminal) end),
-    awful.key({ modkey, "Alt"}, "Return", function () awful.util.spawn(alt_terminal) end),
+    awful.key({ modkey, "Mod1"}, "Return", function () awful.util.spawn(alt_terminal) end),
     awful.key({ modkey, "Control"}, "Return", function () 
                                         awful.util.spawn(terminal .. " -e screen")
                                     end),

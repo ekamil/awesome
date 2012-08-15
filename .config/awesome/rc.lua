@@ -15,10 +15,11 @@ beautiful.init(awful.util.getdir("config") .. "/themes/current/theme.lua")
 -- }}}
 
 -- {{{ Variable definitions
-terminal = "xfce4-terminal -e zsh"
-alt_terminal = "urxvt-zenburn.sh"
 editor = os.getenv("EDITOR") or "editor"
 userhome = os.getenv("HOME")
+shell = os.getenv("SHELL")
+terminal = "xfce4-terminal -e " .. shell
+alt_terminal = userhome .. "/.local/bin/urxvt-zenburn.sh"
 editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
 -- }}}
