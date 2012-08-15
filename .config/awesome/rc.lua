@@ -16,6 +16,7 @@ beautiful.init(awful.util.getdir("config") .. "/themes/current/theme.lua")
 
 -- {{{ Variable definitions
 terminal = "xfce4-terminal -e zsh"
+alt_terminal = "urxvt-zenburn.sh"
 editor = os.getenv("EDITOR") or "editor"
 userhome = os.getenv("HOME")
 editor_cmd = terminal .. " -e " .. editor
