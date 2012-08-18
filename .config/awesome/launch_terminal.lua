@@ -1,6 +1,6 @@
 function check_for_terminal (command)
    if command:sub(1,1) == ":" then
-      command = terminal .. ' -e ' .. command:sub(2)
+      command = alt_terminal .. ' -e ' .. command:sub(2)
    end
    awful.util.spawn(command)
 end

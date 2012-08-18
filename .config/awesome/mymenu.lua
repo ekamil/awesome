@@ -30,7 +30,6 @@ theme_menu()
 myawesomemenu = {
    { "manual", terminal .. " -e man awesome" },
    { "edit config", editor_cmd .. " " .. awful.util.getdir("config") .. "/rc.lua" },
-   { "midnight", alt_terminal .. " -e mc" },
    { "themes", mythememenu },
    { "restart", awesome.restart },
    { "quit", awesome.quit }
@@ -39,9 +38,8 @@ myawesomemenu = {
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
                         { "Debian", debian.menu.Debian_menu.Debian },
                         { "open terminal", terminal },
-                        { "midnight", alt_terminal .. " -e mc" },
-                        { "Pidgin", "pidgin" },
-                        { "Firefox", "~/.local/bin/firefox4" }
+                        { "midnight", alt_terminal .. " -e dash -c 'sleep 0.1 ; mc'" },
+                        { "toggle day/night", "/home/kamil/.local/bin/day_night.sh" }
                                   }
                         })
 
