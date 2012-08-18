@@ -1,11 +1,11 @@
 window_rules = {
 -- web
-{ match = { "Firefox" }, tag = "2", },
+{ match = { "Firefox" }, tag = "3", },
 -- Pidgin
-{ match = { "Pidgin" }, tag = "3", float=true,  },
-{ match = { "buddy_list" }, tag = "3", float = false, nofocus = true, geometry = {0,16,350,736}},
+{ match = { "Pidgin" }, tag = "4", float=true,  },
+{ match = { "buddy_list" }, tag = "4", float = false, nofocus = true, geometry = {0,16,350,736}},
 -- Skype
-{ match = { "Skype" }, tag = "4" },
+{ match = { "Skype" }, tag = "5" },
 -- gimp
 { match = { "Gimp" }, tag = "6", },
 { match = { "gimp%-image%-window" }, geometry = {175,15,930,770}, border_width = 0 },
@@ -16,7 +16,7 @@ window_rules = {
 -- chromium
 { match = { "Chromium" }, tag = "5"},
 -- eclipse
-{ match = { "Eclipse" }, tag = "7" },
+{ match = { "Eclipse" }, tag = "8" },
 -- IntelliJ IDEA
 { match = { "IntelliJ IDEA" }, tag = "8" },
 -- deluge
