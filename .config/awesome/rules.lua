@@ -5,7 +5,7 @@ window_rules = {
 { match = { "Pidgin" }, tag = "4", float=true,  },
 { match = { "buddy_list" }, tag = "4", float = false, nofocus = true, geometry = {0,16,350,736}},
 -- Skype
-{ match = { "Skype" }, tag = "5" },
+{ match = { "Skype" }, tag = "4" },
 -- gimp
 { match = { "Gimp" }, tag = "6", },
 { match = { "gimp%-image%-window" }, geometry = {175,15,930,770}, border_width = 0 },
