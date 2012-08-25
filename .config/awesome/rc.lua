@@ -59,6 +59,9 @@ require("mymenu")
 require("mypanel")
 -- }}}
 
+shifty.taglist = mytaglist
+shifty.init()
+
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
     awful.button({ }, 3, function () mymainmenu:toggle() end),

@@ -8,9 +8,9 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, }, "w", awful.tag.viewprev),
     awful.key({modkey, "Shift"}, "Left", shifty.shift_prev),
     awful.key({modkey, "Shift"}, "Right", shifty.shift_next),
-    awful.key({modkey, "Shift"}, "t", function() shifty.add({ rel_index = 1 }) end),
+    awful.key({modkey, "Shift"}, "a", function() shifty.add({ rel_index = 1 }) end),
     awful.key({modkey, "Shift"}, "r", shifty.rename),
-    awful.key({modkey, "Shift"}, "w", shifty.del),
+    awful.key({modkey, "Shift"}, "d", shifty.del),
 
     awful.key({ modkey, }, "j", function ()
                                     awful.client.focus.byidx( 1)
@@ -56,18 +56,7 @@ globalkeys = awful.util.table.join(
                                     clean_for_completion,
                                     awful.util.getdir("cache") .. "/history")
                                 end),
-
-    awful.key({ modkey }, "x", function ()
-                                    awful.prompt.run({ prompt = "Run Lua code: " },
-                                    mypromptbox[mouse.screen].widget,
-                                    awful.util.eval, nil,
-                                    awful.util.getdir("cache") .. "/history_eval")
-                                end),
     -- }}}
-    awful.key({ modkey, "Shift" }, "t", function (c)
-                                            if   c.titlebar then awful.titlebar.remove(c)
-                                            else awful.titlebar.add(c, { modkey = modkey }) end
-                                        end),
     awful.key({ "Mod1" }, "Escape", function ()
                                         -- If you want to always position the menu on the same place set coordinates
                                         awful.menu.menu_keys.down = { "Down", "Alt_L" }
@@ -82,13 +71,9 @@ globalkeys = awful.util.table.join(
     awful.key({ "Control" }, ";", function () awful.util.spawn("mpc prev") end),
     awful.key({ "Control" }, "/", function () awful.util.spawn("amixer set Master toggle") end),
     awful.key({   modkey  }, "l", function () awful.util.spawn("xflock4") end),
-    awful.key({ }, "#135", function () awful.util.spawn("xdotool click 2") end),
-    -- Apps
-    awful.key({ modkey }, "F12",          function () awful.prompt.run({ prompt = "Alarm clock (time volume): " },
-                                                                mypromptbox[mouse.screen].widget,
-                                                                function (time) awful.util.spawn("alarmclock "..time)
-                                                                end)
-                                                            end)
+    awful.key({   modkey  }, "Down", function () awful.util.spawn("sudo brightness.sh dec") end),
+    awful.key({   modkey  }, "Up",   function () awful.util.spawn("sudo brightness.sh inc") end),
+    awful.key({ }, "#135", function () awful.util.spawn("xdotool click 2") end)
 )
 
 clientkeys = awful.util.table.join(
@@ -97,7 +82,6 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle),
     -- awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey, }, "o",      awful.client.movetoscreen),
-    awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
     awful.key({ modkey, }, "t",      function (c) c.ontop = not c.ontop            end),
     awful.key({ modkey, }, "n",      function (c) c.minimized = not c.minimized    end),
     awful.key({ modkey, }, "m", function (c)
@@ -152,4 +136,3 @@ clientbuttons = awful.util.table.join(
 root.keys(globalkeys)
 shifty.config.globalkeys = globalkeys
 shifty.config.clientkeys = clientkeys
-

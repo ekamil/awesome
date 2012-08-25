@@ -22,4 +22,3 @@ shifty.config.defaults = {
     nopopup = true,
 }
 shifty.config.layouts = layouts
-shifty.init()
