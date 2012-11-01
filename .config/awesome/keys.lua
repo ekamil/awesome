@@ -1,4 +1,5 @@
 require("shifty")
+require("config")
 
 globalkeys = awful.util.table.join(
     awful.key({ modkey, }, "Left", awful.tag.viewprev),
@@ -69,10 +70,10 @@ globalkeys = awful.util.table.join(
     awful.key({ "Control" }, "\\", function () awful.util.spawn("mpc toggle") end),
     awful.key({ "Control" }, "'", function () awful.util.spawn("mpc next") end),
     awful.key({ "Control" }, ";", function () awful.util.spawn("mpc prev") end),
-    awful.key({ "Control" }, "/", function () awful.util.spawn("amixer set Master toggle") end),
+    awful.key({ "Control" }, "/", function () awful.util.spawn("amixer set " .. config.mixer .. " toggle") end),
     awful.key({   modkey  }, "l", function () awful.util.spawn("xflock4") end),
-    awful.key({   modkey  }, "Down", function () awful.util.spawn("sudo toshiba-brightness.sh dec") end),
-    awful.key({   modkey  }, "Up",   function () awful.util.spawn("sudo toshiba-brightness.sh inc") end),
+    -- awful.key({   modkey  }, "Down", function () awful.util.spawn("sudo toshiba-brightness.sh dec") end),
+    -- awful.key({   modkey  }, "Up",   function () awful.util.spawn("sudo toshiba-brightness.sh inc") end),
     awful.key({ }, "#135", function () awful.util.spawn("xdotool click 2") end)
 )
 

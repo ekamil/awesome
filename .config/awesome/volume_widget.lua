@@ -1,4 +1,5 @@
-local mixer = "Master"
+require("config")
+local mixer = config.mixer
 
 -- Icon widget
 volicon = widget({ type = "imagebox" })
