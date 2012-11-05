@@ -1,8 +1,8 @@
 baticon = widget({ type = "imagebox" })
 --baticon_t = awful.tooltip({ objects = { baticon }, })
 --baticon.image = image(beautiful.baticon_bat1)
-vicious.register(baticon, vicious.widgets.bat, function (widget, args)
-    -- baticon_t:set_text(args[1] .." ".. args[2].."% " .. args[3] )
+vicious.register(baticon, vicious.widgets.bat, function(widget, args)
+-- baticon_t:set_text(args[1] .." ".. args[2].."% " .. args[3] )
     local battery_status = ""
     battery_status = args[1]
     if not battery_status then
@@ -34,7 +34,7 @@ vicious.register(baticon, vicious.widgets.bat, function (widget, args)
         baticon.image = image(icons.batt_ac)
     end
 end,
-mytimes.baticon, config.bat)
+    mytimes.baticon, config.bat)
 
 batwidget = widget({ type = "textbox" })
 vicious.register(batwidget, vicious.widgets.bat, "$2%", mytimes.batwidget, battery)
