@@ -64,7 +64,7 @@ tags = {
 local s = 1
 tags[s] = awful.tag(tags.names, s, tags.layout)
 
-awful.tag.setmwfact(0.15, tags[s][9])
+awful.tag.setmwfact(0.5, tags[s][9])
 -- }}}
 
 -- {{{ Themes menu
