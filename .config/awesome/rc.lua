@@ -451,6 +451,10 @@ awful.rules.rules = {
         rule = { class = "Deluge" },
         properties = { tag = tags[s][6] }
     },
+    {
+        rule = { class = "jetbrains-idea-ce" },
+        properties = { tag = tags[s][7] }
+    },
     { rule = { class = "MPlayer" }, properties = { floating = true } },
     { rule = { class = "Gimp" }, properties = { floating = true } },
     { rule = { class = "pinentry" }, properties = { floating = true } },
