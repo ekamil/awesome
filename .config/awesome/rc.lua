@@ -23,8 +23,8 @@ editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
 --
 config = {}
-config.bat = "BAT0"
-config.mixer = "PCM"
+config.bat = "BAT1"
+config.mixer = "Master"
 -- }}}
 
 -- {{{ Tags
@@ -388,6 +388,12 @@ awful.rules.rules = {
                      buttons = clientbuttons
                  }
     },
+    { rule = { class="xfce4-terminal" },
+      properties = { struts = { bottom = 0, right = 0, left = 0 },
+                     maximized_vertical = true,
+                     maximized_horizontal = true
+                 }
+    },
     {
     rule = { class="Firefox" }, 
     properties = { tag = tags[s][3] } 
@@ -424,37 +430,32 @@ awful.rules.rules = {
     },
     {
     rule = { class="Skype", role="MainWindow" }, 
-    properties = { tag = tags[s][9], floating = true },
+    properties = { tag = tags[s][9], floating=true }
     callback = function( c )
             local w = screen[c.screen].workarea.width
             local h = screen[c.screen].workarea.height
-            c:geometry( { width = 0.2*w , height = h } )
+            c:geometry( { width = 0.2 * w , height = h } )
             c.x = 0
             c.y = 0
         end
     },
     {
     rule = { class="Skype", role="Chats" }, 
-    properties = { tag = tags[s][9] },
+    properties = { floating = false },
     callback = function( c )
             local w = screen[c.screen].workarea.width
             local h = screen[c.screen].workarea.height
-            c:struts({left = 0.2*w})
-            -- c:geometry( { width = w , height = 0.3*h } )
-            -- c.x = 0
-            -- c.y = 0.7*h+1
+            awful.client.setslave(c)
+            c:struts({ left = 0.2 * w })
         end
     },
     {
     rule = { class="Skype", role="CallWindow" }, 
-    properties = { tag = tags[s][9] },
+    properties = { floating = false },
     callback = function( c )
             local w = screen[c.screen].workarea.width
             local h = screen[c.screen].workarea.height
-            c:struts({left = 0.2*w})
-            -- c:geometry( { width = w , height = 0.3*h } )
-            -- c.x = 0
-            -- c.y = 0.7*h+1
+            c:struts({ left = 0.2 * w })
         end
     },
     {
