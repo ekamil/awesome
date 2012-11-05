@@ -1,12 +1,12 @@
 icons = {}
 icons.dir = awful.util.getdir("config") .. "/themes/icons/"
-icons.date = icons.dir .. "date.png" 
-icons.time = icons.dir .. "time.png" 
-icons.mpd  = icons.dir .. "mpd.png" 
-icons.vol = icons.dir .. "vol.png" 
-icons.vol_mute = icons.dir .. "vol_mute.png" 
-icons.charging = icons.dir .. "bat_plus.png" 
-icons.sep = icons.dir .. "sep.png" 
+icons.date = icons.dir .. "date.png"
+icons.time = icons.dir .. "time.png"
+icons.mpd = icons.dir .. "mpd.png"
+icons.vol = icons.dir .. "vol.png"
+icons.vol_mute = icons.dir .. "vol_mute.png"
+icons.charging = icons.dir .. "bat_plus.png"
+icons.sep = icons.dir .. "sep.png"
 icons.uptime = icons.dir .. "uptime.png"
 icons.batt_ac = icons.dir .. "ac.png"
 icons.batt_bat1 = icons.dir .. "bat1.png"
@@ -21,7 +21,7 @@ icons.batt_bat8 = icons.dir .. "bat8.png"
 icons.temp = icons.dir .. "temp_m.png"
 icons.cpu = icons.dir .. "cpu.png"
 icons.mem = icons.dir .. "mem.png"
-icons.fs = icons.dir .. "disk.png" 
+icons.fs = icons.dir .. "disk.png"
 icons.netio = icons.dir .. "netio-green.png"
 icons.wifi = icons.dir .. "wifi_02.png"
 
@@ -29,34 +29,35 @@ icons.mail = icons.dir .. "mail.png"
 icons.nomail = icons.dir .. "mail.png"
 
 mytimes = {}
-mytimes.baticon    =  3
-mytimes.batwidget  =  4
-mytimes.mpdwidget  =  1
-mytimes.vol        =  1
-mytimes.thermal    =  7
-mytimes.mem        =  8
-mytimes.hddt       =  9
-mytimes.cpu        =  9
-mytimes.net        =  10
-mytimes.wifi       =  60
-mytimes.io         =  11
-mytimes.fs         =  12
-mytimes.mail       =  13
-mytimes.uptime     =  600
-mytimes.date       =  55
+mytimes.baticon = 3
+mytimes.batwidget = 4
+mytimes.mpdwidget = 1
+mytimes.vol = 1
+mytimes.thermal = 7
+mytimes.mem = 8
+mytimes.hddt = 9
+mytimes.cpu = 9
+mytimes.net = 10
+mytimes.wifi = 60
+mytimes.io = 11
+mytimes.fs = 12
+mytimes.mail = 13
+mytimes.uptime = 600
+mytimes.date = 55
 
 -- {{{ From wiki
 -- Execute command and return its output. You probably won't only execute commands with one
 -- line of output
 function execute_command(command)
-   local fh = io.popen(command)
-   local str = ""
-   for i in fh:lines() do
-      str = str .. i
-   end
-   io.close(fh)
-   return str
+    local fh = io.popen(command)
+    local str = ""
+    for i in fh:lines() do
+        str = str .. i
+    end
+    io.close(fh)
+    return str
 end
+
 -- }}}
 
 -- {{{ MPD widget
@@ -64,17 +65,15 @@ mpdicon = widget({ type = "imagebox" })
 mpdicon.image = image(icons.mpd)
 mpdwidget = widget({ type = "textbox" })
 -- Register buttons
-mpdwidget:buttons(awful.util.table.join(
-   awful.button({ }, 1, function () awful.util.spawn("mpc toggle") end),
-   awful.button({ }, 2, function () check_for_terminal("pms") end)
-   ))
+mpdwidget:buttons(awful.util.table.join(awful.button({}, 1, function() awful.util.spawn("mpc toggle") end),
+    awful.button({}, 2, function() check_for_terminal("pms") end)))
 --
 vicious.register(mpdwidget, vicious.widgets.mpd,
-    function (widget, args)
-        if args["{state}"] == "Stop" then 
+    function(widget, args)
+        if args["{state}"] == "Stop" then
             return " - "
-        else 
-            return args["{Artist}"]..' - '.. args["{Title}"]
+        else
+            return args["{Artist}"] .. ' - ' .. args["{Title}"]
         end
     end, mytimes.mpdwidget)
 -- }}}
@@ -113,27 +112,27 @@ require("battery_widget")
 
 
 -- {{{ Uptime 
-uptimeicon = widget({type = "imagebox"})
+uptimeicon = widget({ type = "imagebox" })
 uptimeicon.image = image(icons.uptime)
 
 uptimewidget = widget({ type = "textbox" })
 vicious.register(uptimewidget, vicious.widgets.uptime,
-function (widget, args)
-    if args[1] == 0 then
-        return string.format("%02d:%02d", args[2], args[3])
-    else 
-        return string.format("%2dd %02d:%02d", args[1], args[2], args[3])
-    end
-end, mytimes.uptime)
+    function(widget, args)
+        if args[1] == 0 then
+            return string.format("%02d:%02d", args[2], args[3])
+        else
+            return string.format("%2dd %02d:%02d", args[1], args[2], args[3])
+        end
+    end, mytimes.uptime)
 -- }}}
 
 -- {{{ Load
 loadwidget = widget({ type = "textbox" })
 vicious.register(loadwidget, vicious.widgets.uptime,
-    function (widget, args)
-        -- return string.format("%.2f %.2f %.2f", args[4], args[5], args[6])
+    function(widget, args)
+    -- return string.format("%.2f %.2f %.2f", args[4], args[5], args[6])
         return string.format("%.2f %.2f", args[4], args[5])
-        -- return string.format("  %.2f", args[5])
+    -- return string.format("  %.2f", args[5])
     end, mytimes.thermal)
 -- }}}
 
@@ -146,20 +145,22 @@ function cpu_temp()
         local thermal_path = "/sys/devices/platform/coretemp.0/temp%d_input"
         local _path = string.format(thermal_path, proc)
         fd = io.open(_path)
-        if (fd==nil)
-            then
-                fr = "0"
-            else
-                fr = fd:read()
-                fd:close()
-            end
-        return string.format("%d° ", fr/1000)
+        if (fd == nil)
+        then
+            fr = "0"
+        else
+            fr = fd:read()
+            fd:close()
+        end
+        return string.format("%d° ", fr / 1000)
     end
+
     -- for k,proc in pairs({2,4}) do
     --     l = l .. get_temp(proc)
     -- end
     thermalwidget.text = get_temp(3)
 end
+
 cpu_temp()
 mytimer = timer({ timeout = mytimes.thermal })
 mytimer:add_signal("timeout", cpu_temp)
@@ -251,7 +252,7 @@ vicious.register(iowidget, vicious.widgets.dio, "SDA ${sda read_kb}/${sda write_
 fsicon = widget({ type = "imagebox" })
 fsicon.image = image(icons.fs)
 fs_root_widget = widget({ type = "textbox" })
-vicious.register(fs_root_widget, vicious.widgets.fs, "/ ${/ avail_p} %free" , mytimes.fs)
+vicious.register(fs_root_widget, vicious.widgets.fs, "/ ${/ avail_p} %free", mytimes.fs)
 fs_home_widget = widget({ type = "textbox" })
-vicious.register(fs_home_widget, vicious.widgets.fs, "/home ${/home avail_p} %free" , mytimes.fs)
+vicious.register(fs_home_widget, vicious.widgets.fs, "/home ${/home avail_p} %free", mytimes.fs)
 -- }}}
