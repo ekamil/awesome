@@ -10,7 +10,9 @@ require("naughty")
 
 
 -- {{{ beautiful
-beautiful.init(awful.util.getdir("config") .. "/themes/current/theme.lua")
+cfg_path = awful.util.getdir("config")
+
+beautiful.init(cfg_path.. "/themes/current/theme.lua")
 -- }}}
 
 -- {{{ Variable definitions
@@ -25,6 +27,7 @@ modkey = "Mod4"
 config = {}
 config.bat = "BAT0"
 config.mixer = "PCM"
+config.toshiba = true
 -- }}}
 
 -- {{{ Tags
@@ -72,7 +75,6 @@ awful.tag.setmwfact(0.5, tags[s][9])
 mythememenu = {}
 
 function theme_load(theme)
-    local cfg_path = awful.util.getdir("config")
 
     -- Create a symlink from the given theme to /home/user/.config/awesome/themes/current
     awful.util.spawn("ln -sfn " .. cfg_path .. "/themes/" .. theme .. " " .. cfg_path .. "/themes/current")
@@ -81,7 +83,7 @@ end
 
 function theme_menu()
     -- List your theme files and feed the menu table
-    local cmd = "ls -1 " .. awful.util.getdir("config") .. "/themes/"
+    local cmd = "ls -1 " .. cfg_path.. "/themes/"
     local f = io.popen(cmd)
 
     for l in f:lines() do
@@ -100,7 +102,7 @@ theme_menu()
 -- Create a laucher widget and a main menu
 myawesomemenu = {
     { "manual", terminal .. " -e man awesome" },
-    { "edit config", editor_cmd .. " " .. awful.util.getdir("config") .. "/rc.lua" },
+    { "edit config", editor_cmd .. " " .. cfg_path.. "/rc.lua" },
     { "themes", mythememenu },
     { "restart", awesome.restart },
     { "quit", awesome.quit }
@@ -257,7 +259,8 @@ end
 -- }}}
 
 -- {{{ Key bindings
-globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.viewprev),
+globalkeys = awful.util.table.join(
+    awful.key({ modkey, }, "Left", awful.tag.viewprev),
     awful.key({ modkey, }, "Right", awful.tag.viewnext),
     awful.key({ modkey, }, "Escape", awful.tag.history.restore),
     awful.key({ modkey, }, "e", awful.tag.viewnext),
@@ -271,7 +274,6 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
         awful.client.focus.byidx(-1)
         if client.focus then client.focus:raise() end
     end),
-    -- Layout manipulation
     awful.key({ modkey, "Shift" }, "j", function() awful.client.swap.byidx(1) end),
     awful.key({ modkey, "Shift" }, "k", function() awful.client.swap.byidx(-1) end),
     awful.key({ modkey, "Control" }, "j", function() awful.screen.focus_relative(1) end),
@@ -284,13 +286,9 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
     awful.key({ modkey }, "b", function()
         top_panel[mouse.screen].visible = not top_panel[mouse.screen].visible
     end),
-
-    -- Standard program
     awful.key({ modkey, }, "Return", function() awful.util.spawn(terminal) end),
     awful.key({ modkey, "Mod1" }, "Return", function() awful.util.spawn(alt_terminal) end),
-    awful.key({ modkey, "Control" }, "Return", function()
-        awful.util.spawn(terminal .. " -e screen")
-    end),
+    awful.key({ modkey, "Control" }, "Return", function() awful.util.spawn(terminal .. " -e screen") end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift" }, "q", awesome.quit),
     awful.key({ modkey, "Shift" }, "l", function() awful.tag.incmwfact(0.05) end),
@@ -298,8 +296,6 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
     awful.key({ modkey, "Control" }, "h", function() awful.tag.incncol(1) end),
     awful.key({ modkey, "Control" }, "l", function() awful.tag.incncol(-1) end),
     awful.key({ modkey, }, "space", function() awful.layout.inc(layouts, 1) end),
-
-    -- {{{ Prompt
     awful.key({ modkey }, "r", function()
         awful.prompt.run({ prompt = "Run:" },
             mypromptbox[mouse.screen].widget,
@@ -307,8 +303,6 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
             clean_for_completion,
             awful.util.getdir("cache") .. "/history")
     end),
-    -- }}}
-
     -- Custom
     awful.key({ "Control" }, ",", function() awful.util.spawn("mpc volume -5") end),
     awful.key({ "Control" }, ".", function() awful.util.spawn("mpc volume +5") end),
@@ -316,10 +310,19 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
     awful.key({ "Control" }, "'", function() awful.util.spawn("mpc next") end),
     awful.key({ "Control" }, ";", function() awful.util.spawn("mpc prev") end),
     awful.key({ "Control" }, "/", function() awful.util.spawn("amixer set " .. config.mixer .. " toggle") end),
-    awful.key({ modkey }, "l", function() awful.util.spawn("xflock4") end),
-    -- awful.key({   modkey  }, "Down", function () awful.util.spawn("sudo toshiba-brightness.sh dec") end),
-    -- awful.key({   modkey  }, "Up",   function () awful.util.spawn("sudo toshiba-brightness.sh inc") end),
-    awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end))
+    awful.key({ modkey }, "l", function() awful.util.spawn("xflock4") end))
+
+if config.toshiba then
+    awful.util.table.join(globalkeys,
+        awful.key({   modkey  }, "Down", function () awful.util.spawn("sudo toshiba-brightness.sh dec") end))
+    awful.util.table.join(globalkeys,
+        awful.key({   modkey  }, "Up",   function () awful.util.spawn("sudo toshiba-brightness.sh inc") end))
+    awful.util.table.join(globalkeys,
+        awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end))
+else
+    awful.util.table.join(globalkeys,
+        awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end))
+end
 
 for i = 1, 9 do
     globalkeys = awful.util.table.join(globalkeys,
