@@ -3,10 +3,10 @@
 ----------------------------------------------------------------
 -- Lucas de Vries <lucas@glacicle.org>
 -- Licensed under the WTFPL version 2
---   * http://sam.zoy.org/wtfpl/COPYING
+-- * http://sam.zoy.org/wtfpl/COPYING
 ----------------------------------------------------------------
 -- To use this module add:
---   require("eminent")
+-- require("eminent")
 -- to the top of your rc.lua. 
 --
 -- That's it. Through magical monkey-patching, all you need to
@@ -39,7 +39,6 @@ local deflayout = nil
 local orig = {
     new = awful.tag.new,
     viewidx = awful.tag.viewidx,
-
     taglist = awful.widget.taglist.new,
     label = awful.widget.taglist.label.all,
 }
@@ -61,14 +60,14 @@ function gettags(screen)
 end
 
 -- Pre-create tags
-awful.tag.new = function (names, screen, layout)
+awful.tag.new = function(names, screen, layout)
     deflayout = layout and layout[1] or layout
     return orig.new(names, screen, layout)
 end
 
 -- View tag by relative index
-awful.tag.viewidx = function (i, screen)
-    -- Hide tags
+awful.tag.viewidx = function(i, screen)
+-- Hide tags
     local s = screen and screen.index or capi.mouse.screen
     local ctags = capi.screen[s]:tags()
     local tags = gettags(s)
@@ -83,12 +82,12 @@ awful.tag.viewidx = function (i, screen)
         -- Deselect all
         awful.tag.viewnone(s)
 
-        if #ctags >= tagidx+1 then
+        if #ctags >= tagidx + 1 then
             -- Focus next
-            ctags[tagidx+1].selected = true
+            ctags[tagidx + 1].selected = true
         else
             -- Create new
-            local tag = capi.tag { name = ""..(tagidx+1) }
+            local tag = capi.tag{ name = "" .. (tagidx + 1) }
             tag.screen = s
             tag.selected = true
             awful.tag.setproperty(tag, "layout", deflayout)
@@ -100,7 +99,7 @@ awful.tag.viewidx = function (i, screen)
 end
 
 -- Taglist label functions
-awful.widget.taglist.label.all = function (t, args)
+awful.widget.taglist.label.all = function(t, args)
     if t.selected or #t:clients() > 0 then
         return orig.label(t, args)
     end
@@ -109,6 +108,7 @@ end
 
 -- Update hidden status
 local function uc(c) gettags(c.screen) end
+
 local function ut(s, t) gettags(s.index) end
 
 capi.client.add_signal("unmanage", uc)
@@ -118,7 +118,7 @@ capi.client.add_signal("new", function(c)
     c:add_signal("untagged", uc)
 end)
 
-for screen=1, capi.screen.count() do
+for screen = 1, capi.screen.count() do
     awful.tag.attached_add_signal(screen, "property::selected", uc)
     capi.screen[screen]:add_signal("tag::attach", ut)
     capi.screen[screen]:add_signal("tag::detach", ut)

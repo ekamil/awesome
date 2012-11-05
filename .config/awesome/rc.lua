@@ -12,7 +12,7 @@ require("naughty")
 -- {{{ beautiful
 cfg_path = awful.util.getdir("config")
 
-beautiful.init(cfg_path.. "/themes/current/theme.lua")
+beautiful.init(cfg_path .. "/themes/current/theme.lua")
 -- }}}
 
 -- {{{ Variable definitions
@@ -86,7 +86,7 @@ function theme_load(theme)
 end
 
 function theme_menu()
-    local cmd = "ls -1 " .. cfg_path.. "/themes/"
+    local cmd = "ls -1 " .. cfg_path .. "/themes/"
     local f = io.popen(cmd)
 
     for l in f:lines() do
@@ -96,6 +96,7 @@ function theme_menu()
 
     f:close()
 end
+
 theme_menu()
 -- }}}
 
@@ -103,7 +104,7 @@ theme_menu()
 -- Create a laucher widget and a main menu
 myawesomemenu = {
     { "manual", terminal .. " -e man awesome" },
-    { "edit config", editor_cmd .. " " .. cfg_path.. "/rc.lua" },
+    { "edit config", editor_cmd .. " " .. cfg_path .. "/rc.lua" },
     { "themes", mythememenu },
     { "restart", awesome.restart },
     { "quit", awesome.quit }
@@ -251,8 +252,7 @@ end
 -- }}}
 
 -- {{{ Key bindings
-globalkeys = awful.util.table.join(
-    awful.key({ modkey, }, "Left", awful.tag.viewprev),
+globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.viewprev),
     awful.key({ modkey, }, "Right", awful.tag.viewnext),
     awful.key({ modkey, }, "Escape", awful.tag.history.restore),
     awful.key({ modkey, }, "e", awful.tag.viewnext),
@@ -306,9 +306,9 @@ globalkeys = awful.util.table.join(
 
 if config.toshiba then
     awful.util.table.join(globalkeys,
-        awful.key({   modkey  }, "Down", function () awful.util.spawn("sudo toshiba-brightness.sh dec") end))
+        awful.key({ modkey }, "Down", function() awful.util.spawn("sudo toshiba-brightness.sh dec") end))
     awful.util.table.join(globalkeys,
-        awful.key({   modkey  }, "Up",   function () awful.util.spawn("sudo toshiba-brightness.sh inc") end))
+        awful.key({ modkey }, "Up", function() awful.util.spawn("sudo toshiba-brightness.sh inc") end))
     awful.util.table.join(globalkeys,
         awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end))
 else
@@ -377,11 +377,13 @@ awful.rules.rules = {
             buttons = clientbuttons
         }
     },
-    { rule = { class="xfce4-terminal" },
-      properties = { struts = { bottom = 0, right = 0, left = 0 },
-                     maximized_vertical = true,
-                     maximized_horizontal = true
-                 }
+    {
+        rule = { class = "xfce4-terminal" },
+        properties = {
+            struts = { bottom = 0, right = 0, left = 0 },
+            maximized_vertical = true,
+            maximized_horizontal = true
+        }
     },
     {
         rule = { class = "Firefox" },
@@ -429,9 +431,9 @@ awful.rules.rules = {
         end
     },
     {
-    rule = { class="Skype", role="Chats" }, 
-    properties = { floating = false },
-    callback = function( c )
+        rule = { class = "Skype", role = "Chats" },
+        properties = { floating = false },
+        callback = function(c)
             local w = screen[c.screen].workarea.width
             local h = screen[c.screen].workarea.height
             awful.client.setslave(c)
@@ -439,9 +441,9 @@ awful.rules.rules = {
         end
     },
     {
-    rule = { class="Skype", role="CallWindow" }, 
-    properties = { floating = false },
-    callback = function( c )
+        rule = { class = "Skype", role = "CallWindow" },
+        properties = { floating = false },
+        callback = function(c)
             local w = screen[c.screen].workarea.width
             local h = screen[c.screen].workarea.height
             c:struts({ left = 0.2 * w })
