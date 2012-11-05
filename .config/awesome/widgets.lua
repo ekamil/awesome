@@ -1,4 +1,49 @@
-require "icons"
+icons = {}
+icons.dir = awful.util.getdir("config") .. "/themes/icons/"
+icons.date = icons.dir .. "date.png" 
+icons.time = icons.dir .. "time.png" 
+icons.mpd  = icons.dir .. "mpd.png" 
+icons.vol = icons.dir .. "vol.png" 
+icons.vol_mute = icons.dir .. "vol_mute.png" 
+icons.charging = icons.dir .. "bat_plus.png" 
+icons.sep = icons.dir .. "sep.png" 
+icons.uptime = icons.dir .. "uptime.png"
+icons.batt_ac = icons.dir .. "ac.png"
+icons.batt_bat1 = icons.dir .. "bat1.png"
+icons.batt_bat2 = icons.dir .. "bat2.png"
+icons.batt_bat3 = icons.dir .. "bat3.png"
+icons.batt_bat4 = icons.dir .. "bat4.png"
+icons.batt_bat5 = icons.dir .. "bat5.png"
+icons.batt_bat6 = icons.dir .. "bat6.png"
+icons.batt_bat7 = icons.dir .. "bat7.png"
+icons.batt_bat8 = icons.dir .. "bat8.png"
+
+icons.temp = icons.dir .. "temp_m.png"
+icons.cpu = icons.dir .. "cpu.png"
+icons.mem = icons.dir .. "mem.png"
+icons.fs = icons.dir .. "disk.png" 
+icons.netio = icons.dir .. "netio-green.png"
+icons.wifi = icons.dir .. "wifi_02.png"
+
+icons.mail = icons.dir .. "mail.png"
+icons.nomail = icons.dir .. "mail.png"
+
+mytimes = {}
+mytimes.baticon    =  3
+mytimes.batwidget  =  4
+mytimes.mpdwidget  =  1
+mytimes.vol        =  1
+mytimes.thermal    =  7
+mytimes.mem        =  8
+mytimes.hddt       =  9
+mytimes.cpu        =  9
+mytimes.net        =  10
+mytimes.wifi       =  60
+mytimes.io         =  11
+mytimes.fs         =  12
+mytimes.mail       =  13
+mytimes.uptime     =  600
+mytimes.date       =  55
 
 -- {{{ From wiki
 -- Execute command and return its output. You probably won't only execute commands with one
@@ -55,14 +100,14 @@ vicious.register(datewidget, vicious.widgets.date, date_format, mytimes.date)
 
 -- {{{ Volume level
 
-require "volume_widget"
+require("volume_widget")
 
 -- }}}
 
 
 -- {{{ Battery widget with steps
 
-require "battery_widget"
+require("battery_widget")
 
 --}}}
 

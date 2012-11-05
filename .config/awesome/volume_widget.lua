@@ -1,4 +1,3 @@
-require("config")
 local mixer = config.mixer
 
 -- Icon widget

@@ -1,6 +1,3 @@
-require("config")
-
-
 baticon = widget({ type = "imagebox" })
 --baticon_t = awful.tooltip({ objects = { baticon }, })
 --baticon.image = image(beautiful.baticon_bat1)
