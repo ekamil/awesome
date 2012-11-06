@@ -8,6 +8,12 @@ require("beautiful")
 -- Notification library
 require("naughty")
 
+-- {{{ helpers 
+function file_exists(name)
+       local f=io.open(name,"r")
+          if f~=nil then io.close(f) return true else return false end
+      end
+-- }}}
 
 -- {{{ beautiful
 cfg_path = awful.util.getdir("config")
@@ -25,15 +31,19 @@ editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
 --
 config = {}
---[[ toshiba --]]
-config.bat = "BAT1"
+if file_exists('/sys/class/power_supply/BAT1/status') then
+    config.bat = "BAT1"
+else
+    config.bat = "BAT0"
+end
+
+if file_exists('/usr/bin/toshiba-brightness.sh') then
+    config.toshiba = true
+else
+    config.toshiba = false
+end
+
 config.mixer = "Master"
-config.toshiba = true
---[[ dell
-config.bat = "BAT0"
-config.mixer = "PCM"
-config.toshiba = false
---]]
 -- }}}
 
 -- {{{ Tags
@@ -305,15 +315,17 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
     awful.key({ modkey }, "l", function() awful.util.spawn("xflock4") end))
 
 if config.toshiba then
-    awful.util.table.join(globalkeys,
-        awful.key({ modkey }, "Down", function() awful.util.spawn("sudo toshiba-brightness.sh dec") end))
-    awful.util.table.join(globalkeys,
-        awful.key({ modkey }, "Up", function() awful.util.spawn("sudo toshiba-brightness.sh inc") end))
-    awful.util.table.join(globalkeys,
-        awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end))
+    local newkeys = awful.util.table.join(
+        awful.key({ modkey }, "Down", function() awful.util.spawn("sudo toshiba-brightness.sh dec") end),
+        awful.key({ modkey }, "Up", function() awful.util.spawn("sudo toshiba-brightness.sh inc") end),
+        awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end)
+    )
+    globalkeys = awful.util.table.join(globalkeys, newkeys)
 else
-    awful.util.table.join(globalkeys,
-        awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end))
+    local newkeys = awful.util.table.join(
+        awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end)
+    )
+    globalkeys = awful.util.table.join(globalkeys, newkeys)
 end
 
 for i = 1, 9 do
