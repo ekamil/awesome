@@ -69,14 +69,14 @@ tags = {
     layout = {
         layouts[5],
         layouts[2],
-        layouts[2],
+        layouts[5],
 
         layouts[2],
         layouts[2],
         layouts[2],
 
         layouts[2],
-        layouts[2],
+        layouts[5],
         layouts[3]
     }
 }
@@ -390,14 +390,6 @@ awful.rules.rules = {
         }
     },
     {
-        rule = { class = "xfce4-terminal" },
-        properties = {
-            struts = { bottom = 0, right = 0, left = 0 },
-            maximized_vertical = true,
-            maximized_horizontal = true
-        }
-    },
-    {
         rule = { class = "Firefox" },
         properties = { tag = tags[s][3] }
     },
@@ -411,24 +403,20 @@ awful.rules.rules = {
     },
     {
         rule = { class = "Pidgin", role = "buddy_list" },
-        properties = { tag = tags[s][8], floating = true },
+        properties = { floating = true,  x = 0, y = 0 },
         callback = function(c)
-            awful.client.setslave(c)
             local w = screen[c.screen].workarea.width
             local h = screen[c.screen].workarea.height
             c:geometry({ width = 0.3 * w, height = h })
-            c.x = 0
-            c.y = 0
         end
     },
     {
         rule = { class = "Pidgin", role = "conversation" },
-        properties = { tag = tags[s][8], floating = true },
         callback = function(c)
             local w = screen[c.screen].workarea.width
             local h = screen[c.screen].workarea.height
-            c:geometry({ width = 0.7 * w, height = h })
-            c.x = 0.3 * w + 1
+            awful.client.setslave(c)
+            c:struts({ left = 0.3 * w })
         end
     },
     {
