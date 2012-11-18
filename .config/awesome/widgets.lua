@@ -60,7 +60,7 @@ end
 
 -- }}}
 
--- {{{ MPD widget
+--[[ {{{ MPD widget
 mpdicon = widget({ type = "imagebox" })
 mpdicon.image = image(icons.mpd)
 mpdwidget = widget({ type = "textbox" })
@@ -76,7 +76,8 @@ vicious.register(mpdwidget, vicious.widgets.mpd,
             return args["{Artist}"] .. ' - ' .. args["{Title}"]
         end
     end, mytimes.mpdwidget)
--- }}}
+--]]
+--}}}
 
 -- {{{ Reusable separator
 separator = widget({ type = "imagebox" })
