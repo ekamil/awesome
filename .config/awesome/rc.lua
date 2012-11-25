@@ -10,9 +10,49 @@ require("naughty")
 
 -- {{{ helpers 
 function file_exists(name)
-       local f=io.open(name,"r")
-          if f~=nil then io.close(f) return true else return false end
-      end
+    local f = io.open(name, "r")
+    if f ~= nil then io.close(f) return true else return false end
+end
+
+function run_or_raise(command)
+    -- Check throught the clients if the class match the command
+    local lower_command = string.lower(command)
+    for k, c in pairs(client.get()) do
+        local class = string.lower(c.class)
+        if string.match(class, lower_command) then
+            for i, v in ipairs(c:tags()) do
+                awful.tag.viewonly(v)
+                c:raise()
+                c.minimized = false
+                return
+            end
+        end
+    end
+    awful.util.spawn(command)
+end
+
+function check_for_terminal(command)
+    if command:sub(1, 1) == ":" then
+        command = alt_terminal .. ' -e ' .. command:sub(2)
+    end
+    awful.util.spawn(command)
+end
+
+function clean_for_completion(command, cur_pos, ncomp, shell)
+    local term = false
+    if command:sub(1, 1) == ":" then
+        term = true
+        command = command:sub(2)
+        cur_pos = cur_pos - 1
+    end
+    command, cur_pos = awful.completion.shell(command, cur_pos, ncomp, shell)
+    if term == true then
+        command = ':' .. command
+        cur_pos = cur_pos + 1
+    end
+    return command, cur_pos
+end
+
 -- }}}
 
 -- {{{ beautiful
@@ -29,7 +69,7 @@ terminal = "xfce4-terminal -e " .. shell
 alt_terminal = userhome .. "/.local/bin/urxvt-zenburn.sh"
 editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
-dmenu_opts = "-b -nb '".. beautiful.bg_normal .."' -nf '".. beautiful.fg_normal .."' -sb '#955'" .. " -fn '" .. beautiful.font .. "'"
+dmenu_opts = "-b -nb '" .. beautiful.bg_normal .. "' -nf '" .. beautiful.fg_normal .. "' -sb '#955'" .. " -fn '" .. beautiful.font .. "'"
 --
 config = {}
 if file_exists('/sys/class/power_supply/BAT1/status') then
@@ -108,11 +148,11 @@ end
 theme_menu()
 -- }}}
 -- {{{ Layouts menu
-layouts_menu = {} 
+layouts_menu = {}
 function layouts_menu_create()
     for i, l in ipairs(layouts) do
         local fn = function()
-            -- set layout for current tag
+        -- set layout for current tag
             awful.layout.set(l)
         end
         local name = awful.layout.getname(l)
@@ -127,15 +167,16 @@ layouts_menu_create()
 -- mythememenu {{theme_name, theme_load},}
 -- layouts_menu {{layout_name, layout_function},}
 local menu_items = {
-    awesome = { restart = awesome.restart,
-                quit  = awesome.quit,
-                themes = {},
-                layouts = {},
-              },
+    awesome = {
+        restart = awesome.restart,
+        quit = awesome.quit,
+        themes = {},
+        layouts = {},
+    },
     GVim = 'gvim',
     ["open terminal"] = terminal,
     midnight = alt_terminal .. " -e dash -c 'sleep 0.1 ; mc'",
-    ["toggle day/night"] =  "day_night.sh",
+    ["toggle day/night"] = "day_night.sh",
 }
 
 for i, v in ipairs(mythememenu) do
@@ -213,70 +254,7 @@ for s = 1, screen.count() do
         layout = awful.widget.layout.horizontal.rightleft
     }
     top_panel[s].screen = s
-    --
-    -- Create the bottompanel
-    --[[
-    bottom_panel[s] = awful.wibox({ position = "bottom", screen = s })
-    -- Add widgets to the bottompanel - order matters
-    bottom_panel[s].widgets = {
-        {
-            thermalicon,thermalwidget, hddtempwidget, separator,
-            mpdicon,
-            layout = awful.widget.layout.horizontal.leftright
-        },
-        loadwidget, separator,
-        cpuwidget, cpuicon, separator,
-        memwidget, memicon, separator,
-        uptimewidget, uptimeicon, separator,
-        mpdwidget,
-        layout = awful.widget.layout.horizontal.rightleft
-    }
-    bottom_panel[s].screen = s
-    --]]
 end
--- }}}
-
-
--- {{{ functions to help launch run commands in a terminal using ":" keyword 
-function run_or_raise(command)
-    -- Check throught the clients if the class match the command
-    local lower_command=string.lower(command)
-    for k, c in pairs(client.get()) do
-        local class=string.lower(c.class)
-        if string.match(class, lower_command) then
-            for i, v in ipairs(c:tags()) do
-                awful.tag.viewonly(v)
-                c:raise()
-                c.minimized = false
-                return
-            end
-        end
-    end
-    awful.util.spawn(command)
-end
-
-function check_for_terminal(command)
-    if command:sub(1, 1) == ":" then
-        command = alt_terminal .. ' -e ' .. command:sub(2)
-    end
-    awful.util.spawn(command)
-end
-
-function clean_for_completion(command, cur_pos, ncomp, shell)
-    local term = false
-    if command:sub(1, 1) == ":" then
-        term = true
-        command = command:sub(2)
-        cur_pos = cur_pos - 1
-    end
-    command, cur_pos = awful.completion.shell(command, cur_pos, ncomp, shell)
-    if term == true then
-        command = ':' .. command
-        cur_pos = cur_pos + 1
-    end
-    return command, cur_pos
-end
-
 -- }}}
 
 -- {{{ Key bindings
@@ -309,27 +287,19 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
     awful.key({ modkey, "Control" }, "q", awesome.quit),
     awful.key({ modkey, "Shift" }, "l", function() awful.tag.incmwfact(0.05) end),
     awful.key({ modkey, "Shift" }, "h", function() awful.tag.incmwfact(-0.05) end),
-    -- awful.key({ modkey }, "r", function()
-    --     awful.prompt.run({ prompt = "Run:" },
-    --         mypromptbox[mouse.screen].widget,
-    --         check_for_terminal,
-    --         clean_for_completion,
-    --         awful.util.getdir("cache") .. "/history")
-    -- end),
-    -- Run or raise applications with dmenu
-    awful.key({ modkey }, "r", function ()
-        local f_reader = io.popen( "dmenu_path | dmenu " .. dmenu_opts)
+    awful.key({ modkey }, "r", function()
+        local f_reader = io.popen("dmenu_path | dmenu " .. dmenu_opts)
         local command = assert(f_reader:read('*a'))
         f_reader:close()
         if command == "" then return end
         run_or_raise(command)
     end),
-        
+
     awful.key({ modkey }, "space", flexmenu.show_menu),
-    awful.key({ modkey }, "q", function ()
+    awful.key({ modkey }, "q", function()
         awful.util.spawn("simpleswitcher -now -bg '" .. beautiful.bg_normal ..
-            "' -fg '" .. beautiful.fg_normal .. 
-            "' -fn '" .. beautiful.font .. "'")
+                "' -fg '" .. beautiful.fg_normal ..
+                "' -fn '" .. beautiful.font .. "'")
     end),
     -- Custom
     awful.key({ "Control" }, ",", function() awful.util.spawn("mpc volume -5") end),
@@ -341,16 +311,12 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
     awful.key({ modkey }, "l", function() awful.util.spawn("xflock4") end))
 
 if config.toshiba then
-    local newkeys = awful.util.table.join(
-        awful.key({ modkey }, "Down", function() awful.util.spawn("sudo toshiba-brightness.sh dec") end),
+    local newkeys = awful.util.table.join(awful.key({ modkey }, "Down", function() awful.util.spawn("sudo toshiba-brightness.sh dec") end),
         awful.key({ modkey }, "Up", function() awful.util.spawn("sudo toshiba-brightness.sh inc") end),
-        awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end)
-    )
+        awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end))
     globalkeys = awful.util.table.join(globalkeys, newkeys)
 else
-    local newkeys = awful.util.table.join(
-        awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end)
-    )
+    local newkeys = awful.util.table.join(awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end))
     globalkeys = awful.util.table.join(globalkeys, newkeys)
 end
 
@@ -434,7 +400,7 @@ awful.rules.rules = {
     },
     {
         rule = { class = "Pidgin", role = "buddy_list" },
-        properties = { floating = true,  x = 0, y = 0 },
+        properties = { floating = true, x = 0, y = 0 },
         callback = function(c)
             local w = screen[c.screen].workarea.width
             local h = screen[c.screen].workarea.height
@@ -485,7 +451,7 @@ awful.rules.rules = {
         properties = { tag = tags[s][6] }
     },
     {
-        rule = { class = "jetbrains-idea-ce" },
+        rule = { name = "IntelliJ" },
         properties = { tag = tags[s][7] }
     },
     { rule = { class = "MPlayer" }, properties = { floating = true } },
@@ -527,7 +493,6 @@ function run_once(prg, arg_string, pname, screen)
     if not prg then
         do return nil end
     end
-
     if not pname then
         pname = prg
     end
@@ -542,12 +507,8 @@ end
 run_once("xscreensaver", "-no-splash")
 run_once("dropbox", "start -i", nil)
 run_once("mpd")
-run_once("mpd-hits", "-d")
 run_once("parcellite", nil, nil)
 run_once("mail-notification", nil, nil)
--- run_once("conky", "-c /home/kamil/.conky/std.conf" ,nil,nil)
-
 awful.util.spawn_with_shell("sleep 40 && awsetbg -f -r Wallpapers")
--- awful.util.spawn_with_shell("sleep 4 && " .. terminal .. " -e screen")
 awful.util.spawn_with_shell("set-touchpad")
 -- }}}
