@@ -4,11 +4,13 @@ Dmenu wrapper with nested menus.
 Author: Kamil Essekkat <kamil@essekkat.pl>
 --]]
 local P = {}
+P.string_handler = io.popen
 
 
-local function init(menu_items, dmenu_opts)
+local function init(menu_items, dmenu_opts, string_handler)
     P.menu_items = menu_items
     P.dmenu_opts = dmenu_opts
+    P.string_handler = string_handler
 end
 
 
@@ -92,7 +94,7 @@ local function show_menu()
     cmd = choose_mlevel(P.menu_items)
     if cmd ~= nil then
         if type(cmd) == 'string' then
-            io.popen(cmd)
+            P.string_handler(cmd)
         elseif type(cmd) == 'function' then
             cmd()
         else

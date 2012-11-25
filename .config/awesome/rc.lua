@@ -147,7 +147,7 @@ for i, v in ipairs(layouts_menu) do
 end
 
 require("flexmenu")
-flexmenu.init(menu_items, dmenu_opts)
+flexmenu.init(menu_items, dmenu_opts, awful.util.spawn)
 -- }}}
 
 -- {{{ panel
