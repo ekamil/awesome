@@ -29,6 +29,7 @@ terminal = "xfce4-terminal -e " .. shell
 alt_terminal = userhome .. "/.local/bin/urxvt-zenburn.sh"
 editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
+dmenu_opts = "-b -nb '".. beautiful.bg_normal .."' -nf '".. beautiful.fg_normal .."' -sb '#955'" .. " -fn '" .. beautiful.font .. "'"
 --
 config = {}
 if file_exists('/sys/class/power_supply/BAT1/status') then
@@ -53,38 +54,35 @@ layouts =
     awful.layout.suit.floating,
     awful.layout.suit.tile,
     awful.layout.suit.tile.left,
-    -- awful.layout.suit.tile.bottom,
-    -- awful.layout.suit.tile.top,
     awful.layout.suit.fair,
-    -- awful.layout.suit.fair.horizontal,
-    --awful.layout.suit.spiral,
-    --awful.layout.suit.spiral.dwindle,
+    awful.layout.suit.fair.horizontal,
+    awful.layout.suit.spiral,
+    awful.layout.suit.spiral.dwindle,
     awful.layout.suit.max,
-    --awful.layout.suit.max.fullscreen,
-    --awful.layout.suit.magnifier
+    awful.layout.suit.max.fullscreen,
+    awful.layout.suit.magnifier,
+    awful.layout.suit.tile.bottom,
+    awful.layout.suit.tile.top,
 }
 
 tags = {
     names = { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
     layout = {
-        layouts[5],
-        layouts[2],
-        layouts[5],
-
-        layouts[2],
-        layouts[2],
-        layouts[2],
-
-        layouts[2],
-        layouts[5],
-        layouts[3]
+        awful.layout.suit.max,
+        awful.layout.suit.tile,
+        awful.layout.suit.max,
+        awful.layout.suit.tile,
+        awful.layout.suit.tile,
+        awful.layout.suit.tile,
+        awful.layout.suit.tile,
+        awful.layout.suit.max,
+        awful.layout.suit.tile.left
     }
 }
 
 local s = 1
 tags[s] = awful.tag(tags.names, s, tags.layout)
 
-awful.tag.setmwfact(0.5, tags[s][9])
 -- }}}
 
 -- {{{ Themes menu
@@ -109,30 +107,47 @@ end
 
 theme_menu()
 -- }}}
+-- {{{ Layouts menu
+layouts_menu = {} 
+function layouts_menu_create()
+    for i, l in ipairs(layouts) do
+        local fn = function()
+            -- set layout for current tag
+            awful.layout.set(l)
+        end
+        local name = awful.layout.getname(l)
+        local item = { name, fn }
+        table.insert(layouts_menu, item)
+    end
+end
 
--- {{{ Menu
--- Create a laucher widget and a main menu
-myawesomemenu = {
-    { "manual", terminal .. " -e man awesome" },
-    { "edit config", editor_cmd .. " " .. cfg_path .. "/rc.lua" },
-    { "themes", mythememenu },
-    { "restart", awesome.restart },
-    { "quit", awesome.quit }
+layouts_menu_create()
+
+-- {{{ flexmenu
+-- mythememenu {{theme_name, theme_load},}
+-- layouts_menu {{layout_name, layout_function},}
+local menu_items = {
+    awesome = { restart = awesome.restart,
+                quit  = awesome.quit,
+                themes = {},
+                layouts = {},
+              },
+    GVim = 'gvim',
+    ["open terminal"] = terminal,
+    midnight = alt_terminal .. " -e dash -c 'sleep 0.1 ; mc'",
+    ["toggle day/night"] =  "day_night.sh",
 }
 
-mymainmenu = awful.menu({
-    items = {
-        { "awesome", myawesomemenu, beautiful.awesome_icon },
-        { "open terminal", terminal },
-        { "midnight", alt_terminal .. " -e dash -c 'sleep 0.1 ; mc'" },
-        { "toggle day/night", "/home/kamil/.local/bin/day_night.sh" }
-    }
-})
+for i, v in ipairs(mythememenu) do
+    menu_items.awesome.themes[v[1]] = v[2]
+end
 
-mylauncher = awful.widget.launcher({
-    image = image(beautiful.awesome_icon),
-    menu = mymainmenu
-})
+for i, v in ipairs(layouts_menu) do
+    menu_items.awesome.layouts[v[1]] = v[2]
+end
+
+require("flexmenu")
+flexmenu.init(menu_items, dmenu_opts)
 -- }}}
 
 -- {{{ panel
@@ -156,14 +171,6 @@ mytasklist.buttons = awful.util.table.join(awful.button({}, 1, function(c)
     client.focus = c
     c:raise()
 end),
-    awful.button({}, 3, function()
-        if instance then
-            instance:hide()
-            instance = nil
-        else
-            instance = awful.menu.clients({ width = 250 })
-        end
-    end),
     awful.button({}, 4, function()
         awful.client.focus.byidx(1)
         if client.focus then client.focus:raise() end
@@ -192,7 +199,6 @@ for s = 1, screen.count() do
     -- Add widgets to the wibox - order matters
     top_panel[s].widgets = {
         {
-            mylauncher,
             mytaglist[s],
             mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
@@ -230,13 +236,25 @@ for s = 1, screen.count() do
 end
 -- }}}
 
--- {{{ Mouse bindings
-root.buttons(awful.util.table.join(awful.button({}, 3, function() mymainmenu:toggle() end),
-    awful.button({}, 4, awful.tag.viewnext),
-    awful.button({}, 5, awful.tag.viewprev)))
--- }}}
 
 -- {{{ functions to help launch run commands in a terminal using ":" keyword 
+function run_or_raise(command)
+    -- Check throught the clients if the class match the command
+    local lower_command=string.lower(command)
+    for k, c in pairs(client.get()) do
+        local class=string.lower(c.class)
+        if string.match(class, lower_command) then
+            for i, v in ipairs(c:tags()) do
+                awful.tag.viewonly(v)
+                c:raise()
+                c.minimized = false
+                return
+            end
+        end
+    end
+    awful.util.spawn(command)
+end
+
 function check_for_terminal(command)
     if command:sub(1, 1) == ":" then
         command = alt_terminal .. ' -e ' .. command:sub(2)
@@ -281,10 +299,6 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
     awful.key({ modkey, "Control" }, "j", function() awful.screen.focus_relative(1) end),
     awful.key({ modkey, "Control" }, "k", function() awful.screen.focus_relative(-1) end),
     awful.key({ modkey, }, "u", awful.client.urgent.jumpto),
-    awful.key({ modkey, }, "Tab", function()
-        awful.client.focus.history.previous()
-        if client.focus then client.focus:raise() end
-    end),
     awful.key({ modkey }, "b", function()
         top_panel[mouse.screen].visible = not top_panel[mouse.screen].visible
     end),
@@ -292,18 +306,30 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
     awful.key({ modkey, "Mod1" }, "Return", function() awful.util.spawn(alt_terminal) end),
     awful.key({ modkey, "Control" }, "Return", function() awful.util.spawn(terminal .. " -e screen") end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
-    awful.key({ modkey, "Shift" }, "q", awesome.quit),
+    awful.key({ modkey, "Control" }, "q", awesome.quit),
     awful.key({ modkey, "Shift" }, "l", function() awful.tag.incmwfact(0.05) end),
     awful.key({ modkey, "Shift" }, "h", function() awful.tag.incmwfact(-0.05) end),
-    awful.key({ modkey, "Control" }, "h", function() awful.tag.incncol(1) end),
-    awful.key({ modkey, "Control" }, "l", function() awful.tag.incncol(-1) end),
-    awful.key({ modkey, }, "space", function() awful.layout.inc(layouts, 1) end),
-    awful.key({ modkey }, "r", function()
-        awful.prompt.run({ prompt = "Run:" },
-            mypromptbox[mouse.screen].widget,
-            check_for_terminal,
-            clean_for_completion,
-            awful.util.getdir("cache") .. "/history")
+    -- awful.key({ modkey }, "r", function()
+    --     awful.prompt.run({ prompt = "Run:" },
+    --         mypromptbox[mouse.screen].widget,
+    --         check_for_terminal,
+    --         clean_for_completion,
+    --         awful.util.getdir("cache") .. "/history")
+    -- end),
+    -- Run or raise applications with dmenu
+    awful.key({ modkey }, "r", function ()
+        local f_reader = io.popen( "dmenu_path | dmenu " .. dmenu_opts)
+        local command = assert(f_reader:read('*a'))
+        f_reader:close()
+        if command == "" then return end
+        run_or_raise(command)
+    end),
+        
+    awful.key({ modkey }, "space", flexmenu.show_menu),
+    awful.key({ modkey }, "q", function ()
+        awful.util.spawn("simpleswitcher -now -bg '" .. beautiful.bg_normal ..
+            "' -fg '" .. beautiful.fg_normal .. 
+            "' -fn '" .. beautiful.font .. "'")
     end),
     -- Custom
     awful.key({ "Control" }, ",", function() awful.util.spawn("mpc volume -5") end),
@@ -386,8 +412,13 @@ awful.rules.rules = {
             border_color = beautiful.border_normal,
             focus = true,
             keys = clientkeys,
+            size_hints_honor = false,
             buttons = clientbuttons
         }
+    },
+    {
+        rule = { class = "luakit" },
+        properties = { tag = tags[s][2] }
     },
     {
         rule = { class = "Firefox" },
