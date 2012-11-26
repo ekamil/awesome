@@ -167,25 +167,17 @@ layouts_menu_create()
 -- mythememenu {{theme_name, theme_load},}
 -- layouts_menu {{layout_name, layout_function},}
 local menu_items = {
-    awesome = {
-        restart = awesome.restart,
-        quit = awesome.quit,
-        themes = {},
-        layouts = {},
-    },
-    GVim = 'gvim',
-    ["open terminal"] = terminal,
-    midnight = alt_terminal .. " -e dash -c 'sleep 0.1 ; mc'",
-    ["toggle day/night"] = "day_night.sh",
+    {"awesome", {
+        {"restart", awesome.restart},
+        {"quit", awesome.quit},
+        {"themes", mythememenu},
+        {"layouts", layouts_menu},
+    }},
+    {"GVim", 'gvim'},
+    {"open terminal", terminal},
+    {"midnight", alt_terminal .. " -e dash -c 'sleep 0.1 ; mc'"},
+    {"toggle day/night", "day_night.sh"},
 }
-
-for i, v in ipairs(mythememenu) do
-    menu_items.awesome.themes[v[1]] = v[2]
-end
-
-for i, v in ipairs(layouts_menu) do
-    menu_items.awesome.layouts[v[1]] = v[2]
-end
 
 require("flexmenu")
 flexmenu.init(menu_items, dmenu_opts, awful.util.spawn)

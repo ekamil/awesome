@@ -66,13 +66,16 @@ end
 
 local function choose(t)
     local choices = {}
-    for k, v in pairs(t) do
-        table.insert(choices, k)
+    local results = {}
+    for k, v in ipairs(t) do
+        assert(v[1], "Empty table")
+        assert(v[2], "No value")
+        table.insert(choices, v[1])
+        results[v[1]] = v[2]
     end
     local selected = call_dmenu(choices)
-    local choices = {}
     if selected ~= nil then
-        return t[selected]
+        return results[selected]
     else
         return nil
     end
@@ -82,8 +85,9 @@ end
 local function choose_mlevel(t)
     local selected = nil
     local t_ = t
-    while not selected or type(selected) == 'table' do
+    while not (selected ~= nil and type(selected) ~= 'table') do
         selected = choose(t_)
+        print (selected)
         if selected == nil then return nil end
         t_ = selected
     end
