@@ -53,7 +53,7 @@ local function call_dmenu(t)
         return rval
     end
 
-    ok, rval = pcall(internal, t)
+    local ok, rval = pcall(internal, t)
     if ok then
         -- if empty string then the choice was cancelled
         if rval == '' then return nil end
@@ -83,7 +83,7 @@ end
 
 
 local function choose_mlevel(t)
-    local selected = nil
+    local selected
     local t_ = t
     while not (selected ~= nil and type(selected) ~= 'table') do
         selected = choose(t_)
@@ -95,7 +95,7 @@ local function choose_mlevel(t)
 end
 
 local function show_menu()
-    cmd = choose_mlevel(P.menu_items)
+    local cmd = choose_mlevel(P.menu_items)
     if cmd ~= nil then
         if type(cmd) == 'string' then
             P.string_handler(cmd)

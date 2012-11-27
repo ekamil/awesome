@@ -3,7 +3,7 @@ local mixer = config.mixer
 -- Icon widget
 volicon = widget({ type = "imagebox" })
 vicious.register(volicon, vicious.widgets.volume, function(widget, args)
-    local mute = ""
+    local mute
     mute = args[2]
     volicon.image = image(icons.vol)
     if mute == "♩" then

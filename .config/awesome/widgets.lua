@@ -142,10 +142,11 @@ thermalwidget = widget({ type = "textbox", name = "thermalwidget" })
 thermalicon = widget({ type = "imagebox" })
 thermalicon.image = image(icons.temp)
 function cpu_temp()
-    function get_temp(proc)
+    local function get_temp(proc)
         local thermal_path = "/sys/devices/platform/coretemp.0/temp%d_input"
         local _path = string.format(thermal_path, proc)
-        fd = io.open(_path)
+        local fd = io.open(_path)
+        local fr
         if (fd == nil)
         then
             fr = "0"
