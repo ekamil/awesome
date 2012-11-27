@@ -1,4 +1,3 @@
-#!/usr/bin/env lua
 --[[
 Dmenu wrapper with nested menus.
 Author: Kamil Essekkat <kamil@essekkat.pl>
@@ -24,8 +23,8 @@ local function print_tab(t, p, d)
             print(s)
         else
             cur_depth = cur_depth + 1
-            if cur_depth <= d then 
-                print_tab(item, title, d-cur_depth) 
+            if cur_depth <= d then
+                print_tab(item, title, d - cur_depth)
             else
                 local s = string.format("%s => submenu", title)
                 print(s)
@@ -39,20 +38,21 @@ local function call_dmenu(t)
     -- t (table): list of items
     local function internal(t)
         local n = os.tmpname()
-        assert(n, "Cannot create temp file") 
-        local dm = io.popen('dmenu ' .. P.dmenu_opts .. ' > ' .. n , "w")
-        assert(dm, "Cannot run dmenu") 
-        for k, v in ipairs(t) do 
-            dm:write(v .. '\n') 
+        assert(n, "Cannot create temp file")
+        local dm = io.popen('dmenu ' .. P.dmenu_opts .. ' > ' .. n, "w")
+        assert(dm, "Cannot run dmenu")
+        for k, v in ipairs(t) do
+            dm:write(v .. '\n')
         end
         dm:close()
         local rf = io.open(n)
-        assert(rf, "Cannot read temp file") 
+        assert(rf, "Cannot read temp file")
         local rval = rf:read("*a")
         rf:close()
         os.remove(n)
         return rval
     end
+
     ok, rval = pcall(internal, t)
     if ok then
         -- if empty string then the choice was cancelled
@@ -87,7 +87,7 @@ local function choose_mlevel(t)
     local t_ = t
     while not (selected ~= nil and type(selected) ~= 'table') do
         selected = choose(t_)
-        print (selected)
+        print(selected)
         if selected == nil then return nil end
         t_ = selected
     end
