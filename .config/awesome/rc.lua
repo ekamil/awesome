@@ -14,45 +14,6 @@ function file_exists(name)
     if f ~= nil then io.close(f) return true else return false end
 end
 
-function run_or_raise(command)
-    -- Check throught the clients if the class match the command
-    local lower_command = string.lower(command)
-    for k, c in pairs(client.get()) do
-        local class = string.lower(c.class)
-        if string.match(class, lower_command) then
-            for i, v in ipairs(c:tags()) do
-                awful.tag.viewonly(v)
-                c:raise()
-                c.minimized = false
-                return
-            end
-        end
-    end
-    awful.util.spawn(command)
-end
-
-function check_for_terminal(command)
-    if command:sub(1, 1) == ":" then
-        command = alt_terminal .. ' -e ' .. command:sub(2)
-    end
-    awful.util.spawn(command)
-end
-
-function clean_for_completion(command, cur_pos, ncomp, shell)
-    local term = false
-    if command:sub(1, 1) == ":" then
-        term = true
-        command = command:sub(2)
-        cur_pos = cur_pos - 1
-    end
-    command, cur_pos = awful.completion.shell(command, cur_pos, ncomp, shell)
-    if term == true then
-        command = ':' .. command
-        cur_pos = cur_pos + 1
-    end
-    return command, cur_pos
-end
-
 -- }}}
 
 -- {{{ beautiful
@@ -87,41 +48,78 @@ end
 config.mixer = "Master"
 -- }}}
 
--- {{{ Tags
--- layouts count from 1
-layouts =
-{
-    awful.layout.suit.floating,
-    awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral,
-    awful.layout.suit.spiral.dwindle,
-    awful.layout.suit.max,
-    awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier,
-    awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
-}
+-- {{{ Run sth helpers 
+function run_or_raise(command)
+    -- Check throught the clients if the class match the command
+    local lower_command = string.lower(command)
+    for k, c in pairs(client.get()) do
+        local class = string.lower(c.class)
+        if string.match(class, lower_command) then
+            for i, v in ipairs(c:tags()) do
+                awful.tag.viewonly(v)
+                c:raise()
+                c.minimized = false
+                return
+            end
+        end
+    end
+    awful.util.spawn(command)
+end
 
-tags = {
-    names = { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-    layout = {
-        awful.layout.suit.max,
-        awful.layout.suit.tile,
-        awful.layout.suit.max,
-        awful.layout.suit.tile,
-        awful.layout.suit.tile,
-        awful.layout.suit.tile,
-        awful.layout.suit.tile,
-        awful.layout.suit.max,
-        awful.layout.suit.tile.left
-    }
-}
+function run_or_raise_menu()
+    local f_reader = io.popen("dmenu_path | dmenu " .. dmenu_opts)
+    local command = assert(f_reader:read('*a'))
+    f_reader:close()
+    if command == "" then return end
+    run_or_raise(command)
+end
 
-local s = 1
-tags[s] = awful.tag(tags.names, s, tags.layout)
+function simpleswitcher()
+    awful.util.spawn("simpleswitcher -now -bg '" .. beautiful.bg_normal ..
+            "' -fg '" .. beautiful.fg_normal ..
+            "' -fn '" .. beautiful.font .. "'")
+end
+
+function run_in_terminal()
+    local f_reader = io.popen("dmenu_path | dmenu " .. dmenu_opts)
+    local command = assert(f_reader:read('*a'))
+    f_reader:close()
+    if command == "" then return end
+    command = alt_terminal .. ' -e ' .. command
+    awful.util.spawn(command)
+end
+
+function check_for_terminal(command)
+    if command:sub(1, 1) == ":" then
+        command = alt_terminal .. ' -e ' .. command:sub(2)
+    end
+    awful.util.spawn(command)
+end
+
+function run_in_terminal_fn(command)
+    local function internal()
+        command = alt_terminal .. ' -e ' .. command
+        awful.util.spawn(command)
+    end
+
+    return internal
+end
+
+function clean_for_completion(command, cur_pos, ncomp, shell)
+    local term = false
+    if command:sub(1, 1) == ":" then
+        term = true
+        command = command:sub(2)
+        cur_pos = cur_pos - 1
+    end
+    command, cur_pos = awful.completion.shell(command, cur_pos, ncomp, shell)
+    if term == true then
+        command = ':' .. command
+        cur_pos = cur_pos + 1
+    end
+    return command, cur_pos
+end
+
 
 -- }}}
 
@@ -148,6 +146,21 @@ end
 theme_menu()
 -- }}}
 -- {{{ Layouts menu
+layouts =
+{
+    awful.layout.suit.floating,
+    awful.layout.suit.tile,
+    awful.layout.suit.tile.left,
+    awful.layout.suit.fair,
+    awful.layout.suit.fair.horizontal,
+    awful.layout.suit.spiral,
+    awful.layout.suit.spiral.dwindle,
+    awful.layout.suit.max,
+    awful.layout.suit.max.fullscreen,
+    awful.layout.suit.magnifier,
+    awful.layout.suit.tile.bottom,
+    awful.layout.suit.tile.top,
+}
 layouts_menu = {}
 function layouts_menu_create()
     for i, l in ipairs(layouts) do
@@ -167,22 +180,51 @@ layouts_menu_create()
 -- mythememenu {{theme_name, theme_load},}
 -- layouts_menu {{layout_name, layout_function},}
 local menu_items = {
-    {"awesome", {
-        {"restart", awesome.restart},
-        {"quit", awesome.quit},
-        {"themes", mythememenu},
-        {"layouts", layouts_menu},
-    }},
-    {"GVim", 'gvim'},
-    {"open terminal", terminal},
-    {"midnight", alt_terminal .. " -e dash -c 'sleep 0.1 ; mc'"},
-    {"toggle day/night", "day_night.sh"},
+    { "RunTerm", run_in_terminal },
+    { "RunOrRaise", run_or_raise },
+    {
+        "awesome", {
+        { "restart", awesome.restart },
+        { "quit", awesome.quit },
+        { "themes", mythememenu },
+        { "layouts", layouts_menu },
+    }
+    },
+    { "GVim", 'gvim' },
+    { "xfce4-terminal", terminal },
+    { "urxvt", alt_terminal },
+    { "KeePass", run_in_terminal_fn("fatman_keepass.sh") },
+    { "Firefox", run_in_terminal_fn("firefox5") },
+    { "midnight", alt_terminal .. " -e dash -c 'sleep 0.1 ; mc'" },
+    { "toggle day/night", "day_night.sh" },
 }
 
 require("flexmenu")
 flexmenu.init(menu_items, dmenu_opts, awful.util.spawn)
 -- }}}
 
+
+-- {{{ Tags
+-- layouts count from 1
+tags = {
+    names = { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+    layout = {
+        awful.layout.suit.max,
+        awful.layout.suit.tile,
+        awful.layout.suit.max,
+        awful.layout.suit.tile,
+        awful.layout.suit.tile,
+        awful.layout.suit.tile,
+        awful.layout.suit.tile,
+        awful.layout.suit.max,
+        awful.layout.suit.tile.left
+    }
+}
+
+local s = 1
+tags[s] = awful.tag(tags.names, s, tags.layout)
+
+-- }}}
 -- {{{ panel
 require("widgets")
 top_panel = {}
@@ -279,20 +321,9 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
     awful.key({ modkey, "Control" }, "q", awesome.quit),
     awful.key({ modkey, "Shift" }, "l", function() awful.tag.incmwfact(0.05) end),
     awful.key({ modkey, "Shift" }, "h", function() awful.tag.incmwfact(-0.05) end),
-    awful.key({ modkey }, "r", function()
-        local f_reader = io.popen("dmenu_path | dmenu " .. dmenu_opts)
-        local command = assert(f_reader:read('*a'))
-        f_reader:close()
-        if command == "" then return end
-        run_or_raise(command)
-    end),
-
+    awful.key({ modkey }, "r", run_or_raise_menu),
     awful.key({ modkey }, "space", flexmenu.show_menu),
-    awful.key({ modkey }, "q", function()
-        awful.util.spawn("simpleswitcher -now -bg '" .. beautiful.bg_normal ..
-                "' -fg '" .. beautiful.fg_normal ..
-                "' -fn '" .. beautiful.font .. "'")
-    end),
+    awful.key({ modkey }, "q", simpleswitcher),
     -- Custom
     awful.key({ "Control" }, ",", function() awful.util.spawn("mpc volume -5") end),
     awful.key({ "Control" }, ".", function() awful.util.spawn("mpc volume +5") end),
