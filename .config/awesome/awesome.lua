@@ -14,6 +14,15 @@ function file_exists(name)
     if f ~= nil then io.close(f) return true else return false end
 end
 
+function is_on_path(name)
+    local f = os.execute("which " .. name .. " > /dev/null")
+    if f ~= nil then
+        if f == 0 then
+            return true
+        end
+    end
+    return false
+end
 -- }}}
 
 -- {{{ beautiful
@@ -31,6 +40,12 @@ alt_terminal = userhome .. "/.local/bin/urxvt-zenburn.sh"
 editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
 dmenu_opts = "-b -nb '" .. beautiful.bg_normal .. "' -nf '" .. beautiful.fg_normal .. "' -sb '#955'" .. " -fn '" .. beautiful.font .. "'"
+
+if is_on_path("yeganesh") then
+    dmenu_path = "dmenu_path | yeganesh -p default -- " .. dmenu_opts
+else
+    dmenu_path = "dmenu_path | dmenu " .. dmenu_opts
+end
 --
 config = {}
 if file_exists('/sys/class/power_supply/BAT1/status') then
@@ -46,6 +61,8 @@ else
 end
 
 config.mixer = "Master"
+
+
 -- }}}
 
 -- {{{ Run sth helpers 
@@ -67,7 +84,7 @@ function run_or_raise(command)
 end
 
 function run_or_raise_menu()
-    local f_reader = io.popen("dmenu_path | dmenu " .. dmenu_opts)
+    local f_reader = io.popen(dmenu_path)
     local command = assert(f_reader:read('*a'))
     f_reader:close()
     if command == "" then return end
@@ -81,7 +98,7 @@ function simpleswitcher()
 end
 
 function run_in_terminal()
-    local f_reader = io.popen("dmenu_path | dmenu " .. dmenu_opts)
+    local f_reader = io.popen(dmenu_path)
     local command = assert(f_reader:read('*a'))
     f_reader:close()
     if command == "" then return end
@@ -197,6 +214,7 @@ local menu_items = {
     { "Firefox", run_in_terminal_fn("firefox5") },
     { "midnight", alt_terminal .. " -e dash -c 'sleep 0.1 ; mc'" },
     { "toggle day/night", "day_night.sh" },
+    { "calc", "xclip -selection clipboard -o | bc | xclip -selection clipboard -i" },
 }
 
 require("flexmenu")
