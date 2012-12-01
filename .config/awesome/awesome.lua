@@ -208,10 +208,9 @@ local menu_items = {
     }
     },
     { "GVim", 'gvim' },
-    { "xfce4-terminal", terminal },
     { "urxvt", alt_terminal },
     { "KeePass", run_in_terminal_fn("fatman_keepass.sh") },
-    { "Firefox", run_in_terminal_fn("firefox5") },
+    { "firefox", run_in_terminal_fn("firefox5") },
     { "midnight", alt_terminal .. " -e dash -c 'sleep 0.1 ; mc'" },
     { "toggle day/night", "day_night.sh" },
     { "calc", "xclip -selection clipboard -o | bc | xclip -selection clipboard -i" },
