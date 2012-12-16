@@ -229,7 +229,7 @@ tags = {
         awful.layout.suit.max,
         awful.layout.suit.tile,
         awful.layout.suit.max,
-        awful.layout.suit.tile,
+        awful.layout.suit.max,
         awful.layout.suit.tile,
         awful.layout.suit.tile,
         awful.layout.suit.tile,
