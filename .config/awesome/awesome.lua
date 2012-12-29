@@ -558,6 +558,7 @@ run_once("dropbox", "start -i", nil)
 run_once("mpd")
 run_once("parcellite", nil, nil)
 run_once("mail-notification", nil, nil)
+run_once("conky", "-c .conky/std.conf", nil)
 awful.util.spawn_with_shell("sleep 40 && awsetbg -f -r Wallpapers")
 awful.util.spawn_with_shell("set-touchpad")
 -- }}}
