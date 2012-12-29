@@ -197,8 +197,8 @@ layouts_menu_create()
 -- mythememenu {{theme_name, theme_load},}
 -- layouts_menu {{layout_name, layout_function},}
 local menu_items = {
-    { "RunTerm", run_in_terminal },
-    { "RunOrRaise", run_or_raise },
+    { "run_in_term", run_in_terminal },
+    { "run_or_raise", run_or_raise },
     {
         "awesome", {
         { "restart", awesome.restart },
@@ -207,13 +207,15 @@ local menu_items = {
         { "layouts", layouts_menu },
     }
     },
-    { "GVim", 'gvim' },
+    { "gvim", 'gvim' },
     { "urxvt", alt_terminal },
-    { "KeePass", run_in_terminal_fn("fatman_keepass.sh") },
+    { "keepass", run_in_terminal_fn("fatman_keepass.sh") },
     { "firefox", run_in_terminal_fn("firefox5") },
     { "midnight", alt_terminal .. " -e dash -c 'sleep 0.1 ; mc'" },
     { "toggle day/night", "day_night.sh" },
     { "calc", "xclip -selection clipboard -o | bc | xclip -selection clipboard -i" },
+    { "layouts", layouts_menu },
+    { "layout max", function () awful.layout.set(awful.layout.suit.max) end }
 }
 
 require("flexmenu")
@@ -339,6 +341,7 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
     awful.key({ modkey, "Shift" }, "l", function() awful.tag.incmwfact(0.05) end),
     awful.key({ modkey, "Shift" }, "h", function() awful.tag.incmwfact(-0.05) end),
     awful.key({ modkey }, "r", run_or_raise_menu),
+    awful.key({ modkey }, "t", run_in_terminal),
     awful.key({ modkey }, "space", flexmenu.show_menu),
     awful.key({ modkey }, "q", simpleswitcher),
     -- Custom
@@ -498,7 +501,6 @@ awful.rules.rules = {
         rule = { class = "OpenOffice" },
         callback = function(c)
             c:lower()
-            awful.client.setslave(c)
         end
     },
     { rule = { class = "MPlayer" }, properties = { floating = true } },
