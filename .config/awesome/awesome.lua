@@ -494,6 +494,13 @@ awful.rules.rules = {
         rule = { name = "IntelliJ" },
         properties = { tag = tags[s][7] }
     },
+    {
+        rule = { class = "OpenOffice" },
+        callback = function(c)
+            c:lower()
+            awful.client.setslave(c)
+        end
+    },
     { rule = { class = "MPlayer" }, properties = { floating = true } },
     { rule = { class = "Gimp" }, properties = { floating = true } },
     { rule = { class = "pinentry" }, properties = { floating = true } },
