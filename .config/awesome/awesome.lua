@@ -559,6 +559,6 @@ run_once("mpd")
 run_once("parcellite", nil, nil)
 run_once("mail-notification", nil, nil)
 run_once("conky", "-c .conky/std.conf", nil)
-awful.util.spawn_with_shell("sleep 40 && awsetbg -f -r Wallpapers")
+run_once("change-wallpaper.sh", nil, nil)
 awful.util.spawn_with_shell("set-touchpad")
 -- }}}
