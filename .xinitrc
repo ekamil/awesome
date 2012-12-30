@@ -2,4 +2,6 @@ gnome-settings-daemon &
 
 [ -f ~/.startx_env ] && . ~/.startx_env
 
-exec awesome | tee awesome.log
+[ -f $HOME/awesome.log ] && mv $HOME/awesome.log $HOME/awesome.log.1
+
+awesome >> $HOME/awesome.log
