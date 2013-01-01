@@ -426,10 +426,6 @@ awful.rules.rules = {
         }
     },
     {
-        rule = { class = "luakit" },
-        properties = { tag = tags[s][2] }
-    },
-    {
         rule = { class = "Firefox" },
         properties = { tag = tags[s][3] }
     },
@@ -496,12 +492,6 @@ awful.rules.rules = {
     {
         rule = { name = "IntelliJ" },
         properties = { tag = tags[s][7] }
-    },
-    {
-        rule = { class = "OpenOffice" },
-        callback = function(c)
-            c:lower()
-        end
     },
     { rule = { class = "MPlayer" }, properties = { floating = true } },
     { rule = { class = "Gimp" }, properties = { floating = true } },
