@@ -209,7 +209,7 @@ local menu_items = {
     },
     { "gvim", 'gvim' },
     { "urxvt", alt_terminal },
-    { "keepass", run_in_terminal_fn("fatman_keepass.sh") },
+    { "keepass", run_in_terminal_fn("fatman_keepass") },
     { "firefox", run_in_terminal_fn("firefox5") },
     { "midnight", alt_terminal .. " -e dash -c 'sleep 0.1 ; mc'" },
     { "toggle day/night", "day_night.sh" },
