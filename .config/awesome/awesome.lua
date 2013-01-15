@@ -313,7 +313,7 @@ end
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.viewprev),
     awful.key({ modkey, }, "Right", awful.tag.viewnext),
-    awful.key({ modkey, }, "Escape", awful.tag.history.restore),
+    -- awful.key({ modkey, }, "Escape", awful.tag.history.restore),
     awful.key({ modkey, }, "e", awful.tag.viewnext),
     awful.key({ modkey, }, "w", awful.tag.viewprev),
 
@@ -344,6 +344,11 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
     awful.key({ modkey }, "t", run_in_terminal),
     awful.key({ modkey }, "space", flexmenu.show_menu),
     awful.key({ modkey }, "q", simpleswitcher),
+    awful.key({ modkey }, "Escape", function ()
+     -- If you want to always position the menu on the same place set coordinates
+     awful.menu.menu_keys.down = { "Down", "Alt_L" }
+     local cmenu = awful.menu.clients({width=245}, { keygrabber=true, coords={x=525, y=330} })
+ end ),
     -- Custom
     awful.key({ "Control" }, ",", function() awful.util.spawn("mpc volume -5") end),
     awful.key({ "Control" }, ".", function() awful.util.spawn("mpc volume +5") end),
