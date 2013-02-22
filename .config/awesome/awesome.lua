@@ -432,15 +432,15 @@ awful.rules.rules = {
     },
     {
         rule = { class = "Firefox" },
-        properties = { tag = tags[s][3] }
-    },
-    {
-        rule = { class = "Chromium" },
         properties = { tag = tags[s][4] }
     },
     {
+        rule = { class = "Chromium" },
+        properties = { tag = tags[s][5] }
+    },
+    {
         rule = { class = "Pidgin" },
-        properties = { tag = tags[s][8] }
+        properties = { tag = tags[s][6] }
     },
     {
         rule = { class = "Pidgin", role = "buddy_list" },
@@ -462,7 +462,7 @@ awful.rules.rules = {
     },
     {
         rule = { class = "Skype", role = "MainWindow" },
-        properties = { tag = tags[s][9], floating = true },
+        properties = { tag = tags[s][7], floating = true },
         callback = function(c)
             local w = screen[c.screen].workarea.width
             local h = screen[c.screen].workarea.height
@@ -492,11 +492,15 @@ awful.rules.rules = {
     },
     {
         rule = { class = "Deluge" },
-        properties = { tag = tags[s][6] }
+        properties = { tag = tags[s][9] }
     },
     {
         rule = { name = "IntelliJ" },
-        properties = { tag = tags[s][7] }
+        properties = { tag = tags[s][2] }
+    },
+    {
+        rule = { name = "Eclipse" },
+        properties = { tag = tags[s][3] }
     },
     { rule = { class = "MPlayer" }, properties = { floating = true } },
     { rule = { class = "Gimp" }, properties = { floating = true } },
