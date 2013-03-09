@@ -1,0 +1,6 @@
+#!/bin/sh
+
+rm ~/.local/var/run/firefox5.lock
+rm ~/.local/var/run/mail-backup.lock
+
+rm $HOME/Wallpapers/.pid

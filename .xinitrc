@@ -5,3 +5,5 @@ gnome-settings-daemon &
 [ -f $HOME/awesome.log ] && mv $HOME/awesome.log $HOME/awesome.log.1
 
 awesome >> $HOME/awesome.log
+
+[ -f $HOME/after-x-cleanup ] && $HOME/after-x-cleanup
