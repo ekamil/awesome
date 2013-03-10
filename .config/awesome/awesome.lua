@@ -240,8 +240,9 @@ tags = {
     }
 }
 
-local s = 1
-tags[s] = awful.tag(tags.names, s, tags.layout)
+for s = 1, screen.count() do
+    tags[s] = awful.tag(tags.names, s, tags.layout)
+end
 
 -- }}}
 -- {{{ panel
@@ -329,6 +330,7 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
     awful.key({ modkey, "Shift" }, "k", function() awful.client.swap.byidx(-1) end),
     awful.key({ modkey, "Control" }, "j", function() awful.screen.focus_relative(1) end),
     awful.key({ modkey, "Control" }, "k", function() awful.screen.focus_relative(-1) end),
+    awful.key({ modkey }, "o", awful.client.movetoscreen),
     awful.key({ modkey, }, "u", awful.client.urgent.jumpto),
     awful.key({ modkey }, "b", function()
         top_panel[mouse.screen].visible = not top_panel[mouse.screen].visible
@@ -372,11 +374,13 @@ for i = 1, 9 do
     globalkeys = awful.util.table.join(globalkeys,
         awful.key({ modkey }, i,
             function()
+                local s = mouse.screen
                 awful.tag.viewonly(tags[s][i])
             end))
     globalkeys = awful.util.table.join(globalkeys,
         awful.key({ modkey, "Control" }, i,
             function()
+                local s = mouse.screen
                 local t = tags[s][i]
                 t.selected = not t.selected
             end))
@@ -384,6 +388,7 @@ for i = 1, 9 do
         awful.key({ modkey, "Control", "Shift" }, i,
             function()
                 if client.focus then
+                    local s = mouse.screen
                     awful.client.toggletag(tags[s][i])
                 end
             end))
@@ -391,6 +396,7 @@ for i = 1, 9 do
         awful.key({ modkey, "Shift" }, i,
             function()
                 if client.focus then
+                    local s = mouse.screen
                     local t = tags[s][i]
                     awful.client.movetotag(t)
                     awful.tag.viewonly(t)
@@ -417,6 +423,7 @@ root.keys(globalkeys)
 -- }}}
 
 -- {{{ Rules
+local s = 1;
 --
 awful.rules.rules = {
     {
