@@ -512,6 +512,7 @@ awful.rules.rules = {
     { rule = { class = "MPlayer" }, properties = { floating = true } },
     { rule = { class = "Gimp" }, properties = { floating = true } },
     { rule = { class = "pinentry" }, properties = { floating = true } },
+    { rule = { class = "Qalculate" }, properties = { floating = true } },
 }
 -- }}}
 
