@@ -311,12 +311,19 @@ for s = 1, screen.count() do
 end
 -- }}}
 
+layouts_short =
+{
+    awful.layout.suit.floating,
+    awful.layout.suit.tile.left,
+    awful.layout.suit.max,
+}
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.viewprev),
     awful.key({ modkey, }, "Right", awful.tag.viewnext),
     -- awful.key({ modkey, }, "Escape", awful.tag.history.restore),
     awful.key({ modkey, }, "e", awful.tag.viewnext),
     awful.key({ modkey, }, "w", awful.tag.viewprev),
+    awful.key({ modkey, }, "a", function() awful.layout.inc(layouts_short, 1) end),
 
     awful.key({ modkey, }, "j", function()
         awful.client.focus.byidx(1)
