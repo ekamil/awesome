@@ -458,11 +458,13 @@ awful.rules.rules = {
     },
     {
         rule = { class = "Pidgin", role = "buddy_list" },
-        properties = { floating = true, x = 0, y = 0 },
+        properties = { floating = true },
         callback = function(c)
             local w = screen[c.screen].workarea.width
             local h = screen[c.screen].workarea.height
             c:geometry({ width = 0.3 * w, height = h })
+            c.x = 0
+            c.y = 0
         end
     },
     {
@@ -487,7 +489,7 @@ awful.rules.rules = {
     },
     {
         rule = { class = "Skype", role = "Chats" },
-        properties = { floating = false },
+        properties = { tag = tags[s][7], floating = false },
         callback = function(c)
             local w = screen[c.screen].workarea.width
             local h = screen[c.screen].workarea.height
@@ -497,7 +499,7 @@ awful.rules.rules = {
     },
     {
         rule = { class = "Skype", role = "CallWindow" },
-        properties = { floating = false },
+        properties = { tag = tags[s][7], floating = false },
         callback = function(c)
             local w = screen[c.screen].workarea.width
             local h = screen[c.screen].workarea.height
