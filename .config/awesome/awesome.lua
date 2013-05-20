@@ -477,7 +477,7 @@ awful.rules.rules = {
         end
     },
     {
-        rule = { class = "Skype", role = "MainWindow" },
+        rule = { class = "Skype" },
         properties = { tag = tags[s][7], floating = true },
         callback = function(c)
             local w = screen[c.screen].workarea.width
@@ -488,7 +488,7 @@ awful.rules.rules = {
         end
     },
     {
-        rule = { class = "Skype", role = "Chats" },
+        rule = { class = "Skype", role = "ConversationsWindow" },
         properties = { tag = tags[s][7], floating = false },
         callback = function(c)
             local w = screen[c.screen].workarea.width
