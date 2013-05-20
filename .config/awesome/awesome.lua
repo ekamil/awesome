@@ -464,7 +464,7 @@ awful.rules.rules = {
             local h = screen[c.screen].workarea.height
             c:geometry({ width = 0.3 * w, height = h })
             c.x = 0
-            c.y = 0
+            c.y = 19
         end
     },
     {
