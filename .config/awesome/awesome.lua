@@ -511,6 +511,10 @@ awful.rules.rules = {
         properties = { tag = tags[s][9] }
     },
     {
+        rule = { class = "Transmission" },
+        properties = { tag = tags[s][9] }
+    },
+    {
         rule = { name = "IntelliJ" },
         properties = { tag = tags[s][2] }
     },
