@@ -478,34 +478,27 @@ awful.rules.rules = {
     },
     {
         rule = { class = "Skype" },
-        properties = { tag = tags[s][7], floating = true },
-        callback = function(c)
-            local w = screen[c.screen].workarea.width
-            local h = screen[c.screen].workarea.height
-            c:geometry({ width = 0.2 * w, height = h })
-            c.x = 0
-            c.y = 0
-        end
+        properties = { tag = tags[s][7], floating = true }
     },
-    {
-        rule = { class = "Skype", role = "ConversationsWindow" },
-        properties = { tag = tags[s][7], floating = false },
-        callback = function(c)
-            local w = screen[c.screen].workarea.width
-            local h = screen[c.screen].workarea.height
-            awful.client.setslave(c)
-            c:struts({ left = 0.2 * w })
-        end
-    },
-    {
-        rule = { class = "Skype", role = "CallWindow" },
-        properties = { tag = tags[s][7], floating = false },
-        callback = function(c)
-            local w = screen[c.screen].workarea.width
-            local h = screen[c.screen].workarea.height
-            c:struts({ left = 0.2 * w })
-        end
-    },
+    -- {
+    --     rule = { class = "Skype", role = "ConversationsWindow" },
+    --     properties = { tag = tags[s][7], floating = false },
+    --     callback = function(c)
+    --         local w = screen[c.screen].workarea.width
+    --         local h = screen[c.screen].workarea.height
+    --         awful.client.setslave(c)
+    --         c:struts({ left = 0.2 * w })
+    --     end
+    -- },
+    -- {
+    --     rule = { class = "Skype", role = "CallWindow" },
+    --     properties = { tag = tags[s][7], floating = false },
+    --     callback = function(c)
+    --         local w = screen[c.screen].workarea.width
+    --         local h = screen[c.screen].workarea.height
+    --         c:struts({ left = 0.2 * w })
+    --     end
+    -- },
     {
         rule = { class = "Deluge" },
         properties = { tag = tags[s][9] }
@@ -576,10 +569,10 @@ end
 run_once("xscreensaver", "-no-splash")
 run_once("dropbox", "start -i", nil)
 run_once("mpd")
-run_once("parcellite", nil, nil)
+run_once("parcellite")
 -- run_once("mail-notification", nil, nil)
 -- run_once("conky", "-c .conky/std.conf", nil)
 run_once("awsetbg", "-f -r " .. userhome .. "/Wallpapers", nil)
-run_once("change-wallpaper.sh", nil, nil)
+run_once("change-wallpaper.sh")
 awful.util.spawn_with_shell("set-touchpad")
 -- }}}
