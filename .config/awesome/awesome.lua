@@ -574,5 +574,6 @@ run_once("parcellite")
 -- run_once("conky", "-c .conky/std.conf", nil)
 run_once("awsetbg", "-f -r " .. userhome .. "/Wallpapers", nil)
 run_once("change-wallpaper.sh")
+run_once("redshift.sh")
 awful.util.spawn_with_shell("set-touchpad")
 -- }}}
