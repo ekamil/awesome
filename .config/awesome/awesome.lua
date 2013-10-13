@@ -344,7 +344,7 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
     end),
     awful.key({ modkey, }, "Return", function() awful.util.spawn(terminal) end),
     awful.key({ modkey, "Mod1" }, "Return", function() awful.util.spawn(alt_terminal) end),
-    awful.key({ modkey, "Control" }, "Return", function() awful.util.spawn(terminal .. " -e screen") end),
+    awful.key({ modkey, "Control" }, "Return", function() awful.util.spawn(terminal .. " -e tmux") end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Control" }, "q", awesome.quit),
     awful.key({ modkey, "Shift" }, "l", function() awful.tag.incmwfact(0.05) end),
