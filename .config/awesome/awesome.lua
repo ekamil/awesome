@@ -480,25 +480,6 @@ awful.rules.rules = {
         rule = { class = "Skype" },
         properties = { tag = tags[s][7], floating = true }
     },
-    -- {
-    --     rule = { class = "Skype", role = "ConversationsWindow" },
-    --     properties = { tag = tags[s][7], floating = false },
-    --     callback = function(c)
-    --         local w = screen[c.screen].workarea.width
-    --         local h = screen[c.screen].workarea.height
-    --         awful.client.setslave(c)
-    --         c:struts({ left = 0.2 * w })
-    --     end
-    -- },
-    -- {
-    --     rule = { class = "Skype", role = "CallWindow" },
-    --     properties = { tag = tags[s][7], floating = false },
-    --     callback = function(c)
-    --         local w = screen[c.screen].workarea.width
-    --         local h = screen[c.screen].workarea.height
-    --         c:struts({ left = 0.2 * w })
-    --     end
-    -- },
     {
         rule = { class = "Deluge" },
         properties = { tag = tags[s][9] }
