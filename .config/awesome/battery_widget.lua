@@ -1,4 +1,21 @@
 baticon = widget({ type = "imagebox" })
+
+baticon:buttons(awful.util.table.join(
+   awful.button({ }, 1, function ()
+       local f = io.popen("acpi -b")
+       local text = ""
+       for line in f:lines() do
+           text = text .. line .. '<br/>'
+       end
+       f:close()
+       local popup = naughty.notify(
+            { title = "Battery",
+              text = text,
+              screen = mouse.screen
+             })
+   end)
+))
+
 --baticon_t = awful.tooltip({ objects = { baticon }, })
 --baticon.image = image(beautiful.baticon_bat1)
 vicious.register(baticon, vicious.widgets.bat, function(widget, args)
@@ -36,5 +53,8 @@ vicious.register(baticon, vicious.widgets.bat, function(widget, args)
 end,
     mytimes.baticon, config.bat)
 
+
 batwidget = widget({ type = "textbox" })
+
+
 vicious.register(batwidget, vicious.widgets.bat, "$2%", mytimes.batwidget, battery)
