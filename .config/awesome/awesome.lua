@@ -490,7 +490,11 @@ awful.rules.rules = {
     },
     {
         rule = { name = "IntelliJ" },
-        properties = { tag = tags[s][2] }
+        properties = { tag = tags[s][3] }
+    },
+    {
+        rule = { name = "PyCharm" },
+        properties = { tag = tags[s][3] }
     },
     {
         rule = { name = "Eclipse" },
