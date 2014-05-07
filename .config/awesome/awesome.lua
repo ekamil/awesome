@@ -323,8 +323,10 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
     -- awful.key({ modkey, }, "Escape", awful.tag.history.restore),
     awful.key({ modkey, }, "e", awful.tag.viewnext),
     awful.key({ modkey, }, "w", awful.tag.viewprev),
-    awful.key({ modkey, }, "a", function() awful.layout.inc(layouts_short, 1) end),
+    awful.key({ modkey, "Shift" }, "e", function() awful.screen.focus_relative(1) end),
+    awful.key({ modkey, "Shift" }, "w", function() awful.screen.focus_relative(-1) end),
 
+    awful.key({ modkey, }, "a", function() awful.layout.inc(layouts_short, 1) end),
     awful.key({ modkey, }, "j", function()
         awful.client.focus.byidx(1)
         if client.focus then client.focus:raise() end
@@ -335,10 +337,25 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
     end),
     awful.key({ modkey, "Shift" }, "j", function() awful.client.swap.byidx(1) end),
     awful.key({ modkey, "Shift" }, "k", function() awful.client.swap.byidx(-1) end),
-    awful.key({ modkey, "Control" }, "j", function() awful.screen.focus_relative(1) end),
-    awful.key({ modkey, "Control" }, "k", function() awful.screen.focus_relative(-1) end),
     awful.key({ modkey }, "o", awful.client.movetoscreen),
-    awful.key({ modkey, }, "u", awful.client.urgent.jumpto),
+    awful.key({ modkey, "Shift" }, "o", function() 
+        local count = 0
+        local _tag = awful.tag.selected()
+        local _screen = 2 -- hack
+        if mouse.screen == 2 then
+            _screen = 1
+        end
+        local _newtag = tags[_screen][awful.tag.selected().name]
+        for _, c in pairs(_tag:clients()) do
+            if client.class ~= c.class then
+                awful.client.movetoscreen(c)
+                awful.client.movetostag(_newtag)
+            end
+        end
+    end),
+    awful.key({ modkey }, "F1",     function () awful.screen.focus(1) end),
+    awful.key({ modkey }, "F2",     function () awful.screen.focus(2) end),
+    awful.key({ modkey }, "u", awful.client.urgent.jumpto),
     awful.key({ modkey }, "b", function()
         top_panel[mouse.screen].visible = not top_panel[mouse.screen].visible
     end),
