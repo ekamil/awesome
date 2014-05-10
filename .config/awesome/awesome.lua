@@ -506,6 +506,10 @@ awful.rules.rules = {
         properties = { tag = tags[s][9] }
     },
     {
+        rule = { class = "Zarządzanie czase" },
+        properties = { tag = tags[s][7] }
+    },
+    {
         rule = { name = "IntelliJ" },
         properties = { tag = tags[s][3] }
     },
@@ -521,7 +525,7 @@ awful.rules.rules = {
     { rule = { class = "Gimp" }, properties = { floating = true } },
     { rule = { class = "pinentry" }, properties = { floating = true } },
     { rule = { class = "Qalculate" }, properties = { floating = true } },
-    { rule = { class = "Krusader" }, properties = { floating = true } },
+    { rule = { class = "Krusader" }, properties = { floating = true } }
 }
 -- }}}
 
