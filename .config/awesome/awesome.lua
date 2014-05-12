@@ -208,12 +208,13 @@ local menu_items = {
     }
     },
     { "gvim", 'gvim' },
-    { "urxvt", alt_terminal },
-    { "keepass", run_in_terminal_fn("fatman_keepass") },
-    { "firefox", run_in_terminal_fn("firefox5") },
     { "midnight", alt_terminal .. " -e dash -c 'sleep 0.1 ; mc'" },
     { "toggle day/night", "day_night.sh" },
-    { "calc", "xclip -selection clipboard -o | bc | xclip -selection clipboard -i" },
+    { "redshift", {
+       { "night", 'redshift -O 3700K' },
+       { "day", 'redshift -x' },
+    } 
+    },
     { "layouts", layouts_menu },
     { "layout max", function () awful.layout.set(awful.layout.suit.max) end }
 }
