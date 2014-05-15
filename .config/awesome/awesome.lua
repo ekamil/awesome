@@ -208,6 +208,7 @@ local menu_items = {
     }
     },
     { "gvim", 'gvim' },
+    { "pms", alt_terminal .. " -e pms"  },
     { "midnight", alt_terminal .. " -e dash -c 'sleep 0.1 ; mc'" },
     { "toggle day/night", "day_night.sh" },
     { "redshift", {
@@ -346,11 +347,13 @@ globalkeys = awful.util.table.join(awful.key({ modkey, }, "Left", awful.tag.view
         if mouse.screen == 2 then
             _screen = 1
         end
-        local _newtag = tags[_screen][awful.tag.selected().name]
+        local _newtag = tags[_screen][_tag.name]
+        print(_newtag)
+        print(_tag)
         for _, c in pairs(_tag:clients()) do
             if client.class ~= c.class then
                 awful.client.movetoscreen(c)
-                awful.client.movetostag(_newtag)
+                awful.client.movetotag(_newtag)
             end
         end
     end),
