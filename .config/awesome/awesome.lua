@@ -228,7 +228,7 @@ flexmenu.init(menu_items, dmenu_opts, awful.util.spawn)
 -- {{{ Tags
 -- layouts count from 1
 tags = {
-    names = { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+    names = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
     layout = {
         awful.layout.suit.max,
         awful.layout.suit.max,
@@ -238,6 +238,7 @@ tags = {
         awful.layout.suit.max,
         awful.layout.suit.max,
         awful.layout.suit.max,
+        awful.layout.suit.tile.left,
         awful.layout.suit.tile.left
     }
 }
@@ -471,11 +472,11 @@ awful.rules.rules = {
     },
     {
         rule = { class = "Chromium" },
-        properties = { tag = tags[s][5] }
+        properties = { tag = tags[s][6] }
     },
     {
         rule = { class = "Pidgin" },
-        properties = { tag = tags[s][6] }
+        properties = { tag = tags[s][7] }
     },
     {
         rule = { class = "Pidgin", role = "buddy_list" },
@@ -499,7 +500,7 @@ awful.rules.rules = {
     },
     {
         rule = { class = "Skype" },
-        properties = { tag = tags[s][7], floating = true }
+        properties = { tag = tags[s][8], floating = true }
     },
     {
         rule = { class = "Deluge" },
@@ -510,8 +511,8 @@ awful.rules.rules = {
         properties = { tag = tags[s][9] }
     },
     {
-        rule = { class = "Zarządzanie czase" },
-        properties = { tag = tags[s][7] }
+        rule = { class = "Spotify" },
+        properties = { tag = tags[s][10] }
     },
     {
         rule = { name = "IntelliJ" },
