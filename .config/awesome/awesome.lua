@@ -512,15 +512,15 @@ awful.rules.rules = {
     },
     {
         rule = { class = "Spotify" },
-        properties = { tag = tags[s][10] }
+        properties = { tag = tags[s][10], floating = true }
     },
     {
         rule = { name = "IntelliJ" },
-        properties = { tag = tags[s][3] }
+        properties = { tag = tags[s][3], floating = true }
     },
     {
         rule = { name = "PyCharm" },
-        properties = { tag = tags[s][3] }
+        properties = { tag = tags[s][3], floating = true }
     },
     {
         rule = { name = "Eclipse" },
