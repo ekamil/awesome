@@ -39,7 +39,7 @@ terminal = "xfce4-terminal -e " .. shell
 alt_terminal = userhome .. "/.local/bin/urxvt-zenburn.sh"
 editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
-dmenu_opts = "-b -nb '" .. beautiful.bg_normal .. "' -nf '" .. beautiful.fg_normal .. "' -sb '#955'" .. " -fn '" .. beautiful.font .. "'"
+dmenu_opts = "-b -nb '" .. beautiful.bg_normal .. "' -nf '" .. beautiful.fg_normal .. "' -sb '#955'"
 
 if is_on_path("yeganesh") then
     dmenu_path = "dmenu_path | yeganesh -p default -- " .. dmenu_opts
@@ -580,7 +580,7 @@ end
 
 run_once("xscreensaver", "-no-splash")
 run_once("dropbox", "start -i", nil)
-run_once("mpd")
+-- run_once("mpd")
 run_once("parcellite")
 -- run_once("mail-notification", nil, nil)
 -- run_once("conky", "-c .conky/std.conf", nil)
