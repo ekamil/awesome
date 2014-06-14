@@ -500,10 +500,10 @@ awful.rules.rules = {
     },
     {
         rule = { class = "Skype" },
-        properties = { tag = tags[s][8], floating = true }
+        properties = { tag = tags[s][7], floating = true }
     },
     {
-        rule = { class = "Deluge" },
+        rule = { name = "Mozilla Thunderbird" },
         properties = { tag = tags[s][9] }
     },
     {
@@ -580,7 +580,7 @@ end
 
 run_once("xscreensaver", "-no-splash")
 run_once("dropbox", "start -i", nil)
--- run_once("mpd")
+run_once("mpd")
 run_once("parcellite")
 -- run_once("mail-notification", nil, nil)
 -- run_once("conky", "-c .conky/std.conf", nil)
