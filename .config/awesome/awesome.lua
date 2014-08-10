@@ -1,7 +1,7 @@
 local awful = require("awful")
 local awful_rules = require("awful.rules")
 local awful_autofocus = require("awful.autofocus")
--- local eminent = require("eminent")
+local eminent = require("eminent")
 local vicious = require("vicious")
 -- Theme handling library
 local beautiful = require("beautiful")
@@ -133,7 +133,6 @@ local tags = create_tags()
 local mywidgets = require "widgets"
 local top_panel = {}
 local bottom_panel = {}
-local mypromptbox = {}
 local mylayoutbox = {}
 
 local mytaglist = {}
@@ -192,7 +191,6 @@ for s = 1, screen.count() do
     top_panel[s].widgets = {
         {
             mytaglist[s],
-            mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
         },
         mylayoutbox[s],
@@ -329,10 +327,15 @@ local globalkeys = awful.util.table.join(
                     end
                     _stack[_iter] = key
                     _iter = _iter + 1
+                    naughty.notify(
+                            { text = key,
+                              screen = mouse.screen,
+                              timeout = 2
+                            })
                 end
                 if _iter > 4 then
                     parse_tags_cmd(_stack)
-                    keygrabber.stop()
+                    return false
                 end
                 return true
             end)
