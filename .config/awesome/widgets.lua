@@ -1,4 +1,8 @@
-icons = {}
+public = {}
+
+local helpers = require "helpers"
+
+local icons = {}
 icons.dir = awful.util.getdir("config") .. "/themes/icons/"
 icons.date = icons.dir .. "date.png"
 icons.time = icons.dir .. "time.png"
@@ -28,7 +32,7 @@ icons.wifi = icons.dir .. "wifi_02.png"
 icons.mail = icons.dir .. "mail.png"
 icons.nomail = icons.dir .. "mail.png"
 
-mytimes = {}
+local mytimes = {}
 mytimes.baticon = 3
 mytimes.batwidget = 4
 mytimes.mpdwidget = 1
@@ -45,10 +49,12 @@ mytimes.mail = 13
 mytimes.uptime = 600
 mytimes.date = 55
 
+local mixer = "Master"
+
 -- {{{ From wiki
 -- Execute command and return its output. You probably won't only execute commands with one
 -- line of output
-function execute_command(command)
+local function execute_command(command)
     local fh = io.popen(command)
     local str = ""
     for i in fh:lines() do
@@ -60,31 +66,13 @@ end
 
 -- }}}
 
---[[ {{{ MPD widget
-mpdicon = widget({ type = "imagebox" })
-mpdicon.image = image(icons.mpd)
-mpdwidget = widget({ type = "textbox" })
--- Register buttons
-mpdwidget:buttons(awful.util.table.join(awful.button({}, 1, function() awful.util.spawn("mpc toggle") end),
-    awful.button({}, 2, function() check_for_terminal("pms") end)))
---
-vicious.register(mpdwidget, vicious.widgets.mpd,
-    function(widget, args)
-        if args["{state}"] == "Stop" then
-            return " - "
-        else
-            return args["{Artist}"] .. ' - ' .. args["{Title}"]
-        end
-    end, mytimes.mpdwidget)
---]]
---}}}
-
 -- {{{ Reusable separator
 separator = widget({ type = "imagebox" })
 separator.image = image(icons.sep)
 
 spacer = widget({ type = "textbox" })
 spacer.width = 1
+public.separator = separator
 -- }}}
 
 -- {{{ Date and time
@@ -93,22 +81,122 @@ dateicon.image = image(icons.date)
 date_format = "%a, %d %b %Y, %W tyg., %H:%M"
 -- Initialize widget
 datewidget = widget({ type = "textbox" })
+require("calendar2")
+calendar2.addCalendarToWidget(datewidget)
 -- Register widget
 vicious.register(datewidget, vicious.widgets.date, date_format, mytimes.date)
--- calendar2.addCalendarToWidget(datewidget)
+public.dateicon = dateicon
+public.datewidget = datewidget
 -- }}}
 
 -- {{{ Volume level
 
-require("volume_widget")
+-- Icon widget
+volicon = widget({ type = "imagebox" })
+vicious.register(volicon, vicious.widgets.volume, function(widget, args)
+    local mute
+    mute = args[2]
+    volicon.image = image(icons.vol)
+    if mute == "♩" then
+        volicon.image = image(icons.vol_mute)
+    end
+end, mytimes.vol, mixer)
 
+public.volicon = volicon
+
+-- Text Widget
+volwidget = widget({ type = "textbox" })
+-- Enable caching
+vicious.cache(vicious.widgets.volume)
+-- Register widgets
+vicious.register(volwidget, vicious.widgets.volume, " $1%", mytimes.vol, mixer)
+-- Register buttons
+volwidget:buttons(awful.util.table.join(awful.button({}, 1, function()
+    awful.util.spawn("amixer set " .. mixer .. " toggle")
+end),
+    awful.button({}, 4, function()
+        awful.util.spawn("amixer -q set " .. mixer .. " 2dB+")
+    end),
+    awful.button({}, 5, function()
+        awful.util.spawn("amixer -q set " .. mixer .. " 2dB-")
+    end)))
+
+public.volwidget = volwidget
 -- }}}
 
 
 -- {{{ Battery widget with steps
 
-require("battery_widget")
 
+if helpers.file_exists('/sys/class/power_supply/BAT1/status') then
+    battery_file = "BAT1"
+else
+    battery_file = "BAT0"
+end
+
+
+local baticon = widget({ type = "imagebox" })
+
+-- Mouse left-click
+baticon:buttons(awful.util.table.join(
+   awful.button({ }, 1, function ()
+       local f = io.popen("acpi -b")
+       local text = ""
+       for line in f:lines() do
+           text = text .. line .. '<br/>'
+       end
+       f:close()
+       local popup = naughty.notify(
+            { title = "Battery",
+              text = text,
+              screen = mouse.screen
+             })
+   end)
+))
+
+vicious.register(baticon, 
+                 vicious.widgets.bat, 
+                 function(widget, args)
+                    local battery_status = ""
+                    battery_status = args[1]
+                    if not battery_status then
+                        baticon.image = image(icons.batt_ac)
+                    elseif args[1] == "-" then --battery_status == "discharging" then
+                        if args[2] > 90 and args[2] <= 100 then
+                            baticon.image = image(icons.batt_bat1)
+                        elseif args[2] >= 60 and args[2] < 90 then
+                            baticon.image = image(icons.batt_bat2)
+                        elseif args[2] >= 20 and args[2] < 60 then
+                            baticon.image = image(icons.batt_bat3)
+                        elseif args[2] < 20 then
+                            baticon.image = image(icons.batt_bat4)
+                        end
+                    elseif args[1] == "+" then --battery_status == "charging" then
+                        if args[2] > 90 and args[2] <= 100 then
+                            baticon.image = image(icons.batt_bat5)
+                        elseif args[2] >= 60 and args[2] < 90 then
+                            baticon.image = image(icons.batt_bat6)
+                        elseif args[2] >= 20 and args[2] < 60 then
+                            baticon.image = image(icons.batt_bat7)
+                        elseif args[2] < 20 then
+                            baticon.image = image(icons.batt_bat8)
+                        end
+                    elseif args[1] == "↯" then
+                        baticon.image = image(icons.batt_ac)
+                    end
+                    if args[1] == "⌁" then --battery_present == '0' then
+                        baticon.image = image(icons.batt_ac)
+                    end
+                end,
+                mytimes.baticon,
+                battery_file)
+
+batwidget = widget({ type = "textbox" })
+
+vicious.register(batwidget, vicious.widgets.bat, "$2%", mytimes.batwidget, battery)
+
+public.baticon = baticon
+public.batwidget = batwidget
 --}}}
 
 
@@ -132,9 +220,10 @@ loadwidget = widget({ type = "textbox" })
 vicious.register(loadwidget, vicious.widgets.uptime,
     function(widget, args)
     -- return string.format("%.2f %.2f %.2f", args[4], args[5], args[6])
-        return string.format("%.2f %.2f", args[4], args[5])
-    -- return string.format("  %.2f", args[5])
+    -- return string.format("%.2f %.2f", args[4], args[5])
+    return string.format("  %.2f", args[5])
     end, mytimes.thermal)
+public.loadwidget = loadwidget
 -- }}}
 
 -- {{{ CPU temperature
@@ -194,67 +283,4 @@ cpuicon.image = image(icons.cpu)
 vicious.register(cpuwidget, vicious.widgets.cpu, "$1%", mytimes.cpu)
 -- }}}
 
---[[ 
--- {{{ Net usage
-netwidget = widget({ type = "textbox" })
-netwidget.width = 160
-neticon = widget({ type = "imagebox" })
-neticon.image = image(icons.netio)
-vicious.register(netwidget, vicious.widgets.net,
-function (widget, args)
-   local down, up
-   if args["{eth1 down_kb}"] ~= "0.0" or args["{eth1 up_kb}"] ~= "0.0" then
-      down, up = args["{eth1 down_kb}"], args["{eth1 up_kb}"]
-   elseif args["{wlan1 down_kb}"] ~= "0.0" or args["{wlan1 up_kb}"] ~= "0.0" then
-      down, up = args["{wlan1 down_kb}"], args["{wlan1 up_kb}"]
-   else
-      down, up = "0.0", "0.0"
-   end
-   neticon.visible = true
-   return string.format("Up: %5s kb/s Dl: %5s kb/s", up, down)
-end, mytimes.net)
--- }}}
---]]
-
---[[ 
--- {{{ wifi
-wifiicon =  widget({ type = "imagebox" })
-wifiicon.image = image(icons.wifi)
-wifiwidget = widget({ type = "textbox", name = "wifiwidget" })
-function wicd_info ()
-    local essid = execute_command("/usr/bin/wicd-cli -yp Essid")
-    local info = ""
-    if essid == "Invalid wireless network identifier." then
-        local ip = execute_command("/sbin/ifconfig eth | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'")
-        info = string.format("IP: %s", ip)
-        wifiicon.visible = false
-    else
-        local qual = execute_command("/usr/bin/wicd-cli -yp Quality")
-        local ip = execute_command("/usr/bin/wicd-cli -yd | grep IP")
-        info = string.format("%s SSID: %s %s%%", ip, essid, qual)
-        wifiicon.visible = true
-    end
-    wifiwidget.text = info
-end
-wicd_info()
-mytimer = timer({ timeout = mytimes.wifi })
-mytimer:add_signal("timeout", wicd_info)
-mytimer:start()
--- }}}
---]]
-
--- {{{ Disk I/O
-ioicon = widget({ type = "imagebox" })
-ioicon.image = image(icons.fs)
-iowidget = widget({ type = "textbox" })
-vicious.register(iowidget, vicious.widgets.dio, "SDA ${sda read_kb}/${sda write_kb} KB", mytimes.io)
--- }}}
-
--- {{{ FS
-fsicon = widget({ type = "imagebox" })
-fsicon.image = image(icons.fs)
-fs_root_widget = widget({ type = "textbox" })
-vicious.register(fs_root_widget, vicious.widgets.fs, "/ ${/ avail_p} %free", mytimes.fs)
-fs_home_widget = widget({ type = "textbox" })
-vicious.register(fs_home_widget, vicious.widgets.fs, "/home ${/home avail_p} %free", mytimes.fs)
--- }}}
+return public

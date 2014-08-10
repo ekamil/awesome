@@ -1,7 +1,7 @@
 -- stolen from http://www.markurashi.de/dotfiles/awesome/rc.lua
 -- stolen second time from http://gitorious.org/awesome-config/awesome-config/
 -- failsafe mode
--- if the current config fail, load the default rc.lua
+-- if the current config fails, load the default rc.lua
 require("awful")
 require("naughty")
 confdir = awful.util.getdir("config")
@@ -16,4 +16,4 @@ dofile("/etc/xdg/awesome/rc.lua");
 for s = 1, screen.count() do
     mypromptbox[s].text = awful.util.escape(err:match("[^\n]*"));
 end
-naughty.notify{ text = "Awesome crashed during startup on " .. os.date("%d%/%m/%Y %T:\n\n") .. err .. "\n", timeout = 0 }
+naughty.notify{ text = "Awesome crashed during startup on " .. os.date("%F %T:\n\n") .. err .. "\n", timeout = 0 }
