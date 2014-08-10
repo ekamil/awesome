@@ -501,14 +501,14 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 -- }}}
 
 -- {{{ Autostart
--- run_once("xscreensaver", "-no-splash")
--- run_once("dropbox", "start -i", nil)
--- run_once("mpd")
--- run_once("parcellite")
--- run_once("mail-notification", nil, nil)
--- run_once("conky", "-c .conky/std.conf", nil)
--- run_once("awsetbg", "-f -r " .. config.userhome .. "/Wallpapers", nil)
--- run_once("change-wallpaper.sh")
--- run_once("redshift.sh")
--- awful.util.spawn_with_shell("set-touchpad")
+helpers.run_once("xscreensaver", "-no-splash")
+helpers.run_once("dropbox", "start -i", nil)
+helpers.run_once("mpd")
+helpers.run_once("parcellite")
+-- helpers.run_once("mail-notification", nil, nil)
+helpers.run_once("conky", "-c .conky/std.conf", nil)
+helpers.run_once("awsetbg", "-f -r " .. config.userhome .. "/Wallpapers", nil)
+helpers.run_once("change-wallpaper.sh")
+helpers.run_once("redshift.sh")
+awful.util.spawn_with_shell("set-touchpad")
 -- }}}
