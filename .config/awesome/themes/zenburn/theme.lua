@@ -16,7 +16,7 @@ theme.font      = "sans 8"
 
 -- {{{ Colors
 theme.fg_normal = "#DCDCCC"
-theme.fg_focus  = "#F0DFAF"
+theme.fg_focus  = "#FF1111"
 theme.fg_urgent = "#CC9393"
 theme.bg_normal = "#3F3F3F"
 theme.bg_focus  = "#1E2320"
