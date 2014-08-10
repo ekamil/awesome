@@ -94,32 +94,39 @@ local menu_items = {
     { "layout max", function () awful.layout.set(awful.layout.suit.max) end }
 }
 
-flexmenu = require("flexmenu")
+local flexmenu = require("flexmenu")
 flexmenu.init(menu_items, helpers.dmenu_opts, awful.util.spawn)
 -- }}}
 
 
 -- {{{ Tags
 -- layouts count from 1
-tags = {
-    names = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-    layout = {
-        awful.layout.suit.max,
-        awful.layout.suit.max,
-        awful.layout.suit.max,
-        awful.layout.suit.max,
-        awful.layout.suit.max,
-        awful.layout.suit.max,
-        awful.layout.suit.max,
-        awful.layout.suit.max,
-        awful.layout.suit.tile.right,
-        awful.layout.suit.tile.right
-    }
-}
 
-for s = 1, screen.count() do
-    tags[s] = awful.tag(tags.names, s, tags.layout)
+local function create_tags()
+    local tags = {}
+    local tmp_tags = {
+        names = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+        layout = {
+            awful.layout.suit.max,
+            awful.layout.suit.max,
+            awful.layout.suit.max,
+            awful.layout.suit.max,
+            awful.layout.suit.max,
+            awful.layout.suit.max,
+            awful.layout.suit.max,
+            awful.layout.suit.max,
+            awful.layout.suit.tile.right,
+            awful.layout.suit.tile.right
+        }
+    }
+
+    for s = 1, screen.count() do
+        tags[s] = awful.tag(tmp_tags.names, s, tmp_tags.layout)
+    end
+    return tags
 end
+
+local tags = create_tags()
 
 -- }}}
 -- {{{ panel
@@ -279,23 +286,74 @@ if helpers.file_exists('/usr/bin/toshiba-brightness.sh') then
     globalkeys = awful.util.table.join(globalkeys, newkeys)
 end
 
-for i = 1, 9 do
+
+local all_tags = {'one', 'two'}
+all_tags.one = tags[1]
+all_tags.two = tags[2]
+-- m101 - > moves client to the first tag of the first screen
+-- s204 - > switches to fourth tag of the second screen
+local function parse_tags_cmd(stack)
+    local action = stack[1]
+
+    local screen = tags[tonumber(stack[2])]
+    local tag_no = tonumber(stack[3]..stack[4])
+    local tag = screen[tag_no]
+    if screen == nil or tag == nil then return end
+    if action == "m" then
+        awful.client.movetotag(tag)
+        awful.tag.viewonly(tag)
+    elseif action == "s" then
+        awful.tag.viewonly(tag)
+    else
+        print("Invalid action " .. action)
+        return
+    end
+end
+
+local globalkeys = awful.util.table.join(
+    globalkeys,
+    -- trigger prompt mode on Mod4 + space
+    awful.key({ modkey, "Shift"}, ";", function(c)
+        local _stack = {}
+        local _iter = 1
+        keygrabber.run(
+            function(mod, key, event)
+                if _iter < 5 and event == "press" then
+                    if _iter == 1 and not (key == "s" or key == "m") then
+                        return false
+                    end
+                    if _iter > 1 and (tonumber(key) == nil) then
+                        return false
+                    end
+                    _stack[_iter] = key
+                    _iter = _iter + 1
+                end
+                if _iter > 4 then
+                    parse_tags_cmd(_stack)
+                    keygrabber.stop()
+                end
+                return true
+            end)
+    end)
+    )
+-- First screen
+local s = 1
+
+for j, tag in ipairs(tags[s]) do
     globalkeys = awful.util.table.join(
         globalkeys,
-        awful.key({ modkey }, i,
+        awful.key({ modkey }, j,
             function()
                 local s = mouse.screen
-                local t = tags[s][i]
-                awful.tag.viewonly(t)
+                awful.tag.viewonly(tags[s][j])
 
             end),
-        awful.key({ modkey, "Shift" }, i,
+        awful.key({ modkey, "Shift" }, j,
             function()
                 if awful.client.focus then
                     local s = mouse.screen
-                    local t = tags[s][i]
-                    awful.client.movetotag(t)
-                    awful.tag.viewonly(t)
+                    awful.client.movetotag(tags[s][j])
+                    awful.tag.viewonly(tags[s][j])
                 end
             end)
         )
