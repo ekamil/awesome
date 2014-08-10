@@ -73,21 +73,10 @@ function helpers.run_in_terminal()
     awful.util.spawn(command)
 end
 
-function check_for_terminal(command)
-    if command:sub(1, 1) == ":" then
-        command = config.alt_terminal .. ' -e ' .. command:sub(2)
-    end
-    awful.util.spawn(command)
+function helpers.run_in_terminal_fn(command)
+    return config.alt_terminal .. ' -e ' .. command
 end
 
-local function run_in_terminal_fn(command)
-    local function internal()
-        command = config.alt_terminal .. ' -e ' .. command
-        awful.util.spawn(command)
-    end
-
-    return internal
-end
 
 function clean_for_completion(command, cur_pos, ncomp, shell)
     local term = false

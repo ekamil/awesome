@@ -75,8 +75,8 @@ function addCalendarToWidget(mywidget, custom_current_day_format)
         calendar = { month, year,
         naughty.notify({
                 text = string.format('<span font_desc="%s">%s</span>', "monospace", displayMonth(month, year, 2)),
-                timeout = 0,
-                hover_timeout = 0.5,
+                timeout = 5,
+                hover_timeout = 5,
                 screen = capi.mouse.screen
         })
   }

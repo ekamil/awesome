@@ -1,7 +1,7 @@
 local awful = require("awful")
 local awful_rules = require("awful.rules")
 local awful_autofocus = require("awful.autofocus")
-local eminent = require("eminent")
+-- local eminent = require("eminent")
 local vicious = require("vicious")
 -- Theme handling library
 local beautiful = require("beautiful")
@@ -18,14 +18,14 @@ local modkey = config.modkey
 
 
 -- {{{ Themes menu
-theme_menu = {}
+local theme_menu = {}
 
-function theme_load(theme)
+local function theme_load(theme)
     awful.util.spawn("ln -sfn " .. confdir .. "/themes/" .. theme .. " " .. confdir .. "/themes/current")
     awesome.restart()
 end
 
-function theme_menu_create()
+local function theme_menu_create()
     local cmd = "ls -1 " .. confdir .. "/themes/"
     local f = io.popen(cmd)
 
@@ -40,7 +40,7 @@ end
 theme_menu_create()
 -- }}}
 -- {{{ Layouts menu
-layouts =
+local layouts =
 {
     awful.layout.suit.floating,
     awful.layout.suit.tile,
@@ -55,8 +55,8 @@ layouts =
     awful.layout.suit.tile.bottom,
     awful.layout.suit.tile.top,
 }
-layouts_menu = {}
-function layouts_menu_create()
+local layouts_menu = {}
+local function layouts_menu_create()
     for i, l in ipairs(layouts) do
         local fn = function()
         -- set layout for current tag
@@ -83,8 +83,8 @@ local menu_items = {
     }
     },
     { "gvim", 'gvim' },
-    { "pms", config.alt_terminal .. " -e pms"  },
-    { "midnight", config.alt_terminal .. " -e dash -c 'sleep 0.1 ; mc'" },
+    { "pms", helpers.run_in_terminal_fn("pms") },
+    { "midnight", helpers.run_in_terminal_fn(" -e dash -c 'sleep 0.1 ; mc'") },
     { "toggle day/night", "day_night.sh" },
     { "redshift", {
        { "night", 'redshift -O 3700K' },
@@ -215,7 +215,7 @@ local layouts_short =
     awful.layout.suit.max,
 }
 -- {{{ Key bindings
-globalkeys = awful.util.table.join(
+local globalkeys = awful.util.table.join(
     awful.key({ modkey, }, "Left", awful.tag.viewprev),
     awful.key({ modkey, }, "Right", awful.tag.viewnext),
     awful.key({ modkey, }, "Escape", awful.tag.history.restore),
@@ -268,6 +268,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "t", helpers.run_in_terminal),
     awful.key({ modkey }, "space", flexmenu.show_menu),
     awful.key({ modkey }, "q", helpers.simpleswitcher),
+
     -- Not related to window mgmt
     awful.key({ "Control" }, ",", function() awful.util.spawn("mpc --quiet volume -5") end),
     awful.key({ "Control" }, ".", function() awful.util.spawn("mpc --quiet volume +5") end),
@@ -276,7 +277,8 @@ globalkeys = awful.util.table.join(
     awful.key({ "Control" }, ";", function() awful.util.spawn("mpc --quiet prev") end),
     awful.key({ "Control" }, "/", function() awful.util.spawn("amixer set " .. config.mixer .. " toggle") end),
     awful.key({ modkey }, "l", function() awful.util.spawn("xflock4") end),
-    awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end))
+    awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end)
+)
 
 if helpers.file_exists('/usr/bin/toshiba-brightness.sh') then
     local newkeys = awful.util.table.join(
@@ -361,13 +363,13 @@ end
 
 root.keys(globalkeys)
 
-clientbuttons = awful.util.table.join(
+local clientbuttons = awful.util.table.join(
     awful.button({}, 1, function(c) client.focus = c; c:raise() end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize)
 )
 
-clientkeys = awful.util.table.join(
+local clientkeys = awful.util.table.join(
     awful.key({ modkey, }, "f", function(c) c.fullscreen = not c.fullscreen end),
     awful.key({ modkey, "Shift" }, "c", function(c) c:kill() end),
     awful.key({ modkey, }, "m",
@@ -384,10 +386,8 @@ clientkeys = awful.util.table.join(
 -- }}}
 
 -- {{{ Rules
-local s = 1;
 --
-awful_rules.rules = {
-    {
+awful_rules.rules = {{
         rule = {},
         properties = {
             border_width = beautiful.border_width,
@@ -452,7 +452,11 @@ awful_rules.rules = {
     },
     {
         rule = { name = "PyCharm" },
-        properties = { tag = tags[s][3], floating = true }
+        callback = function(c)
+            c.screen = mouse.screen
+            c:tags({tags[c.screen][3]})
+            c.floating = true
+        end
     },
     {
         rule = { name = "Eclipse" },
