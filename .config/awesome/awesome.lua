@@ -92,8 +92,12 @@ local menu_items = {
     }
     },
     { "layout max", function () awful.layout.set(awful.layout.suit.max) end },
-    { "sleep", 'gksudo pm-suspend' },
-    { "halt", 'gksudo shutdown -h now' }
+    { "power", {
+        { "sleep", 'gksudo pm-suspend' },
+        { "halt", 'gksudo -- shutdown -h now' },
+        { "restart", 'gksudo -- shutdown -r now' },
+    }
+    }
 }
 
 local flexmenu = require("flexmenu")
@@ -493,10 +497,11 @@ awful_rules.rules = {{
 client.add_signal("manage", function(c, startup)
 -- Enable sloppy focus
     c:add_signal("mouse::enter", function(c)
-        if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
-                and awful.client.focus.filter(c) then
-            client.focus = c
-        end
+        -- if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
+        --         and awful.client.focus.filter(c) then
+        --     client.focus = c
+        -- end
+        client.focus = c
     end)
 
     if not startup then
