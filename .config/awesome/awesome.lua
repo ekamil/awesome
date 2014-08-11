@@ -166,7 +166,13 @@ mytasklist.buttons = awful.util.table.join(
     end)
 )
 
-local mysystray = widget({ type = "systray" })
+local function mysystray(s)
+    if s == 1 then
+        return widget({ type = "systray" })
+    else
+        return widget( { type = "textbox" })
+    end
+end
 
 -- Create a wibox for each screen and add it
 for s = 1, screen.count() do
@@ -200,7 +206,7 @@ for s = 1, screen.count() do
         mywidgets.loadwidget, mywidgets.thermalwidget, mywidgets.cpuicon, mywidgets.separator,
         mywidgets.volwidget, mywidgets.volicon, mywidgets.separator,
         mywidgets.batwidget, mywidgets.baticon, mywidgets.separator,
-        mysystray,
+        mysystray(s),
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -234,23 +240,6 @@ local globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift" }, "j", function() awful.client.swap.byidx(1) end),
     awful.key({ modkey, "Shift" }, "k", function() awful.client.swap.byidx(-1) end),
     awful.key({ modkey }, "o", awful.client.movetoscreen),
-    awful.key({ modkey, "Shift" }, "o", function() 
-        local count = 0
-        local _tag = awful.tag.selected()
-        local _screen = 2 -- hack
-        if mouse.screen == 2 then
-            _screen = 1
-        end
-        local _newtag = tags[_screen][_tag.name]
-        print(_newtag)
-        print(_tag)
-        for _, c in pairs(_tag:clients()) do
-            if client.class ~= c.class then
-                awful.client.movetoscreen(c)
-                awful.client.movetotag(_newtag)
-            end
-        end
-    end),
     awful.key({ modkey }, "F1",     function () awful.screen.focus(1) end),
     awful.key({ modkey }, "F2",     function () awful.screen.focus(2) end),
     awful.key({ modkey }, "u", awful.client.urgent.jumpto),
