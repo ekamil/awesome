@@ -448,7 +448,7 @@ awful_rules.rules = {{
         rule = { name = "PyCharm" },
         callback = function(c)
             c.screen = mouse.screen
-            c:tags({tags[c.screen][3]})
+            c:tags({tags[s][3]})
             c.floating = true
         end
     },
