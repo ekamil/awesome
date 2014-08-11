@@ -92,7 +92,7 @@ local menu_items = {
     }
     },
     { "layout max", function () awful.layout.set(awful.layout.suit.max) end },
-    { "sleep", 'gksudo /usr/sbin/pm-suspend' }
+    { "sleep", 'gksudo /usr/sbin/pm-suspend' },
     { "halt", 'gksudo /sbin/shutdown -h now' }
 }
 
