@@ -92,8 +92,8 @@ local menu_items = {
     }
     },
     { "layout max", function () awful.layout.set(awful.layout.suit.max) end },
-    { "sleep", 'gksudo /usr/sbin/pm-suspend' },
-    { "halt", 'gksudo /sbin/shutdown -h now' }
+    { "sleep", 'gksudo pm-suspend' },
+    { "halt", 'gksudo shutdown -h now' }
 }
 
 local flexmenu = require("flexmenu")
