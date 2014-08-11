@@ -9,7 +9,6 @@ beautiful.init(confdir .. "/themes/current/theme.lua")
 -- Notification library
 local naughty = require("naughty")
 
-require("cheeky")
 local helpers = require "helpers"
 
 -- {{{ Variable definitions
@@ -110,7 +109,7 @@ local function create_tags()
     local tmp_tags = {
         names = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
         layout = {
-            awful.layout.suit.max,
+            awful.layout.suit.floating,
             awful.layout.suit.max,
             awful.layout.suit.max,
             awful.layout.suit.max,
@@ -259,7 +258,7 @@ local globalkeys = awful.util.table.join(
     awful.key({ modkey }, "t", helpers.run_in_terminal),
     awful.key({ modkey }, "space", flexmenu.show_menu),
 
-    awful.key({ modkey }, "/", cheeky.util.switcher),
+    awful.key({ modkey }, "y", helpers.simpleswitcher),
 
     -- Not related to window mgmt
     awful.key({ "Control" }, ",", function() awful.util.spawn("mpc --quiet volume -5") end),
@@ -280,10 +279,6 @@ if helpers.file_exists('/usr/bin/toshiba-brightness.sh') then
     globalkeys = awful.util.table.join(globalkeys, newkeys)
 end
 
-
-local all_tags = {'one', 'two'}
-all_tags.one = tags[1]
-all_tags.two = tags[2]
 -- m101 - > moves client to the first tag of the first screen
 -- s204 - > switches to fourth tag of the second screen
 local function parse_tags_cmd(stack)
@@ -343,19 +338,35 @@ for j, tag in ipairs(tags[s]) do
         globalkeys,
         awful.key({ modkey }, j,
             function()
-                local s = mouse.screen
-                awful.tag.viewonly(tags[s][j])
-
+                awful.tag.viewonly(tag)
             end),
         awful.key({ modkey, "Shift" }, j,
             function()
                 if awful.client.focus then
-                    local s = mouse.screen
-                    awful.client.movetotag(tags[s][j])
-                    awful.tag.viewonly(tags[s][j])
+                    awful.client.movetotag(tag)
+                    awful.tag.viewonly(tag)
                 end
             end)
         )
+end
+
+if tags[2] ~= nil then
+    for j, tag in ipairs(tags[2]) do
+        globalkeys = awful.util.table.join(
+            globalkeys,
+            awful.key({ modkey, "Mod1" }, j,
+                function()
+                    awful.tag.viewonly(tag)
+                end),
+            awful.key({ modkey, "Mod1", "Shift" }, j,
+                function()
+                    if awful.client.focus then
+                        awful.client.movetotag(tag)
+                        awful.tag.viewonly(tag)
+                    end
+                end)
+            )
+    end
 end
 
 root.keys(globalkeys)
@@ -433,7 +444,11 @@ awful_rules.rules = {{
     },
     {
         rule = { name = "Mozilla Thunderbird" },
-        properties = { tag = tags[s][9] }
+        callback = function(c)
+            c.screen = mouse.screen
+            c:tags({tags[s][9]})
+            c.floating = true
+        end
     },
     {
         rule = { class = "Transmission" },
@@ -500,7 +515,6 @@ helpers.run_once("dropbox", "start -i")
 helpers.run_once("mpd")
 helpers.run_once("parcellite")
 helpers.run_once("awsetbg", "-f -r " .. config.userhome .. "/Wallpapers")
-helpers.run_once("change-wallpaper.sh", nil, "/bin/zsh /home/kamil/.local/bin/change-wallpaper.sh")
 helpers.run_once("redshift.sh")
 awful.util.spawn_with_shell("set-touchpad")
 -- }}}
