@@ -89,9 +89,11 @@ local menu_items = {
     { "redshift", {
        { "night", 'redshift -O 3700K' },
        { "day", 'redshift -x' },
-    } 
+    }
     },
-    { "layout max", function () awful.layout.set(awful.layout.suit.max) end }
+    { "layout max", function () awful.layout.set(awful.layout.suit.max) end },
+    { "sleep", 'gksudo /usr/sbin/pm-suspend' }
+    { "halt", 'gksudo /sbin/shutdown -h now' }
 }
 
 local flexmenu = require("flexmenu")
