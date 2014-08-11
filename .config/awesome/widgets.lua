@@ -78,7 +78,7 @@ public.separator = separator
 -- {{{ Date and time
 dateicon = widget({ type = "imagebox" })
 dateicon.image = image(icons.date)
-date_format = "%a, %d %b %Y, %W tyg., %H:%M"
+date_format = "%a, %d %b %Y, week %V, %H:%M"
 -- Initialize widget
 datewidget = widget({ type = "textbox" })
 require("calendar2")
