@@ -72,29 +72,35 @@ layouts_menu_create()
 
 -- {{{ flexmenu
 local menu_items = {
-    { "run_in_term", helpers.run_in_terminal },
-    { "run_or_raise", helpers.run_or_raise_menu },
-    {
-        "awesome", {
+    { "run", {
+        { "run_in_term", helpers.run_in_terminal },
+        { "run_or_raise", helpers.run_or_raise_menu },
+        { "gvim", 'gvim' },
+        { "pms", helpers.run_in_terminal_fn("pms") },
+        { "midnight", config.alt_terminal ..  " -e dash -c 'sleep 0.1 ; mc'" }
+    }
+    },
+    { "awesome", {
         { "restart", awesome.restart },
         { "quit", awesome.quit },
         { "themes", theme_menu },
         { "layouts", layouts_menu },
     }
     },
-    { "gvim", 'gvim' },
-    { "pms", helpers.run_in_terminal_fn("pms") },
-    { "midnight", helpers.run_in_terminal_fn(" -e dash -c 'sleep 0.1 ; mc'") },
-    { "toggle day/night", "day_night.sh" },
     { "redshift", {
+       { "toggle day/night", "day_night.sh" },
        { "night", 'redshift -O 3700K' },
        { "day", 'redshift -x' },
     }
     },
-    { "layout max", function () awful.layout.set(awful.layout.suit.max) end },
-    { "sleep", 'gksudo pm-suspend' },
-    { "halt", 'gksudo shutdown -h now' }
+    { "power", {
+        { "sleep", 'gksudo pm-suspend' },
+        { "halt", 'gksudo -- shutdown -h now' },
+        { "reboot", 'gksudo -- shutdown -r now' }
+    }
+    }
 }
+
 
 local flexmenu = require("flexmenu")
 flexmenu.init(menu_items, helpers.dmenu_opts, awful.util.spawn)
