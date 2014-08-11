@@ -279,20 +279,25 @@ if helpers.file_exists('/usr/bin/toshiba-brightness.sh') then
     globalkeys = awful.util.table.join(globalkeys, newkeys)
 end
 
+
+local function focus_tag(tag)
+    awful.tag.viewonly(tag)
+    awful.screen.focus(tag.screen)
+end
+
 -- m101 - > moves client to the first tag of the first screen
 -- s204 - > switches to fourth tag of the second screen
 local function parse_tags_cmd(stack)
     local action = stack[1]
-
     local screen = tags[tonumber(stack[2])]
     local tag_no = tonumber(stack[3]..stack[4])
     local tag = screen[tag_no]
     if screen == nil or tag == nil then return end
     if action == "m" then
         awful.client.movetotag(tag)
-        awful.tag.viewonly(tag)
+        focus_tag(tag)
     elseif action == "s" then
-        awful.tag.viewonly(tag)
+        focus_tag(tag)
     else
         print("Invalid action " .. action)
         return
@@ -301,7 +306,6 @@ end
 
 local globalkeys = awful.util.table.join(
     globalkeys,
-    -- trigger prompt mode on Mod4 + space
     awful.key({ modkey, "Shift"}, ";", function(c)
         local _stack = {}
         local _iter = 1
@@ -338,13 +342,13 @@ for j, tag in ipairs(tags[s]) do
         globalkeys,
         awful.key({ modkey }, j,
             function()
-                awful.tag.viewonly(tag)
+                focus_tag(tag)
             end),
         awful.key({ modkey, "Shift" }, j,
             function()
                 if awful.client.focus then
                     awful.client.movetotag(tag)
-                    awful.tag.viewonly(tag)
+                    focus_tag(tag)
                 end
             end)
         )
@@ -356,13 +360,13 @@ if tags[2] ~= nil then
             globalkeys,
             awful.key({ modkey, "Mod1" }, j,
                 function()
-                    awful.tag.viewonly(tag)
+                    focus_tag(tag)
                 end),
             awful.key({ modkey, "Mod1", "Shift" }, j,
                 function()
                     if awful.client.focus then
                         awful.client.movetotag(tag)
-                        awful.tag.viewonly(tag)
+                        focus_tag(tag)
                     end
                 end)
             )
@@ -382,11 +386,13 @@ local clientkeys = awful.util.table.join(
     awful.key({ modkey, "Shift" }, "c", function(c) c:kill() end),
     awful.key({ modkey, }, "m",
         function(c)
+            c.screen = mouse.screen
             c.maximized_horizontal = not c.maximized_horizontal
             c.maximized_vertical = not c.maximized_vertical
         end),
     awful.key({ modkey, "Shift" }, "m",
         function(c)
+            c.screen = mouse.screen
             c.maximized_vertical = not c.maximized_vertical
         end)
      )
