@@ -34,6 +34,11 @@ local function print_tab(t, p, d)
 end
 
 
+local function trim(s)
+    return (s:gsub("^%s*(.-)%s*$", "%1"))
+end
+
+
 local function call_dmenu(t)
     -- t (table): list of items
     local function internal(t)
@@ -54,6 +59,7 @@ local function call_dmenu(t)
     end
 
     local ok, rval = pcall(internal, t)
+    rval = trim(rval)
     if ok then
         -- if empty string then the choice was cancelled
         if rval == '' then return nil end
@@ -87,7 +93,6 @@ local function choose_mlevel(t)
     local t_ = t
     while not (selected ~= nil and type(selected) ~= 'table') do
         selected = choose(t_)
-        print(selected)
         if selected == nil then return nil end
         t_ = selected
     end
