@@ -104,9 +104,9 @@ function helpers.run_once(prg, arg_string, pname, screen)
     end
 
     if not arg_string then
-        awful.util.spawn_with_shell("pgrep -f -u $USER -x '" .. pname .. "' || (" .. prg .. ")", screen)
+        awful.util.spawn_with_shell("pgrep -f -u $USER '" .. pname .. "' || (" .. prg .. ")", screen)
     else
-        awful.util.spawn_with_shell("pgrep -f -u $USER -x '" .. pname .. "' || (" .. prg .. " " .. arg_string .. ")", screen)
+        awful.util.spawn_with_shell("pgrep -f -u $USER '" .. pname .. "' || (" .. prg .. " " .. arg_string .. ")", screen)
     end
 end
 -- }}}
