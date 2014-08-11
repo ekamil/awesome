@@ -9,6 +9,7 @@ beautiful.init(confdir .. "/themes/current/theme.lua")
 -- Notification library
 local naughty = require("naughty")
 
+require("cheeky")
 local helpers = require "helpers"
 
 -- {{{ Variable definitions
@@ -224,6 +225,7 @@ local layouts_short =
 local globalkeys = awful.util.table.join(
     awful.key({ modkey, }, "Left", awful.tag.viewprev),
     awful.key({ modkey, }, "Right", awful.tag.viewnext),
+    awful.key({ modkey, }, "q", function() awful.screen.focus_relative(1) end),
     awful.key({ modkey, }, "Escape", awful.tag.history.restore),
     awful.key({ modkey, }, "e", awful.tag.viewnext),
     awful.key({ modkey, }, "w", awful.tag.viewprev),
@@ -240,23 +242,24 @@ local globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift" }, "j", function() awful.client.swap.byidx(1) end),
     awful.key({ modkey, "Shift" }, "k", function() awful.client.swap.byidx(-1) end),
     awful.key({ modkey }, "o", awful.client.movetoscreen),
-    awful.key({ modkey }, "F1",     function () awful.screen.focus(1) end),
-    awful.key({ modkey }, "F2",     function () awful.screen.focus(2) end),
     awful.key({ modkey }, "u", awful.client.urgent.jumpto),
     awful.key({ modkey }, "b", function()
         top_panel[mouse.screen].visible = not top_panel[mouse.screen].visible
     end),
+    awful.key({ modkey, "Control" }, "r", awesome.restart),
+    awful.key({ modkey, "Control" }, "q", awesome.quit),
+    awful.key({ modkey, "Shift" }, "l", function() awful.tag.incmwfact(0.1) end),
+    awful.key({ modkey, "Shift" }, "h", function() awful.tag.incmwfact(-0.1) end),
+
     awful.key({ modkey, }, "Return", function() awful.util.spawn(config.terminal) end),
     awful.key({ modkey, "Mod1" }, "Return", function() awful.util.spawn(config.alt_terminal) end),
     awful.key({ modkey, "Control" }, "Return", function() awful.util.spawn(config.terminal .. " -e tmux") end),
-    awful.key({ modkey, "Control" }, "r", awesome.restart),
-    awful.key({ modkey, "Control" }, "q", awesome.quit),
-    awful.key({ modkey, "Shift" }, "l", function() awful.tag.incmwfact(0.05) end),
-    awful.key({ modkey, "Shift" }, "h", function() awful.tag.incmwfact(-0.05) end),
+
     awful.key({ modkey }, "r", helpers.run_or_raise_menu),
     awful.key({ modkey }, "t", helpers.run_in_terminal),
     awful.key({ modkey }, "space", flexmenu.show_menu),
-    awful.key({ modkey }, "q", helpers.simpleswitcher),
+
+    awful.key({ modkey }, "/", cheeky.util.switcher),
 
     -- Not related to window mgmt
     awful.key({ "Control" }, ",", function() awful.util.spawn("mpc --quiet volume -5") end),
