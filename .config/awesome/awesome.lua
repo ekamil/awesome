@@ -139,8 +139,7 @@ local tags = create_tags()
 -- }}}
 -- {{{ panel
 local mywidgets = require "widgets"
-local top_panel = {}
-local bottom_panel = {}
+local panel = {}
 local mylayoutbox = {}
 
 local mytaglist = {}
@@ -200,9 +199,9 @@ for s = 1, screen.count() do
     --
     -- Create the wibox
     --
-    top_panel[s] = awful.wibox({ position = "top", screen = s })
+    panel[s] = awful.wibox({ position = config.panel_position, screen = s })
     -- Add widgets to the wibox - order matters
-    top_panel[s].widgets = {
+    panel[s].widgets = {
         {
             mytaglist[s],
             layout = awful.widget.layout.horizontal.leftright
@@ -216,7 +215,7 @@ for s = 1, screen.count() do
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
-    top_panel[s].screen = s
+    panel[s].screen = s
 end
 -- }}}
 
@@ -249,7 +248,7 @@ local globalkeys = awful.util.table.join(
     awful.key({ modkey }, "o", awful.client.movetoscreen),
     awful.key({ modkey }, "u", awful.client.urgent.jumpto),
     awful.key({ modkey }, "b", function()
-        top_panel[mouse.screen].visible = not top_panel[mouse.screen].visible
+        panel[mouse.screen].visible = not panel[mouse.screen].visible
     end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Control" }, "q", awesome.quit),
