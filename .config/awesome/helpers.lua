@@ -18,7 +18,7 @@ end
 -- }}}
 
 -- {{{ dmenu
-local dmenu_opts = "-b -nb '" .. beautiful.bg_normal .. "' -nf '" .. beautiful.fg_normal .. "' -sb '#955'"
+local dmenu_opts = "-i -b -nb '" .. beautiful.bg_normal .. "' -nf '" .. beautiful.fg_normal .. "' -sb '#955'"
 helpers.dmenu_opts = dmenu_opts
 
 local function get_dmenu()
