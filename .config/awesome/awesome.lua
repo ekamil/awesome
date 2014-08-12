@@ -262,7 +262,7 @@ local globalkeys = awful.util.table.join(
     awful.key({ modkey }, "t", helpers.run_in_terminal),
     awful.key({ modkey }, "space", flexmenu.show_menu),
 
-    awful.key({ modkey }, "y", helpers.simpleswitcher),
+    awful.key({ modkey }, "y", helpers.switchapp),
 
     -- Not related to window mgmt
     awful.key({ "Control" }, ",", function() awful.util.spawn("mpc --quiet volume -5") end),
