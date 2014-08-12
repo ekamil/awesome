@@ -140,7 +140,7 @@ end
 local function screen_layout(layout)
     -- switch layout as in screenlayouts and restart awesome
     if layout == nil then return nil end
-    local exec_file = config.userhome .. '/.screenlayout' .. '/' .. layout .. '.sh'
+    local exec_file = confdir .. '/layouts/' .. layout .. '.sh'
     print(exec_file)
     if file_exists(exec_file) then
         awful.util.spawn_with_shell(exec_file)
