@@ -16,29 +16,6 @@ local config = require "config"
 local modkey = config.modkey
 -- }}}
 
-
--- {{{ Themes menu
-local theme_menu = {}
-
-local function theme_load(theme)
-    awful.util.spawn("ln -sfn " .. confdir .. "/themes/" .. theme .. " " .. confdir .. "/themes/current")
-    awesome.restart()
-end
-
-local function theme_menu_create()
-    local cmd = "ls -1 " .. confdir .. "/themes/"
-    local f = io.popen(cmd)
-
-    for l in f:lines() do
-        local item = { l, function() theme_load(l) end }
-        table.insert(theme_menu, item)
-    end
-
-    f:close()
-end
-
-theme_menu_create()
--- }}}
 -- {{{ Layouts menu
 local layouts =
 {
@@ -55,20 +32,6 @@ local layouts =
     awful.layout.suit.tile.bottom,
     awful.layout.suit.tile.top,
 }
-local layouts_menu = {}
-local function layouts_menu_create()
-    for i, l in ipairs(layouts) do
-        local fn = function()
-        -- set layout for current tag
-            awful.layout.set(l)
-        end
-        local name = awful.layout.getname(l)
-        local item = { name, fn }
-        table.insert(layouts_menu, item)
-    end
-end
-
-layouts_menu_create()
 
 -- {{{ flexmenu
 local menu_items = {
@@ -77,10 +40,6 @@ local menu_items = {
     { "pms", helpers.run_in_terminal_fn("pms") },
     { "mutt", helpers.run_in_terminal_fn("mutt") },
     { "midnight", config.alt_terminal ..  " -e dash -c 'sleep 0.1 ; mc'" },
-    { "screens", {
-        { "only_edp", function() helpers.screen_layout("only_edp") end },
-        { "primary_vga_plus_edp", function() helpers.screen_layout("primary_vga_plus_edp") end }
-    }},
     { "run", {
         { "run_in_term", helpers.run_in_terminal },
         { "run_or_raise", helpers.run_or_raise_menu },
@@ -88,8 +47,8 @@ local menu_items = {
     { "awesome", {
         { "restart", awesome.restart },
         { "quit", awesome.quit },
-        { "themes", theme_menu },
-        { "layouts", layouts_menu },
+        { "themes", helpers.create_theme_menu() },
+        { "layouts", helpers.create_layouts_menu(layouts) },
     }},
     { "redshift", {
        { "toggle day/night", "day_night.sh" },
@@ -100,7 +59,8 @@ local menu_items = {
         { "sleep", 'gksudo pm-suspend' },
         { "halt", 'gksudo -- shutdown -h now' },
         { "reboot", 'gksudo -- shutdown -r now' }
-    }}
+    }},
+    { "screens", helpers.create_screen_layouts_menu() }
 }
 
 
@@ -229,8 +189,6 @@ local layouts_short =
 }
 -- {{{ Key bindings
 local globalkeys = awful.util.table.join(
-    awful.key({ modkey, }, "Left", awful.tag.viewprev),
-    awful.key({ modkey, }, "Right", awful.tag.viewnext),
     awful.key({ modkey, }, "q", function() awful.screen.focus_relative(1) end),
     awful.key({ modkey, }, "Escape", awful.tag.history.restore),
     awful.key({ modkey, }, "e", awful.tag.viewnext),
@@ -345,38 +303,40 @@ local globalkeys = awful.util.table.join(
 local s = 1
 
 for j, tag in ipairs(tags[s]) do
-    globalkeys = awful.util.table.join(
-        globalkeys,
-        awful.key({ modkey }, j,
-            function()
-                focus_tag(tag)
-            end),
-        awful.key({ modkey, "Shift" }, j,
-            function()
-                if awful.client.focus then
-                    awful.client.movetotag(tag)
-                    focus_tag(tag)
-                end
-            end)
-        )
-end
-
-if tags[2] ~= nil then
-    for j, tag in ipairs(tags[2]) do
+    if j <= 9 then
         globalkeys = awful.util.table.join(
             globalkeys,
-            awful.key({ modkey, "Mod1" }, j,
+            awful.key({ modkey }, j,
                 function()
                     focus_tag(tag)
                 end),
-            awful.key({ modkey, "Mod1", "Shift" }, j,
+            awful.key({ modkey, "Shift" }, j,
                 function()
                     if awful.client.focus then
                         awful.client.movetotag(tag)
                         focus_tag(tag)
                     end
-                end)
-            )
+                end))
+    end
+end
+
+if tags[2] ~= nil then
+    for j, tag in ipairs(tags[2]) do
+        if j <= 9 then
+            globalkeys = awful.util.table.join(
+                globalkeys,
+                awful.key({ modkey, "Mod1" }, j,
+                    function()
+                        focus_tag(tag)
+                    end),
+                awful.key({ modkey, "Mod1", "Shift" }, j,
+                    function()
+                        if awful.client.focus then
+                            awful.client.movetotag(tag)
+                            focus_tag(tag)
+                        end
+                    end))
+        end
     end
 end
 

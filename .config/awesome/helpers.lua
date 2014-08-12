@@ -137,7 +137,7 @@ function helpers.switchapp()
     end
 end
 
-local function screen_layout(layout)
+local function load_screen_layout(layout)
     -- switch layout as in screenlayouts and restart awesome
     if layout == nil then return nil end
     local exec_file = confdir .. '/layouts/' .. layout .. '.sh'
@@ -147,6 +147,62 @@ local function screen_layout(layout)
         awesome.restart()
     end
 end
-helpers.screen_layout = screen_layout
+helpers.load_screen_layout = load_screen_layout
+
+local function create_screen_layouts_menu()
+    local cmd = "ls -1 " .. confdir .. "/layouts/*.sh"
+    local f = io.popen(cmd)
+    local menu = {}
+
+    for l in f:lines() do
+        l = string.sub(l, 1, -4)
+        local item = { l, function() load_screen_layout(l) end }
+        table.insert(menu, item)
+    end
+
+    f:close()
+    return menu
+end
+helpers.create_screen_layouts_menu = create_screen_layouts_menu
+
+-------------
+
+-- {{{ Themes menu
+
+local function create_theme_menu()
+    local cmd = "ls -1 " .. confdir .. "/themes/"
+    local f = io.popen(cmd)
+    local menu = {}
+
+    local function theme_load(theme)
+        awful.util.spawn("ln -sfn " .. confdir .. "/themes/" .. theme .. " " .. confdir .. "/themes/current")
+        awesome.restart()
+    end
+
+    for l in f:lines() do
+        local item = { l, function() theme_load(l) end }
+        table.insert(menu, item)
+    end
+
+    f:close()
+    return menu
+end
+helpers.create_theme_menu = create_theme_menu
+-- }}}
+
+local function create_layouts_menu(layouts)
+    local menu = {}
+    for i, l in ipairs(layouts) do
+        local fn = function()
+        -- set layout for current tag
+            awful.layout.set(l)
+        end
+        local name = awful.layout.getname(l)
+        local item = { name, fn }
+        table.insert(menu, item)
+    end
+    return menu
+end
+helpers.create_layouts_menu = create_layouts_menu
 
 return helpers
