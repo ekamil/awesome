@@ -1,10 +1,11 @@
 local config = require "config"
 local helpers = {}
 -- {{{ helpers 
-function helpers.file_exists(name)
+local function file_exists(name)
     local f = io.open(name, "r")
     if f ~= nil then io.close(f) return true else return false end
 end
+helpers.file_exists = file_exists
 
 local function is_on_path(name)
     local f = os.execute("which " .. name .. " > /dev/null")
@@ -15,6 +16,7 @@ local function is_on_path(name)
     end
     return false
 end
+helpers.is_on_path = is_on_path
 -- }}}
 
 -- {{{ dmenu
@@ -135,5 +137,16 @@ function helpers.switchapp()
     end
 end
 
+local function screen_layout(layout)
+    -- switch layout as in screenlayouts and restart awesome
+    if layout == nil then return nil end
+    local exec_file = config.userhome .. '/.screenlayout' .. '/' .. layout .. '.sh'
+    print(exec_file)
+    if file_exists(exec_file) then
+        awful.util.spawn_with_shell(exec_file)
+        awesome.restart()
+    end
+end
+helpers.screen_layout = screen_layout
 
 return helpers

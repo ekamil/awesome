@@ -72,33 +72,35 @@ layouts_menu_create()
 
 -- {{{ flexmenu
 local menu_items = {
+    -- apps
+    { "gvim", 'gvim' },
+    { "pms", helpers.run_in_terminal_fn("pms") },
+    { "mutt", helpers.run_in_terminal_fn("mutt") },
+    { "midnight", config.alt_terminal ..  " -e dash -c 'sleep 0.1 ; mc'" },
+    { "screens", {
+        { "only_edp", function() helpers.screen_layout("only_edp") end },
+        { "primary_vga_plus_edp", function() helpers.screen_layout("primary_vga_plus_edp") end }
+    }},
     { "run", {
         { "run_in_term", helpers.run_in_terminal },
         { "run_or_raise", helpers.run_or_raise_menu },
-        { "gvim", 'gvim' },
-        { "pms", helpers.run_in_terminal_fn("pms") },
-        { "midnight", config.alt_terminal ..  " -e dash -c 'sleep 0.1 ; mc'" }
-    }
-    },
+    }},
     { "awesome", {
         { "restart", awesome.restart },
         { "quit", awesome.quit },
         { "themes", theme_menu },
         { "layouts", layouts_menu },
-    }
-    },
+    }},
     { "redshift", {
        { "toggle day/night", "day_night.sh" },
        { "night", 'redshift -O 3700K' },
        { "day", 'redshift -x' },
-    }
-    },
+    }},
     { "power", {
         { "sleep", 'gksudo pm-suspend' },
         { "halt", 'gksudo -- shutdown -h now' },
         { "reboot", 'gksudo -- shutdown -r now' }
-    }
-    }
+    }}
 }
 
 
