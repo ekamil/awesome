@@ -264,7 +264,7 @@ local globalkeys = awful.util.table.join(
     awful.key({ modkey }, "t", helpers.run_in_terminal),
     awful.key({ modkey }, "space", flexmenu.show_menu),
 
-    awful.key({ modkey }, "y", helpers.simpleswitcher),
+    awful.key({ modkey }, "y", helpers.switchapp),
 
     -- Not related to window mgmt
     awful.key({ "Control" }, ",", function() awful.util.spawn("mpc --quiet volume -5") end),
@@ -499,10 +499,11 @@ awful_rules.rules = {{
 client.add_signal("manage", function(c, startup)
 -- Enable sloppy focus
     c:add_signal("mouse::enter", function(c)
-        if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
-                and awful.client.focus.filter(c) then
-            client.focus = c
-        end
+        -- if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
+        --         and awful.client.focus.filter(c) then
+        --     client.focus = c
+        -- end
+        client.focus = c
     end)
 
     if not startup then

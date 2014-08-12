@@ -18,7 +18,7 @@ end
 -- }}}
 
 -- {{{ dmenu
-local dmenu_opts = "-b -nb '" .. beautiful.bg_normal .. "' -nf '" .. beautiful.fg_normal .. "' -sb '#955'"
+local dmenu_opts = "-i -b -nb '" .. beautiful.bg_normal .. "' -nf '" .. beautiful.fg_normal .. "' -sb '#955'"
 helpers.dmenu_opts = dmenu_opts
 
 local function get_dmenu()
@@ -110,5 +110,35 @@ function helpers.run_once(prg, arg_string, pname, screen)
     end
 end
 -- }}}
+
+function helpers.switchapp()
+ local awful= require("awful")
+    local beautiful = require("beautiful")
+    local naughty   = require("naughty")
+    local client=client
+    local pairs=pairs
+    local table=table
+    local print=print
+
+    local allclients = client.get(mouse.screen)
+    clientsline = ""
+    for _,c in ipairs(allclients) do
+    clientsline = clientsline .. c:tags()[1].name .. " - " .. c.name .. "\n"
+    end
+    selected = awful.util.pread("echo '".. clientsline .."' | dmenu -l 10 " .. dmenu_opts)
+    for _,c in ipairs(allclients) do
+    a = c:tags()[1].name .. " - " .. c.name 
+    if a == selected:gsub("\n", "") then
+        for i, v in ipairs(c:tags()) do
+        awful.tag.viewonly(v)
+        client.focus = c
+        c:raise()
+        c.minimized = false
+        return
+        end
+    end
+    end
+end
+
 
 return helpers
