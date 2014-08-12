@@ -112,22 +112,17 @@ end
 -- }}}
 
 function helpers.switchapp()
- local awful= require("awful")
-    local beautiful = require("beautiful")
-    local naughty   = require("naughty")
-    local client=client
-    local pairs=pairs
-    local table=table
-    local print=print
+    local awful= require("awful")
+    local client = client
 
-    local allclients = client.get(mouse.screen)
+    local allclients = client.get()
     clientsline = ""
     for _,c in ipairs(allclients) do
     clientsline = clientsline .. c:tags()[1].name .. " - " .. c.name .. "\n"
     end
     selected = awful.util.pread("echo '".. clientsline .."' | dmenu -l 10 " .. dmenu_opts)
     for _,c in ipairs(allclients) do
-    a = c:tags()[1].name .. " - " .. c.name 
+    a = c:tags()[1].name .. " - " .. c.name
     if a == selected:gsub("\n", "") then
         for i, v in ipairs(c:tags()) do
         awful.tag.viewonly(v)
