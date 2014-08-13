@@ -2,7 +2,7 @@
 -- licensed under the Creative Commons Attribution-Share (Alike License: http://creativecommons.org/licenses/by-sa/3.0/)
 
 --{{{ Main
-require("awful.util")
+local awful = require("awful")
 
 theme = {}
 
@@ -130,4 +130,3 @@ theme.layout_dwindle = themedir .. "/layouts/dwindlew.png"
 theme.awesome_icon = themedir .. "/awesome16.png"
 
 return theme
--- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80

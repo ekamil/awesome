@@ -81,7 +81,7 @@ dateicon.image = image(icons.date)
 date_format = "%a, %d %b %Y, week %V, %H:%M"
 -- Initialize widget
 datewidget = widget({ type = "textbox" })
-require("calendar2")
+local calendar2 = require("calendar2")
 calendar2.addCalendarToWidget(datewidget)
 -- Register widget
 vicious.register(datewidget, vicious.widgets.date, date_format, mytimes.date)

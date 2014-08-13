@@ -2,8 +2,9 @@
 -- stolen second time from http://gitorious.org/awesome-config/awesome-config/
 -- failsafe mode
 -- if the current config fails, load the default rc.lua
-require("awful")
-require("naughty")
+local awful = require("awful")
+local naughty = require("naughty")
+
 confdir = awful.util.getdir("config")
 local rc, err = loadfile(confdir .. "/awesome.lua");
 if rc then
