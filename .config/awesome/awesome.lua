@@ -100,12 +100,12 @@ local tags = create_tags()
 
 -- }}}
 -- {{{ panel
-local mywidgets = require "widgets"
+local widgets = require "widgets"
 local panel = {}
-local mylayoutbox = {}
+local layoutbox = {}
 
-local mytaglist = {}
-mytaglist.buttons = awful.util.table.join(
+local taglist = {}
+taglist.buttons = awful.util.table.join(
     awful.button({}, 1, awful.tag.viewonly),
     awful.button({ modkey }, 1, awful.client.movetotag),
     awful.button({}, 3, awful.tag.viewtoggle),
@@ -114,8 +114,8 @@ mytaglist.buttons = awful.util.table.join(
     awful.button({}, 5, awful.tag.viewprev)
 )
 
-local mytasklist = {}
-mytasklist.buttons = awful.util.table.join(
+local tasklist = {}
+tasklist.buttons = awful.util.table.join(
     awful.button({}, 1, function(c)
             if not c:isvisible() then
                 awful.tag.viewonly(c:tags()[1])
@@ -133,7 +133,7 @@ mytasklist.buttons = awful.util.table.join(
     end)
 )
 
-local function mysystray(s)
+local function systray(s)
     if s == 1 then
         return widget({ type = "systray" })
     else
@@ -143,38 +143,34 @@ end
 
 -- Create a wibox for each screen and add it
 for s = 1, screen.count() do
-    mylayoutbox[s] = awful.widget.layoutbox(s)
-    mylayoutbox[s]:buttons(
+    layoutbox[s] = awful.widget.layoutbox(s)
+    layoutbox[s]:buttons(
         awful.util.table.join(
             awful.button({}, 1, function() awful.layout.inc(layouts, 1) end),
             awful.button({}, 3, function() awful.layout.inc(layouts, -1) end)
         )
     )
 
-    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, mytaglist.buttons)
-    mytasklist[s] = awful.widget.tasklist(
-        function(c)
-            return awful.widget.tasklist.label.currenttags(c, s)
-        end,
-        mytasklist.buttons)
+    taglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, taglist.buttons)
+    tasklist[s] = awful.widget.tasklist(
+        function(c) return awful.widget.tasklist.label.currenttags(c, s) end,
+        tasklist.buttons)
 
-    --
     -- Create the wibox
-    --
     panel[s] = awful.wibox({ position = config.panel_position, screen = s })
     -- Add widgets to the wibox - order matters
     panel[s].widgets = {
         {
-            mytaglist[s],
+            taglist[s],
             layout = awful.widget.layout.horizontal.leftright
         },
-        mylayoutbox[s],
-        mywidgets.datewidget, mywidgets.dateicon, mywidgets.separator,
-        mywidgets.loadwidget, mywidgets.thermalwidget, mywidgets.cpuicon, mywidgets.separator,
-        mywidgets.volwidget, mywidgets.volicon, mywidgets.separator,
-        mywidgets.batwidget, mywidgets.baticon, mywidgets.separator,
-        mysystray(s),
-        mytasklist[s],
+        layoutbox[s],
+        widgets.datewidget, widgets.dateicon, widgets.separator,
+        widgets.loadwidget, widgets.thermalwidget, widgets.cpuicon, widgets.separator,
+        widgets.volwidget, widgets.volicon, widgets.separator,
+        widgets.batwidget, widgets.baticon, widgets.separator,
+        systray(s),
+        tasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
     panel[s].screen = s
@@ -485,23 +481,16 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 
 -- {{{ Autostart
 helpers.run_once("xscreensaver", "-no-splash")
-helpers.kill_at_exit("xscreensaver")
 
 helpers.run_once("dropbox", "start -i")
-awesome.add_signal("exit", function()
-    awful.util.spawn("dropbox stop")
-end)
 
-helpers.run_once("mpd")
+helpers.run_once("mpd", nil, true) -- dont kill
 helpers.run_once("parcellite")
-helpers.kill_at_exit("parcellite")
 
 helpers.run_once("redshift.sh")
-helpers.kill_at_exit("redshift.sh")
 
-helpers.run_once("awsetbg", "-f -r " .. config.userhome .. "/Wallpapers")
+helpers.run_once("awsetbg", "-f -r " .. config.userhome .. "/Wallpapers", true) -- dont kill
 helpers.run_once("change-wallpaper.sh")
-helpers.kill_at_exit("change-wallpaper.sh")
 
 awful.util.spawn_with_shell("set-touchpad")
 -- }}}

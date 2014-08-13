@@ -97,18 +97,21 @@ end
 -- }}}
 
 -- {{{ Autostart
-function run_once(prg, arg_string, pname, screen)
-    if not prg then
-        do return nil end
-    end
-    if not pname then
-        pname = prg
-    end
+function run_once(prg, arg_string, persistent)
+    if not prg then return nil end
+    if persistent == nil then persistent=false end
 
+    pid = nil
     if not arg_string then
-        awful.util.spawn_with_shell("pgrep -u $USER '" .. pname .. "' || (" .. prg .. ")")
+        pid = awful.util.spawn_with_shell("pgrep -u $USER '" .. prg .. "' || (" .. prg .. ")")
     else
-        awful.util.spawn_with_shell("pgrep -u $USER '" .. pname .. "' || (" .. prg .. " " .. arg_string .. ")")
+        pid = awful.util.spawn_with_shell("pgrep -u $USER '" .. prg .. "' || (" .. prg .. " " .. arg_string .. ")")
+    end
+    if pid ~= nil and not persistent then
+        -- print("Will kill " .. prg .. " pid: " .. pid)
+        awesome.add_signal("exit", function()
+            awful.util.spawn_with_shell("kill " .. pid)
+        end)
     end
 end
 helpers.run_once = run_once
@@ -116,7 +119,7 @@ helpers.run_once = run_once
 local function kill_at_exit(prg)
     if not prg then return nil end
     awesome.add_signal("exit", function()
-        awful.util.spawn("pkill -fu $USER " .. prg)
+        awful.util.spawn_with_shell("pkill -fu $USER " .. prg)
     end)
 end
 helpers.kill_at_exit = kill_at_exit
