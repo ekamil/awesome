@@ -163,7 +163,7 @@ end
 helpers.load_screen_layout = load_screen_layout
 
 local function create_screen_layouts_menu()
-    local cmd = "ls -1 " .. confdir .. "/layouts/*.sh"
+    local cmd = "ls -1 " .. confdir .. "/layouts/"
     local f = io.popen(cmd)
     local menu = {}
 
