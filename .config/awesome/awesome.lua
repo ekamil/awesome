@@ -176,7 +176,8 @@ for s = 1, screen.count() do
         widgets.loadwidget, widgets.thermalwidget, widgets.cpuicon, widgets.separator,
         widgets.volwidget, widgets.volicon, widgets.separator,
         widgets.baticon, widgets.separator,
-        systray(s),
+        widgets.mailwidget, widgets.separator,
+        systray(s), widgets.separator,
         tasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
