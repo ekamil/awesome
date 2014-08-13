@@ -485,10 +485,23 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 
 -- {{{ Autostart
 helpers.run_once("xscreensaver", "-no-splash")
+helpers.kill_at_exit("xscreensaver")
+
 helpers.run_once("dropbox", "start -i")
+awesome.add_signal("exit", function()
+    awful.util.spawn("dropbox stop")
+end)
+
 helpers.run_once("mpd")
 helpers.run_once("parcellite")
-helpers.run_once("awsetbg", "-f -r " .. config.userhome .. "/Wallpapers")
+helpers.kill_at_exit("parcellite")
+
 helpers.run_once("redshift.sh")
+helpers.kill_at_exit("redshift.sh")
+
+helpers.run_once("awsetbg", "-f -r " .. config.userhome .. "/Wallpapers")
+helpers.run_once("change-wallpaper.sh")
+helpers.kill_at_exit("change-wallpaper.sh")
+
 awful.util.spawn_with_shell("set-touchpad")
 -- }}}

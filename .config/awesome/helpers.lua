@@ -97,7 +97,7 @@ end
 -- }}}
 
 -- {{{ Autostart
-function helpers.run_once(prg, arg_string, pname, screen)
+function run_once(prg, arg_string, pname, screen)
     if not prg then
         do return nil end
     end
@@ -111,6 +111,16 @@ function helpers.run_once(prg, arg_string, pname, screen)
         awful.util.spawn_with_shell("pgrep -u $USER '" .. pname .. "' || (" .. prg .. " " .. arg_string .. ")")
     end
 end
+helpers.run_once = run_once
+
+local function kill_at_exit(prg)
+    if not prg then return nil end
+    awesome.add_signal("exit", function()
+        awful.util.spawn("pkill -fu $USER " .. prg)
+    end)
+end
+helpers.kill_at_exit = kill_at_exit
+
 -- }}}
 
 function helpers.switchapp()
