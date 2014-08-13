@@ -133,6 +133,12 @@ tasklist.buttons = awful.util.table.join(
     end)
 )
 
+local mainmenu = awful.menu.new({ items = menu_items })
+local launcher = awful.widget.launcher({
+                    image = image(beautiful.awesome_icon),
+                    menu = mainmenu })
+
+
 local function systray(s)
     if s == 1 then
         return widget({ type = "systray" })
@@ -161,6 +167,7 @@ for s = 1, screen.count() do
     -- Add widgets to the wibox - order matters
     panel[s].widgets = {
         {
+            launcher,
             taglist[s],
             layout = awful.widget.layout.horizontal.leftright
         },
