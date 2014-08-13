@@ -51,41 +51,27 @@ mytimes.date = 55
 
 local mixer = "Master"
 
--- {{{ From wiki
--- Execute command and return its output. You probably won't only execute commands with one
--- line of output
-local function execute_command(command)
-    local fh = io.popen(command)
-    local str = ""
-    for i in fh:lines() do
-        str = str .. i
-    end
-    io.close(fh)
-    return str
-end
-
--- }}}
 
 -- {{{ Reusable separator
 separator = widget({ type = "imagebox" })
 separator.image = image(icons.sep)
 
-spacer = widget({ type = "textbox" })
-spacer.width = 1
 public.separator = separator
 -- }}}
 
 -- {{{ Date and time
 dateicon = widget({ type = "imagebox" })
 dateicon.image = image(icons.date)
+public.dateicon = dateicon
+
 date_format = "%a, %d %b %Y, week %V, %H:%M"
--- Initialize widget
+
 datewidget = widget({ type = "textbox" })
 local calendar2 = require("calendar2")
 calendar2.addCalendarToWidget(datewidget)
--- Register widget
+
 vicious.register(datewidget, vicious.widgets.date, date_format, mytimes.date)
-public.dateicon = dateicon
+
 public.datewidget = datewidget
 -- }}}
 
@@ -93,14 +79,16 @@ public.datewidget = datewidget
 
 -- Icon widget
 volicon = widget({ type = "imagebox" })
-vicious.register(volicon, vicious.widgets.volume, function(widget, args)
-    local mute
-    mute = args[2]
-    volicon.image = image(icons.vol)
-    if mute == "♩" then
-        volicon.image = image(icons.vol_mute)
-    end
-end, mytimes.vol, mixer)
+vicious.register(volicon, vicious.widgets.volume,
+    function(widget, args)
+        local mute
+        mute = args[2]
+        volicon.image = image(icons.vol)
+        if mute == "♩" then
+            volicon.image = image(icons.vol_mute)
+        end
+    end,
+    mytimes.vol, mixer)
 
 public.volicon = volicon
 
@@ -111,9 +99,10 @@ vicious.cache(vicious.widgets.volume)
 -- Register widgets
 vicious.register(volwidget, vicious.widgets.volume, " $1%", mytimes.vol, mixer)
 -- Register buttons
-volwidget:buttons(awful.util.table.join(awful.button({}, 1, function()
-    awful.util.spawn("amixer set " .. mixer .. " toggle")
-end),
+volwidget:buttons(awful.util.table.join(
+    awful.button({}, 1, function()
+        awful.util.spawn("amixer set " .. mixer .. " toggle")
+    end),
     awful.button({}, 4, function()
         awful.util.spawn("amixer -q set " .. mixer .. " 2dB+")
     end),
@@ -154,8 +143,8 @@ baticon:buttons(awful.util.table.join(
    end)
 ))
 
-vicious.register(baticon, 
-                 vicious.widgets.bat, 
+vicious.register(baticon,
+                 vicious.widgets.bat,
                  function(widget, args)
                     local battery_status = ""
                     battery_status = args[1]
@@ -191,29 +180,9 @@ vicious.register(baticon,
                 mytimes.baticon,
                 battery_file)
 
-batwidget = widget({ type = "textbox" })
-
-vicious.register(batwidget, vicious.widgets.bat, "$2%", mytimes.batwidget, battery)
-
 public.baticon = baticon
-public.batwidget = batwidget
 --}}}
 
-
--- {{{ Uptime 
-uptimeicon = widget({ type = "imagebox" })
-uptimeicon.image = image(icons.uptime)
-
-uptimewidget = widget({ type = "textbox" })
-vicious.register(uptimewidget, vicious.widgets.uptime,
-    function(widget, args)
-        if args[1] == 0 then
-            return string.format("%02d:%02d", args[2], args[3])
-        else
-            return string.format("%2dd %02d:%02d", args[1], args[2], args[3])
-        end
-    end, mytimes.uptime)
--- }}}
 
 -- {{{ Load
 loadwidget = widget({ type = "textbox" })
@@ -222,65 +191,9 @@ vicious.register(loadwidget, vicious.widgets.uptime,
     -- return string.format("%.2f %.2f %.2f", args[4], args[5], args[6])
     -- return string.format("%.2f %.2f", args[4], args[5])
     return string.format("  %.2f", args[5])
-    end, mytimes.thermal)
+    end,
+    mytimes.thermal)
 public.loadwidget = loadwidget
--- }}}
-
--- {{{ CPU temperature
-thermalwidget = widget({ type = "textbox", name = "thermalwidget" })
-thermalicon = widget({ type = "imagebox" })
-thermalicon.image = image(icons.temp)
-function cpu_temp()
-    local function get_temp(proc)
-        local thermal_path = "/sys/devices/platform/coretemp.0/temp%d_input"
-        local _path = string.format(thermal_path, proc)
-        local fd = io.open(_path)
-        local fr
-        if (fd == nil)
-        then
-            fr = "0"
-        else
-            fr = fd:read()
-            fd:close()
-        end
-        return string.format("%d° ", fr / 1000)
-    end
-
-    -- for k,proc in pairs({2,4}) do
-    --     l = l .. get_temp(proc)
-    -- end
-    thermalwidget.text = get_temp(3)
-end
-
-cpu_temp()
-mytimer = timer({ timeout = mytimes.thermal })
-mytimer:add_signal("timeout", cpu_temp)
-mytimer:start()
--- }}}
-
--- B
--- {{{ Memory usage
--- Initialize widget
-memwidget = widget({ type = "textbox" })
--- memwidget.width = 130
-memicon = widget({ type = "imagebox" })
-memicon.image = image(icons.mem)
--- vicious.register(memwidget, vicious.widgets.mem, "$2MB/$3MB ($1%)", mytimes.mem)
-vicious.register(memwidget, vicious.widgets.mem, "$1%", mytimes.mem)
--- }}}
-
--- {{{ Hddtemp
-hddtempwidget = widget({ type = "textbox" })
-hddtempwidget.width = 60
-vicious.register(hddtempwidget, vicious.widgets.hddtemp, "SDA: ${/dev/sda}°C", mytimes.hddt)
--- }}}
-
--- {{{ CPU usage
-cpuwidget = widget({ type = "textbox" })
-cpuwidget.width = 25
-cpuicon = widget({ type = "imagebox" })
-cpuicon.image = image(icons.cpu)
-vicious.register(cpuwidget, vicious.widgets.cpu, "$1%", mytimes.cpu)
 -- }}}
 
 return public
