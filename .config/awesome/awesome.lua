@@ -78,9 +78,9 @@ local function create_tags()
         names = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
         layout = {
             awful.layout.suit.tile.left,
+            awful.layout.suit.tile.left,
             awful.layout.suit.max,
-            awful.layout.suit.max,
-            awful.layout.suit.max,
+            awful.layout.suit.tile.left,
             awful.layout.suit.max,
             awful.layout.suit.max,
             awful.layout.suit.max,
