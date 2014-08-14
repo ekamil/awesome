@@ -133,20 +133,24 @@ function helpers.switchapp()
     local allclients = client.get()
     clientsline = ""
     for _,c in ipairs(allclients) do
-    clientsline = clientsline .. c:tags()[1].name .. " - " .. c.name .. "\n"
+        cname = c.name
+        if c:tags() then
+            cname = c:tags()[1].screen .. "/" .. c:tags()[1].name .. " - " .. cname
+        end
+        clientsline = clientsline .. cname .. "\n"
     end
     selected = awful.util.pread("echo '".. clientsline .."' | dmenu -l 10 " .. dmenu_opts)
     for _,c in ipairs(allclients) do
-    a = c:tags()[1].name .. " - " .. c.name
-    if a == selected:gsub("\n", "") then
-        for i, v in ipairs(c:tags()) do
-        awful.tag.viewonly(v)
-        client.focus = c
-        c:raise()
-        c.minimized = false
-        return
+        a = c:tags()[1].name .. " - " .. c.name
+        if a == selected:gsub("\n", "") then
+            for i, v in ipairs(c:tags()) do
+            awful.tag.viewonly(v)
+            client.focus = c
+            c:raise()
+            c.minimized = false
+            return
+            end
         end
-    end
     end
 end
 
