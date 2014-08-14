@@ -193,6 +193,20 @@ vicious.register(loadwidget, vicious.widgets.uptime,
     return string.format("  %.2f", args[5])
     end,
     mytimes.thermal)
+loadwidget:buttons(awful.util.table.join(
+   awful.button({ }, 1, function ()
+       local f = io.popen("uptime")
+       local text = ""
+       for line in f:lines() do
+           text = text .. line .. '<br/>'
+       end
+       f:close()
+       local popup = naughty.notify(
+            { title = "Uptime",
+              text = text,
+              screen = mouse.screen
+             })
+   end)))
 public.loadwidget = loadwidget
 -- }}}
 
