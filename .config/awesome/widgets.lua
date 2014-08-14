@@ -197,28 +197,28 @@ public.loadwidget = loadwidget
 -- }}}
 
 -- {{{ Mailcheck
-local mc = require("mailcheck")
-mailwidget = widget({type = "imagebox" })
-mailwidget.image =image(icons.mail)
-mailwidget:buttons(awful.util.table.join(
-   awful.button({ }, 1, function ()
-       local summary = nil
-       local maildirs = nil
-       summary, maildirs = mc.count_mail()
-       local text = ""
-       for i, v in ipairs(maildirs) do
-           if (v.new+v.unread)>0 then
-               text = text .. string.format("%s: %d new and %d unread message(s)<br/>", v.name, v.new, v.unread)
-           end
-       end
-       local popup = naughty.notify(
-            { title = "Maildirs",
-              text = text,
-              screen = mouse.screen
-             })
-   end)))
+-- local mc = require("mailcheck")
+-- mailwidget = widget({type = "imagebox" })
+-- mailwidget.image =image(icons.mail)
+-- mailwidget:buttons(awful.util.table.join(
+--    awful.button({ }, 1, function ()
+--        local summary = nil
+--        local maildirs = nil
+--        summary, maildirs = mc.count_mail()
+--        local text = ""
+--        for i, v in ipairs(maildirs) do
+--            if (v.new+v.unread)>0 then
+--                text = text .. string.format("%s: %d new and %d unread message(s)<br/>", v.name, v.new, v.unread)
+--            end
+--        end
+--        local popup = naughty.notify(
+--             { title = "Maildirs",
+--               text = text,
+--               screen = mouse.screen
+--              })
+--    end)))
 
-public.mailwidget = mailwidget
+-- public.mailwidget = mailwidget
 
 
 -- }}}
