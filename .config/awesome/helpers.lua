@@ -108,7 +108,7 @@ function run_once(prg, arg_string, persistent)
         pid = awful.util.spawn_with_shell("pgrep -u $USER '" .. prg .. "' || (" .. prg .. " " .. arg_string .. ")")
     end
     if pid ~= nil and not persistent then
-        -- print("Will kill " .. prg .. " pid: " .. pid)
+        print("Will kill " .. prg .. " pid: " .. pid)
         awesome.add_signal("exit", function()
             awful.util.spawn_with_shell("kill " .. pid)
         end)
