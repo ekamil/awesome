@@ -133,7 +133,14 @@ tasklist.buttons = awful.util.table.join(
     end)
 )
 
-local mainmenu = awful.menu.new({ items = menu_items })
+-- Define menu keys
+awful.menu.menu_keys.down = { "Down", "j" }
+awful.menu.menu_keys.up = { "Up", "k" }
+awful.menu.menu_keys.exec = { "Right", "l", "Return" }
+awful.menu.menu_keys.back = { "Left", "h", "Backspace" }
+awful.menu.menu_keys.close = { "Escape" }
+
+local mainmenu = awful.menu.new({ items = menu_items, keygrabber = true })
 local launcher = awful.widget.launcher({
                     image = image(beautiful.awesome_icon),
                     menu = mainmenu })
@@ -176,7 +183,7 @@ for s = 1, screen.count() do
         widgets.loadwidget, widgets.thermalwidget, widgets.cpuicon, widgets.separator,
         widgets.volwidget, widgets.volicon, widgets.separator,
         widgets.baticon, widgets.separator,
-        widgets.mailwidget, widgets.separator,
+        -- widgets.mailwidget, widgets.separator,
         systray(s), widgets.separator,
         tasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
@@ -464,10 +471,6 @@ awful_rules.rules = {{
 client.add_signal("manage", function(c, startup)
 -- Enable sloppy focus
     c:add_signal("mouse::enter", function(c)
-        -- if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
-        --         and awful.client.focus.filter(c) then
-        --     client.focus = c
-        -- end
         client.focus = c
     end)
 
