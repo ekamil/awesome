@@ -20,14 +20,11 @@ helpers.is_on_path = is_on_path
 -- }}}
 
 -- {{{ dmenu
-local dmenu_opts = "-i -b -nb '" .. beautiful.bg_normal .. "' -nf '" .. beautiful.fg_normal .. "' -sb '#955'"
-helpers.dmenu_opts = dmenu_opts
-
 local function get_dmenu()
     if is_on_path("yeganesh") then
-        return "dmenu_path | yeganesh -p default -- " .. dmenu_opts
+        return "dmenu_path | yeganesh -p default -- " .. config.dmenu_opts
     else
-        return "dmenu_path | dmenu " .. dmenu_opts
+        return "dmenu_path | dmenu " .. config.dmenu_opts
     end
 end
 dmenu = get_dmenu()
@@ -58,12 +55,6 @@ function helpers.run_or_raise_menu()
     f_reader:close()
     if command == "" then return end
     run_or_raise(command)
-end
-
-function helpers.simpleswitcher()
-    awful.util.spawn("simpleswitcher -now -bg '" .. beautiful.bg_normal ..
-            "' -fg '" .. beautiful.fg_normal ..
-            "' -fn '" .. beautiful.font .. "'")
 end
 
 function helpers.run_in_terminal()
@@ -139,7 +130,7 @@ function helpers.switchapp()
         end
         clientsline = clientsline .. cname .. "\n"
     end
-    selected = awful.util.pread("echo '".. clientsline .."' | dmenu -l 10 " .. dmenu_opts)
+    selected = awful.util.pread("echo '".. clientsline .."' | dmenu -l 10 " .. config.dmenu_opts)
     for _,c in ipairs(allclients) do
         a = c:tags()[1].name .. " - " .. c.name
         if a == selected:gsub("\n", "") then

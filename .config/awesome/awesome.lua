@@ -65,7 +65,7 @@ local menu_items = {
 
 
 local flexmenu = require("flexmenu")
-flexmenu.init(menu_items, helpers.dmenu_opts, awful.util.spawn)
+flexmenu.init(menu_items, config.dmenu_opts, awful.util.spawn)
 -- }}}
 
 
@@ -140,7 +140,8 @@ awful.menu.menu_keys.exec = { "Right", "l", "Return" }
 awful.menu.menu_keys.back = { "Left", "h", "Backspace" }
 awful.menu.menu_keys.close = { "Escape" }
 
-local mainmenu = awful.menu.new({ items = menu_items, keygrabber = true })
+local mainmenu = awful.menu.new({ items = menu_items })
+
 local launcher = awful.widget.launcher({
                     image = image(beautiful.awesome_icon),
                     menu = mainmenu })
@@ -233,7 +234,6 @@ local globalkeys = awful.util.table.join(
     awful.key({ modkey }, "r", helpers.run_or_raise_menu),
     awful.key({ modkey }, "t", helpers.run_in_terminal),
     awful.key({ modkey }, "space", flexmenu.show_menu),
-
     awful.key({ modkey }, "y", helpers.switchapp),
 
     -- Not related to window mgmt
