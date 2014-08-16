@@ -120,7 +120,7 @@ tasklist.buttons = awful.util.table.join(
             if not c:isvisible() then
                 awful.tag.viewonly(c:tags()[1])
             end
-            awful.client.focus = c
+            client.focus = c
             c:raise()
         end),
     awful.button({}, 4, function()
@@ -197,6 +197,7 @@ local layouts_short =
 {
     awful.layout.suit.floating,
     awful.layout.suit.tile.right,
+    awful.layout.suit.tile.bottom,
     awful.layout.suit.max,
 }
 -- {{{ Key bindings
