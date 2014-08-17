@@ -1,5 +1,8 @@
 local config = require "config"
+local awful= require("awful")
+
 local helpers = {}
+
 -- {{{ helpers 
 local function file_exists(name)
     local f = io.open(name, "r")
@@ -118,7 +121,6 @@ helpers.kill_at_exit = kill_at_exit
 -- }}}
 
 function helpers.switchapp()
-    local awful= require("awful")
     local client = client
 
     local allclients = client.get()
@@ -197,8 +199,23 @@ local function create_theme_menu()
 end
 helpers.create_theme_menu = create_theme_menu
 -- }}}
+local layouts =
+{
+    awful.layout.suit.floating,
+    awful.layout.suit.tile,
+    awful.layout.suit.tile.left,
+    awful.layout.suit.fair,
+    awful.layout.suit.fair.horizontal,
+    awful.layout.suit.spiral,
+    awful.layout.suit.spiral.dwindle,
+    awful.layout.suit.max,
+    awful.layout.suit.max.fullscreen,
+    awful.layout.suit.magnifier,
+    awful.layout.suit.tile.bottom,
+    awful.layout.suit.tile.top,
+}
 
-local function create_layouts_menu(layouts)
+local function create_layouts_menu()
     local menu = {}
     for i, l in ipairs(layouts) do
         local fn = function()
