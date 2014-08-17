@@ -163,14 +163,6 @@ for s = 1, screen.count() do
     panel[s].screen = s
 end
 -- }}}
-
-local layouts_short =
-{
-    awful.layout.suit.floating,
-    awful.layout.suit.tile.right,
-    awful.layout.suit.tile.bottom,
-    awful.layout.suit.max,
-}
 -- {{{ Key bindings
 local globalkeys = awful.util.table.join(
     awful.key({ modkey, }, "q", function() awful.screen.focus_relative(1) end),
@@ -178,7 +170,7 @@ local globalkeys = awful.util.table.join(
     awful.key({ modkey, }, "e", awful.tag.viewnext),
     awful.key({ modkey, }, "w", awful.tag.viewprev),
 
-    awful.key({ modkey, }, "a", function() awful.layout.inc(layouts_short, 1) end),
+    awful.key({ modkey, }, "a", function() awful.layout.inc(layouts, 1) end),
     awful.key({ modkey, }, "j", function()
         awful.client.focus.byidx(1)
         if client.focus then client.focus:raise() end
