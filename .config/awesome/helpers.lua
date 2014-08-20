@@ -122,28 +122,27 @@ helpers.kill_at_exit = kill_at_exit
 
 function helpers.switchapp()
     local client = client
-
     local allclients = client.get()
-    clientsline = ""
+    local name_client = {}
+    local clientsline = ""
     for _,c in ipairs(allclients) do
-        cname = c.name
+        local cname = c.name
         if c:tags() then
             cname = c:tags()[1].screen .. "/" .. c:tags()[1].name .. " - " .. cname
         end
+        name_client[cname] = c
         clientsline = clientsline .. cname .. "\n"
     end
-    selected = awful.util.pread("echo '".. clientsline .."' | dmenu -l 10 " .. config.dmenu_opts)
-    for _,c in ipairs(allclients) do
-        a = c:tags()[1].name .. " - " .. c.name
-        if a == selected:gsub("\n", "") then
-            for i, v in ipairs(c:tags()) do
-            awful.tag.viewonly(v)
-            client.focus = c
-            c:raise()
-            c.minimized = false
-            return
-            end
-        end
+    local selected = awful.util.pread("echo '".. clientsline .."' | dmenu -l 10 " .. config.dmenu_opts)
+    selected = selected:gsub("\n", "")
+    local c = name_client[selected]
+    if c == nil then return end
+    for i, v in ipairs(c:tags()) do
+        awful.tag.viewonly(v)
+        client.focus = c
+        c:raise()
+        c.minimized = false
+        return
     end
 end
 
