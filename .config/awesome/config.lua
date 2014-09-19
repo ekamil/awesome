@@ -5,7 +5,7 @@ local shell = os.getenv("SHELL")
 config.terminal = "xfce4-terminal -e " .. shell
 config.alt_terminal = config.userhome .. "/.local/bin/urxvt-zenburn.sh"
 config.modkey = "Mod4"
-config.panel_position = "bottom"
+config.panel_position = "top"
 
 local beautiful = require("beautiful")
 config.dmenu_opts = "-i -b -nb '" .. beautiful.bg_normal .. "' -nf '" .. beautiful.fg_normal .. "' -sb '#955'"
