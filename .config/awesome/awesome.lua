@@ -463,7 +463,7 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 -- {{{ Autostart
 helpers.run_once("xscreensaver", "-no-splash")
 
-helpers.run_once("dropbox", "start -i")
+helpers.run_once("dropbox", "start -i", true)
 
 helpers.run_once("mpd", nil, true) -- dont kill
 helpers.run_once("parcellite")
