@@ -69,23 +69,26 @@ end
 
 function addCalendarToWidget(mywidget, custom_current_day_format)
   if custom_current_day_format then current_day_format = custom_current_day_format end
-
-  mywidget:add_signal('mouse::enter', function ()
-        local month, year = os.date('%m'), os.date('%Y')
-        calendar = { month, year,
-        naughty.notify({
-                text = string.format('<span font_desc="%s">%s</span>', "monospace", displayMonth(month, year, 2)),
-                timeout = 5,
-                hover_timeout = 5,
-                screen = capi.mouse.screen
-        })
+  
+  function showCalendarPopup()
+      local month, year = os.date('%m'), os.date('%Y')
+      calendar = { month, year,
+      naughty.notify({
+          text = string.format('<span font_desc="%s">%s</span>', "monospace", displayMonth(month, year, 2)),
+          timeout = 5,
+          screen = capi.mouse.screen,
+          run = function () naughty.destroy(calendar[3]) end
+      })
   }
-  end)
-  mywidget:add_signal('mouse::leave', function () naughty.destroy(calendar[3]) end)
+  end
+
+  -- mywidget:add_signal('mouse::enter', showCalendarPopup)
+  -- mywidget:add_signal('mouse::leave', function () naughty.destroy(calendar[3]) end)
 
   mywidget:buttons(awful.util.table.join(
     awful.button({ }, 1, function()
-        switchNaughtyMonth(-1)
+        showCalendarPopup()
+        -- switchNaughtyMonth(-1)
     end),
     awful.button({ }, 3, function()
         switchNaughtyMonth(1)
