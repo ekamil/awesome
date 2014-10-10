@@ -114,8 +114,8 @@ awful.menu.menu_keys.close = { "Escape" }
 local mainmenu = awful.menu.new({ items = menu_items })
 
 local launcher = awful.widget.launcher({
-                    image = image(beautiful.awesome_icon),
-                    menu = mainmenu })
+    image = image(beautiful.awesome_icon),
+    menu = mainmenu })
 
 
 local function systray(s)
@@ -146,7 +146,6 @@ for s = 1, screen.count() do
     -- Add widgets to the wibox - order matters
     panel[s].widgets = {
         {
-            launcher,
             taglist[s],
             layout = awful.widget.layout.horizontal.leftright
         },
