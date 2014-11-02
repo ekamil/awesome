@@ -46,7 +46,7 @@ flexmenu.init(menu_items, config.dmenu_opts, awful.util.spawn)
 local function create_tags()
     local tags = {}
     local tmp_tags = {
-        names = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+        names = { 1, 2, 3, 4, 5, 6, 'www', 'im', 'mail', 10, 11 },
         layout = {
             awful.layout.suit.tile.left,
             awful.layout.suit.tile.left,
@@ -55,9 +55,10 @@ local function create_tags()
             awful.layout.suit.max,
             awful.layout.suit.max,
             awful.layout.suit.max,
+            awful.layout.suit.tile,
             awful.layout.suit.max,
-            awful.layout.suit.tile.right,
-            awful.layout.suit.tile.right
+            awful.layout.suit.max,
+            awful.layout.suit.max,
         }
     }
 
@@ -65,6 +66,7 @@ local function create_tags()
         tags[s] = awful.tag(tmp_tags.names, s, tmp_tags.layout)
     end
     return tags
+
 end
 
 local tags = create_tags()
@@ -342,6 +344,16 @@ local clientkeys = awful.util.table.join(
 
 -- {{{ Rules
 --
+local __www = 7
+local __im = 8
+local __mail = 9
+
+-- for Pidgin & Skype
+awful.tag.setncol(2, tags[s][__im])
+awful.tag.setnmaster (2, tags[s][__im])
+awful.tag.setmwfact (0.2, tags[s][__im])
+
+
 awful_rules.rules = {{
         rule = {},
         properties = {
@@ -353,89 +365,116 @@ awful_rules.rules = {{
             buttons = clientbuttons
         }
     },
+    { rule = { class = "MPlayer" }, properties = { floating = true } },
+    { rule = { class = "Gimp" }, properties = { floating = true } },
+    { rule = { class = "pinentry" }, properties = { floating = true } },
+    { rule = { class = "Qalculate" }, properties = { floating = true } },
+    { rule = { class = "Krusader" }, properties = { floating = true } },
     {
-        rule = { class = "Firefox" },
-        properties = { tag = tags[s][4] }
+        -- rule_any = {
+        --     { class = "Firefox" },
+        --     { class = "Chromium" },
+        --     { name = "Google Chrome" }
+        -- },
+        rule = { role = 'browser' },
+        properties = { tag = tags[s][__www] }
     },
-    {
-        rule = { class = "Chromium" },
-        properties = { tag = tags[s][6] }
-    },
-    {
-        rule = { class = "Pidgin" },
-        properties = { tag = tags[s][7] }
-    },
+
+    { rule = {class = "Pidgin"}, properties = {tag = tags[s][__im]}},
+    { rule = {class = "Skype"}, properties = {tag = tags[s][__im]}},
     {
         rule = { class = "Pidgin", role = "buddy_list" },
         properties = { floating = true },
         callback = function(c)
-            local w = screen[c.screen].workarea.width
+            local w = screen[c.screen].workarea.width - 19
             local h = screen[c.screen].workarea.height
-            c:geometry({ width = 0.3 * w, height = h })
-            c.x = 0
-            c.y = 19
+            c:geometry({
+                width = 0.2 * w,
+                height = 0.5 * h,
+                x = 0,
+                y = 19 })
         end
     },
     {
         rule = { class = "Pidgin", role = "conversation" },
         callback = function(c)
-            local w = screen[c.screen].workarea.width
-            local h = screen[c.screen].workarea.height
             awful.client.setslave(c)
-            c:struts({ left = 0.3 * w })
+            local w = screen[c.screen].workarea.width
+            c:struts({ left = 0.2 * w })
+        end
+    },
+    {
+        rule = { class = "Skype", role = "ConversationsWindow" },
+        callback = function(c)
+            awful.client.setslave(c)
+            local w = screen[c.screen].workarea.width
+            c:struts({ left = 0.2 * w })
+        end
+    },
+    {
+        rule = { class = "Skype", role = "CallWindow" },
+        callback = function(c)
+            awful.client.setslave(c)
+            local w = screen[c.screen].workarea.width
+            c:struts({ left = 0.2 * w })
+            c.maximized_horizontal = true
+            c.maximized_vertical = true
         end
     },
     {
         rule = { class = "Skype" },
-        properties = { tag = tags[s][7], floating = true }
+        properties = { floating = true },
+        callback = function(c)
+            if c.role then return end  -- Skype main window doesn have role
+            local w = screen[c.screen].workarea.width - 19
+            local h = screen[c.screen].workarea.height
+            c:geometry({
+                width = 0.2 * w,
+                height = 0.45 * h,
+                x = 0,
+                y = 0.55 * h })
+        end
     },
+
     {
-        rule = { name = "Mozilla Thunderbird" },
+        rule = { name = "mozilla thunderbird" },
         callback = function(c)
             c.screen = mouse.screen
-            c:tags({tags[s][9]})
+            c:tags({tags[s][__mail]})
             c.floating = true
         end
     },
     {
-        rule = { class = "Transmission" },
-        properties = { tag = tags[s][9] }
+        rule = { class = "transmission" },
+        properties = { tag = tags[s][11] }
     },
     {
-        rule = { class = "Spotify" },
+        rule = { class = "spotify" },
         properties = { tag = tags[s][10], floating = true }
     },
     {
-        rule = { name = "IntelliJ" },
-        properties = { tag = tags[s][3], floating = true }
+        rule = { name = "intellij" },
+        properties = { tag = tags[s][2], floating = true }
     },
     {
-        rule = { name = "PyCharm" },
+        rule = { name = "pycharm" },
         callback = function(c)
             c.screen = mouse.screen
-            c:tags({tags[s][3]})
+            c:tags({tags[s][2]})
             c.floating = true
         end
     },
-    {
-        rule = { name = "Eclipse" },
-        properties = { tag = tags[s][3] }
-    },
-    { rule = { class = "MPlayer" }, properties = { floating = true } },
-    { rule = { class = "Gimp" }, properties = { floating = true } },
-    { rule = { class = "pinentry" }, properties = { floating = true } },
-    { rule = { class = "Qalculate" }, properties = { floating = true } },
-    { rule = { class = "Krusader" }, properties = { floating = true } }
+    { rule = { name = "eclipse" }, properties = { tag = tags[s][2] } }
 }
 -- }}}
 
--- {{{ Signals
--- Signal function to execute when a new client appears.
+-- {{{ signals
+-- signal function to execute when a new client appears.
 client.add_signal("manage",
     function (c, startup)
-        -- Add a titlebar
+        -- add a titlebar
         -- awful.titlebar.add(c, { modkey = modkey })
-        -- Enable sloppy focus
+        -- enable sloppy focus
         c:add_signal("mouse::enter",
             function(c)
                 if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
@@ -444,10 +483,10 @@ client.add_signal("manage",
                 end
             end)
         if not startup then
-            -- Set the windows at the slave,
+            -- set the windows at the slave,
             -- i.e. put it at the end of others instead of setting it master.
             awful.client.setslave(c)
-            -- Put windows in a smart way, only if they do not set an initial position.
+            -- put windows in a smart way, only if they do not set an initial position.
             if not c.size_hints.user_position and not c.size_hints.program_position then
                 awful.placement.no_overlap(c)
                 awful.placement.no_offscreen(c)
@@ -459,7 +498,7 @@ client.add_signal("focus", function(c) c.border_color = beautiful.border_focus e
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
--- {{{ Autostart
+-- {{{ autostart
 helpers.run_once("xscreensaver", "-no-splash")
 
 helpers.run_once("dropbox", "start -i", true)
@@ -469,7 +508,7 @@ helpers.run_once("parcellite")
 
 helpers.run_once("redshift.sh")
 
-helpers.run_once("awsetbg", "-f -r " .. config.userhome .. "/Wallpapers", true) -- dont kill
+helpers.run_once("awsetbg", "-f -r " .. config.userhome .. "/wallpapers", true) -- dont kill
 helpers.run_once("change-wallpaper.sh")
 
 awful.util.spawn_with_shell("set-touchpad")
