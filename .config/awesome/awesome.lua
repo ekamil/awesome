@@ -46,7 +46,7 @@ flexmenu.init(menu_items, config.dmenu_opts, awful.util.spawn)
 local function create_tags()
     local tags = {}
     local tmp_tags = {
-        names = { 1, 2, 3, 4, 5, 6, 'www', 'im', 'mail', 10, 11 },
+        names = { 1, 2, 3, 4, 5, 6, '7_www', '8_im', '9_mail', 10, 11 },
         layout = {
             awful.layout.suit.tile.left,
             awful.layout.suit.tile.left,
