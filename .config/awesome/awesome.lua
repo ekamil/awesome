@@ -437,7 +437,7 @@ awful_rules.rules = {{
     },
 
     {
-        rule = { name = "mozilla thunderbird" },
+        rule = { name = "Mozilla Thunderbird" },
         callback = function(c)
             c.screen = mouse.screen
             c:tags({tags[s][__mail]})
@@ -445,26 +445,26 @@ awful_rules.rules = {{
         end
     },
     {
-        rule = { class = "transmission" },
+        rule = { class = "Transmission" },
         properties = { tag = tags[s][11] }
     },
     {
-        rule = { class = "spotify" },
+        rule = { class = "Spotify" },
         properties = { tag = tags[s][10], floating = true }
     },
     {
-        rule = { name = "intellij" },
+        rule = { name = "IntelliJ" },
         properties = { tag = tags[s][2], floating = true }
     },
     {
-        rule = { name = "pycharm" },
+        rule = { name = "PyCharm" },
         callback = function(c)
             c.screen = mouse.screen
             c:tags({tags[s][2]})
             c.floating = true
         end
     },
-    { rule = { name = "eclipse" }, properties = { tag = tags[s][2] } }
+    { rule = { name = "Eclipse" }, properties = { tag = tags[s][2] } }
 }
 -- }}}
 
