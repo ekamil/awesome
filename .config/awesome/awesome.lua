@@ -500,6 +500,13 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 
 -- {{{ autostart
 
-config.autostart()
+helpers.run_once("xscreensaver", "-no-splash")
+helpers.run_once("dropbox", "start -i", true)
+helpers.run_once("mpd", nil, true) -- dont kill
+helpers.run_once("parcellite")
+helpers.run_once("redshift.sh")
+helpers.run_once("awsetbg", "-f -r " .. config.userhome .. "/Wallpapers", true) -- dont kill
+helpers.run_once("change-wallpaper.sh")
+awful.util.spawn_with_shell("set-touchpad")
 
 -- }}}
