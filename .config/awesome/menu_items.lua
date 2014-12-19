@@ -5,9 +5,6 @@ local config = require "config"
 local menu_items = {
     -- apps
     { "gvim", 'gvim' },
-    { "pms", helpers.run_in_terminal_fn("pms") },
-    { "mutt", helpers.run_in_terminal_fn("mutt") },
-    { "midnight", config.alt_terminal ..  " -e dash -c 'sleep 0.1 ; mc'" },
     { "run", {
         { "run_in_term", helpers.run_in_terminal },
         { "run_or_raise", helpers.run_or_raise_menu },
