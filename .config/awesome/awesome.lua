@@ -454,13 +454,17 @@ awful_rules.rules = {{
     },
     {
         rule = { name = "IntelliJ" },
-        properties = { tag = tags[s][2], floating = true }
+        properties = { tag = tags[s][6], floating = true }
+    },
+    {
+        rule = { name = "SoapUI" },
+        properties = { tag = tags[s][5], floating = true }
     },
     {
         rule = { name = "PyCharm" },
         callback = function(c)
             c.screen = mouse.screen
-            c:tags({tags[s][2]})
+            c:tags({tags[s][4]})
             c.floating = true
         end
     },
