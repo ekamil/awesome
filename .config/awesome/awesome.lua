@@ -202,12 +202,6 @@ local globalkeys = awful.util.table.join(
     awful.key({ modkey }, "y", helpers.switchapp),
 
     -- Not related to window mgmt
-    awful.key({ "Control" }, ",", function() awful.util.spawn("mpc --quiet volume -5") end),
-    awful.key({ "Control" }, ".", function() awful.util.spawn("mpc --quiet volume +5") end),
-    awful.key({ "Control" }, "\\", function() awful.util.spawn("mpc --quiet toggle") end),
-    awful.key({ "Control" }, "'", function() awful.util.spawn("mpc --quiet next") end),
-    awful.key({ "Control" }, ";", function() awful.util.spawn("mpc --quiet prev") end),
-    awful.key({ "Control" }, "/", function() awful.util.spawn("amixer set " .. config.mixer .. " toggle") end),
     awful.key({ modkey }, "l", function() awful.util.spawn("xflock4") end),
     awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end)
 )
