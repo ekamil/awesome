@@ -229,4 +229,27 @@ local function create_layouts_menu()
 end
 helpers.create_layouts_menu = create_layouts_menu
 
+
+local function alsamixer()
+    awful.util.spawn(helpers.run_in_terminal_fn("alsamixer"))
+end
+local function volume_toggle()
+    awful.util.spawn("amixer -q set " .. config.mixer .. " toggle")
+end
+local function volume_up()
+    awful.util.spawn("amixer -q set " .. config.mixer .. " 2dB+")
+end
+local function volume_down()
+    awful.util.spawn("amixer -q set " .. config.mixer .. " 2dB-")
+end
+
+local volume = {}
+volume.toggle = volume_toggle
+volume.alsamixer = alsamixer
+volume.mixer = config.mixer
+volume.down = volume_down
+volume.up = volume_up
+
+helpers.volume = volume
+
 return helpers

@@ -49,8 +49,6 @@ mytimes.mail = 1
 mytimes.uptime = 600
 mytimes.date = 55
 
-local mixer = "Master"
-
 
 -- {{{ Reusable separator
 separator = widget({ type = "imagebox" })
@@ -88,7 +86,7 @@ vicious.register(volicon, vicious.widgets.volume,
             volicon.image = image(icons.vol_mute)
         end
     end,
-    mytimes.vol, mixer)
+    mytimes.vol, helpers.volume.mixer)
 
 public.volicon = volicon
 
@@ -97,18 +95,14 @@ volwidget = widget({ type = "textbox" })
 -- Enable caching
 vicious.cache(vicious.widgets.volume)
 -- Register widgets
-vicious.register(volwidget, vicious.widgets.volume, " $1%", mytimes.vol, mixer)
+vicious.register(volwidget, vicious.widgets.volume, " $1%", mytimes.vol, helpers.volume.mixer)
 -- Register buttons
 volwidget:buttons(awful.util.table.join(
-    awful.button({}, 1, function()
-        awful.util.spawn("amixer set " .. mixer .. " toggle")
-    end),
-    awful.button({}, 4, function()
-        awful.util.spawn("amixer -q set " .. mixer .. " 2dB+")
-    end),
-    awful.button({}, 5, function()
-        awful.util.spawn("amixer -q set " .. mixer .. " 2dB-")
-    end)))
+    awful.button({}, 1, helpers.volume.toggle),
+    awful.button({}, 2, helpers.volume.alsamixer),
+    awful.button({}, 4, helpers.volume.up),
+    awful.button({}, 5, helpers.volume.down)
+    ))
 
 public.volwidget = volwidget
 -- }}}

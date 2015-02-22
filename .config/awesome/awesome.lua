@@ -203,6 +203,10 @@ local globalkeys = awful.util.table.join(
 
     -- Not related to window mgmt
     awful.key({ modkey }, "l", function() awful.util.spawn("xflock4") end),
+    -- XF86AudioLowerVolume: #122
+    -- XF86AudioRaiseVolume: #123
+    awful.key({}, "#122", helpers.volume.down),
+    awful.key({}, "#123", helpers.volume.up),
     awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end)
 )
 

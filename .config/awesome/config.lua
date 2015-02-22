@@ -20,4 +20,6 @@ naughty.config.default_preset.timeout = 10
 -- naughty.config.default_preset.border_width
 naughty.config.default_preset.position = config.panel_position .. "_right"
 
+config.mixer = "Master"
+
 return config
