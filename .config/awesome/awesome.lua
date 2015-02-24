@@ -154,6 +154,7 @@ for s = 1, screen.count() do
         layoutbox[s],
         widgets.datewidget, widgets.dateicon, widgets.separator,
         widgets.loadwidget, widgets.thermalwidget, widgets.cpuicon, widgets.separator,
+        widgets.mpdwidget, widgets.separator,
         widgets.volwidget, widgets.volicon, widgets.separator,
         widgets.baticon, widgets.separator,
         -- widgets.mailwidget, widgets.separator,

@@ -231,4 +231,31 @@ public.loadwidget = loadwidget
 
 -- }}}
 
+-- Initialize widget
+mpdwidget = widget({ type = "textbox" })
+-- Register widget
+vicious.register(mpdwidget, vicious.widgets.mpd,
+    function (widget, args)
+        if args["{state}"] == "Stop" then
+            return " || "
+        else
+            return " ► "
+        end
+    end,
+    mytimes.mpdwidget)
+
+
+mpdwidget:buttons(awful.util.table.join(
+   awful.button({ }, 1, function ()
+        awful.util.spawn("mpc toggle")
+    end),
+   awful.button({ }, 2, function ()
+        awful.util.spawn(helpers.run_in_terminal_fn("pms"))
+    end)
+    ))
+
+
+public.mpdwidget = mpdwidget
+
+
 return public
