@@ -236,10 +236,10 @@ mpdwidget = widget({ type = "textbox" })
 -- Register widget
 vicious.register(mpdwidget, vicious.widgets.mpd,
     function (widget, args)
-        if args["{state}"] == "Stop" then
-            return " || "
-        else
+        if args["{state}"] == "Playing" then
             return " ► "
+        else
+            return " || "
         end
     end,
     mytimes.mpdwidget)
