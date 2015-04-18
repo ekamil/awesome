@@ -23,7 +23,8 @@ local menu_items = {
     { "power", {
         { "sleep", 'gksudo pm-suspend' },
         { "halt", 'gksudo -- shutdown -h now' },
-        { "reboot", 'gksudo -- shutdown -r now' }
+        { "reboot", 'gksudo -- shutdown -r now' },
+        { "hibernate", 'gksudo -- pm-hibernate' }
     }},
     { "screens", helpers.create_screen_layouts_menu() }
 }
