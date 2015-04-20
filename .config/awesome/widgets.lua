@@ -239,7 +239,12 @@ vicious.register(mpdwidget, vicious.widgets.mpd,
         if args["{state}"] == "Stop" then 
             return " - "
         else 
-            return args["{Artist}"]..' - '.. args["{Title}"]
+            msg = args["{Artist}"]..' - '.. args["{Title}"]
+            if string.len(msg) > 30 then
+                return string.sub(msg, 1, 30)
+            else
+                return msg
+            end
         end
     end,
     mytimes.mpdwidget)
