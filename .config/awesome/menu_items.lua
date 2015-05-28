@@ -1,3 +1,4 @@
+local debian_menu = require("debian.menu")
 local helpers = require "helpers"
 local config = require "config"
 
@@ -26,7 +27,8 @@ local menu_items = {
         { "reboot", 'gksudo -- shutdown -r now' },
         { "hibernate", 'gksudo -- pm-hibernate' }
     }},
-    { "screens", helpers.create_screen_layouts_menu() }
+    { "screens", helpers.create_screen_layouts_menu() },
+    { "Debian", debian.menu.Debian_menu.Debian }
 }
 
 return menu_items

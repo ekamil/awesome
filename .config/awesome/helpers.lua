@@ -27,7 +27,7 @@ local function get_dmenu()
     if is_on_path("yeganesh") then
         return "dmenu_path | yeganesh -p default -- " .. config.dmenu_opts
     else
-        return "dmenu_path | dmenu " .. config.dmenu_opts
+        return "dmenu_run " .. config.dmenu_opts
     end
 end
 dmenu = get_dmenu()

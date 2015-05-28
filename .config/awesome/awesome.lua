@@ -114,7 +114,6 @@ awful.menu.menu_keys.back = { "Left", "h", "Backspace" }
 awful.menu.menu_keys.close = { "Escape" }
 
 local mainmenu = awful.menu.new({ items = menu_items })
-
 local launcher = awful.widget.launcher({
     image = image(beautiful.awesome_icon),
     menu = mainmenu })
@@ -148,6 +147,7 @@ for s = 1, screen.count() do
     -- Add widgets to the wibox - order matters
     panel[s].widgets = {
         {
+            launcher,
             taglist[s],
             layout = awful.widget.layout.horizontal.leftright
         },
@@ -203,7 +203,7 @@ local globalkeys = awful.util.table.join(
     awful.key({ modkey }, "y", helpers.switchapp),
 
     -- Not related to window mgmt
-    awful.key({ modkey }, "l", function() awful.util.spawn("xflock4") end),
+    awful.key({ modkey }, "l", function() awful.util.spawn("lxlock") end),
     -- XF86AudioLowerVolume: #122
     -- XF86AudioRaiseVolume: #123
     awful.key({}, "#122", helpers.volume.down),
@@ -444,6 +444,14 @@ awful_rules.rules = {{
         end
     },
     {
+        rule = { name = "Icedove Mail/News" },
+        callback = function(c)
+            c.screen = mouse.screen
+            c:tags({tags[s][__mail]})
+            c.floating = true
+        end
+    },
+    {
         rule = { class = "Transmission" },
         properties = { tag = tags[s][11] }
     },
@@ -502,14 +510,5 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 -- }}}
 
 -- {{{ autostart
-
-helpers.run_once("xscreensaver", "-no-splash")
-helpers.run_once("dropbox", "start -i", true)
-helpers.run_once("mpd", nil, true) -- dont kill
-helpers.run_once("parcellite")
-helpers.run_once("redshift.sh")
-helpers.run_once("awsetbg", "-f -r " .. config.userhome .. "/Wallpapers", true) -- dont kill
-helpers.run_once("change-wallpaper.sh")
-awful.util.spawn_with_shell("set-touchpad")
 
 -- }}}
