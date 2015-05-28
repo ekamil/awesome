@@ -208,16 +208,14 @@ local globalkeys = awful.util.table.join(
     -- XF86AudioRaiseVolume: #123
     awful.key({}, "#122", helpers.volume.down),
     awful.key({}, "#123", helpers.volume.up),
-    awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end)
+    awful.key({}, "#135", function() awful.util.spawn("xdotool click 2") end),
+    -- XF86MonBrightnessUp: #233
+    -- XF86MonBrightnessDown: #232
+    awful.key({ modkey }, "Up", function() awful.util.spawn("xbacklight +10%") end),
+    awful.key({ }, "#233", function() awful.util.spawn("xbacklight +10%") end),
+    awful.key({ modkey }, "Down", function() awful.util.spawn("xbacklight -10%") end),
+    awful.key({ }, "#232", function() awful.util.spawn("xbacklight -10%") end)
 )
-
-if helpers.file_exists('/usr/bin/toshiba-brightness.sh') then
-    local newkeys = awful.util.table.join(
-        awful.key({ modkey }, "Down", function() awful.util.spawn("sudo toshiba-brightness.sh dec") end),
-        awful.key({ modkey }, "Up", function() awful.util.spawn("sudo toshiba-brightness.sh inc") end)
-        )
-    globalkeys = awful.util.table.join(globalkeys, newkeys)
-end
 
 
 local function focus_tag(tag)
