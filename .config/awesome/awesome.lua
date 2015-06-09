@@ -149,6 +149,7 @@ for s = 1, screen.count() do
         {
             launcher,
             taglist[s],
+            widgets.separator,
             layout = awful.widget.layout.horizontal.leftright
         },
         layoutbox[s],
