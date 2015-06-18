@@ -275,6 +275,9 @@ local globalkeys = awful.util.table.join(
     )
 -- First screen
 local s = 1
+local im_screen = 1
+local mail_screen = 1
+local www_screen = 1
 
 for j, tag in ipairs(tags[s]) do
     if j <= 9 then
@@ -312,6 +315,9 @@ if tags[2] ~= nil then
                     end))
         end
     end
+    im_screen = 2
+    mail_screen = 2
+    www_screen = 2
 end
 
 root.keys(globalkeys)
@@ -347,9 +353,9 @@ local __im = 8
 local __mail = 9
 
 -- for Pidgin & Skype
-awful.tag.setncol(2, tags[s][__im])
-awful.tag.setnmaster (2, tags[s][__im])
-awful.tag.setmwfact (0.2, tags[s][__im])
+awful.tag.setncol(2, tags[im_screen][__im])
+awful.tag.setnmaster (2, tags[im_screen][__im])
+awful.tag.setmwfact (0.2, tags[im_screen][__im])
 
 
 awful_rules.rules = {{
@@ -375,17 +381,17 @@ awful_rules.rules = {{
         --     { name = "Google Chrome" }
         -- },
         rule = { role = 'browser' },
-        properties = { tag = tags[s][__www] }
+        properties = { tag = tags[www_screen][__www] }
     },
 
-    { rule = {class = "Pidgin"}, properties = {tag = tags[s][__im]}},
-    { rule = {class = "Skype"}, properties = {tag = tags[s][__im]}},
+    { rule = {class = "Pidgin"}, properties = {tag = tags[im_screen][__im]}},
+    { rule = {class = "Skype"}, properties = {tag = tags[im_screen][__im]}},
     {
         rule = { class = "Pidgin", role = "buddy_list" },
         properties = { floating = true },
         callback = function(c)
-            local w = screen[c.screen].workarea.width - 19
-            local h = screen[c.screen].workarea.height
+            local w = screen[im_screen].workarea.width - 19
+            local h = screen[im_screen].workarea.height
             c:geometry({
                 width = 0.2 * w,
                 height = 0.5 * h,
@@ -397,7 +403,7 @@ awful_rules.rules = {{
         rule = { class = "Pidgin", role = "conversation" },
         callback = function(c)
             awful.client.setslave(c)
-            local w = screen[c.screen].workarea.width
+            local w = screen[im_screen].workarea.width
             c:struts({ left = 0.2 * w })
         end
     },
@@ -438,7 +444,7 @@ awful_rules.rules = {{
         rule = { name = "Mozilla Thunderbird" },
         callback = function(c)
             c.screen = mouse.screen
-            c:tags({tags[s][__mail]})
+            c:tags({tags[mail_screen][__mail]})
             c.floating = true
         end
     },
@@ -446,7 +452,7 @@ awful_rules.rules = {{
         rule = { name = "Icedove Mail/News" },
         callback = function(c)
             c.screen = mouse.screen
-            c:tags({tags[s][__mail]})
+            c:tags({tags[mail_screen][__mail]})
             c.floating = true
         end
     },
@@ -464,7 +470,7 @@ awful_rules.rules = {{
     },
     {
         rule = { name = "SoapUI" },
-        properties = { tag = tags[s][5], floating = true }
+        properties = { tag = tags[s][4], floating = true }
     },
     {
         rule = { name = "PyCharm" },
