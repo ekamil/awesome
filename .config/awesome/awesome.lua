@@ -147,11 +147,12 @@ for s = 1, screen.count() do
     -- Add widgets to the wibox - order matters
     panel[s].widgets = {
         {
-            launcher,
+            widgets.logo,
             taglist[s],
             widgets.separator,
             layout = awful.widget.layout.horizontal.leftright
         },
+        launcher,
         layoutbox[s],
         widgets.datewidget, widgets.dateicon, widgets.separator,
         widgets.loadwidget, widgets.thermalwidget, widgets.cpuicon, widgets.separator,
@@ -384,6 +385,7 @@ awful_rules.rules = {{
         properties = { tag = tags[www_screen][__www] }
     },
 
+    { rule = {class = "Buddy List"}, properties = {tag = tags[im_screen][__im]}},
     { rule = {class = "Pidgin"}, properties = {tag = tags[im_screen][__im]}},
     { rule = {class = "Skype"}, properties = {tag = tags[im_screen][__im]}},
     {

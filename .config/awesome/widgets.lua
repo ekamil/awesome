@@ -32,6 +32,8 @@ icons.wifi = icons.dir .. "wifi_02.png"
 icons.mail = icons.dir .. "mail.png"
 icons.nomail = icons.dir .. "mail.png"
 
+icons.awesome = awful.util.getdir("config") .. "/themes/current/awesome-icon.png"
+
 local mytimes = {}
 mytimes.baticon = 3
 mytimes.batwidget = 4
@@ -262,5 +264,11 @@ mpdwidget:buttons(awful.util.table.join(
 
 public.mpdwidget = mpdwidget
 
+--- {{{ logo
+logo = widget({ type = "imagebox" })
+logo.image = image(icons.awesome)
+
+public.logo = logo
+--- }}}
 
 return public
