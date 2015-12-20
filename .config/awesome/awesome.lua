@@ -173,7 +173,32 @@ local globalkeys = awful.util.table.join(
     awful.key({ modkey, }, "q", function() awful.screen.focus_relative(1) end),
     awful.key({ modkey, }, "Escape", awful.tag.history.restore),
     awful.key({ modkey, }, "e", awful.tag.viewnext),
+    awful.key({ modkey, "Shift" }, "e", -- move window right
+    function()
+        if client == nil then return end
+        local curidx = awful.tag.getidx()
+        local newidx = 1
+        if curidx == 11 then
+            newidx = 1
+        else
+            newidx = curidx + 1
+        end
+        awful.client.movetotag(tags[client.focus.screen][newidx])
+        awful.tag.viewnext()
+    end),
     awful.key({ modkey, }, "w", awful.tag.viewprev),
+    awful.key({ modkey, "Shift" }, "w", -- move window left
+    function()
+        if client == nil then return end
+        local curidx = awful.tag.getidx()
+        if curidx == 1 then
+            newidx = 11
+        else
+            newidx = curidx - 1
+        end
+        awful.client.movetotag(tags[client.focus.screen][newidx])
+        awful.tag.viewprev()
+    end),
 
     awful.key({ modkey, }, "a", function() awful.layout.inc(layouts, 1) end),
     awful.key({ modkey, }, "j", function()
