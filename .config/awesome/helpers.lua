@@ -237,10 +237,10 @@ local function volume_toggle()
     awful.util.spawn("amixer -q set " .. config.mixer .. " toggle")
 end
 local function volume_up()
-    awful.util.spawn("amixer -q set " .. config.mixer .. " 2dB+")
+    awful.util.spawn("amixer -q set " .. config.mixer .. " 2%+")
 end
 local function volume_down()
-    awful.util.spawn("amixer -q set " .. config.mixer .. " 2dB-")
+    awful.util.spawn("amixer -q set " .. config.mixer .. " 2%-")
 end
 
 local volume = {}
